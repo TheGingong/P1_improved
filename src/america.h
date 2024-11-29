@@ -1,4 +1,5 @@
 #include "static_variables.h"
+#include <stdio.h>
 #define STATES 51
 #define NUMBER_OF_VOTERS 100
 
@@ -63,6 +64,6 @@ typedef enum {
 } state_names;
 
 /* Prototyper */
-char america();
+char america(FILE *file);
 void initialize_states(states all_states[]);
 char assign_electors(states all_states[]);
