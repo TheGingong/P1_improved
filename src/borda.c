@@ -1,10 +1,11 @@
 #include "borda.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "convert.h"
 #include "static_variables.h"
 
 /* Funktion borda_count initialiserer de nødvendige arrays, samt tildeler dem en start værdi */
-char borda_count() {
+char borda_count(FILE *file) {
     /* Initialiserer arrays */
     char candidate[NUMBER_CANDIDATES]; // Alle mulige kandidater sorteret fra a-z
     int candidate_points[NUMBER_CANDIDATES]; // Gemmer point for hver kandidat
@@ -25,8 +26,11 @@ char borda_count() {
 void point_counting(char* voter_preference, int* candidate_points) {
     int linje = 0; // Optæller der specificerer hvilken linje i convert_borda som betragtes
 
-    while (convert_borda(linje, voter_preference) != 0) { // While fortsætter mens tekstfilen stadig har stemmer der skal optælles
-        convert_borda(linje, voter_preference); /* convert_borda konverterer data gemt i
+    int x = 1;
+    while (x != 0) { // While fortsætter mens tekstfilen stadig har stemmer der skal optælles
+        x = convert_borda(linje, voter_preference);
+    while (convert_borda(voter_preference, file) != 0) {
+        convert_borda(voter_preference, file); /* convert_borda konverterer data gemt i
                                                  * tekstfilen til et array, repræsenteret af voter_preference */
         linje++; // Optæller bliver talt op
         for (int i = 0, j = NUMBER_CANDIDATES; i < NUMBER_CANDIDATES; i++, j--) {

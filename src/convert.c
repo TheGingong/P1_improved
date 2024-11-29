@@ -9,8 +9,8 @@
 // Ny optimering
 
 /* convert_borda tager i mod et array af chars og hvilken linjen i text filen den skal sende tilbage i arrayet */
-int convert_borda(int line_person,char* array_pref) {
-    FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
+int convert_borda(char* array_pref, FILE *file) {
+
     char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
     int current_line = 0; // Erklærer den nuværende linje
 
@@ -46,7 +46,7 @@ int convert_borda(int line_person,char* array_pref) {
 
 /* convert_america tager imod en linje på tekstfilen der skal læses.
  * Tekst fil bliver læst og indlæser værdier til struck person der returnes */
-struct person convert_america(int line_person) {
+struct person convert_america(FILE *file) {
     struct person ny_person;
     FILE *file = fopen("text-files/test-tekstil.txt","r"); // Åbner tekst fil i 'r' readmode
     if (file == NULL) {

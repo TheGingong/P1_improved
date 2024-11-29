@@ -8,15 +8,20 @@
 
 int main(void) {
     /* Kalder simluering af det amerikanske valgsystem */
+    FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
     clock_t start,end;
     double cpu_time_used;
 
     start = clock();
 
-    printf("The winner candidate of the american election is: %c\n\n", america(NUMBER_CANDIDATES));
+    printf("The winner candidate of the american election is: %c\n\n", america(file));
+    fclose(file);
+
+    FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
 
     /* Kalder simulering af et valgsystem som bruger Borda count */
-    printf("The winner candidate of borda count is: %c\n", borda_count());
+    printf("The winner candidate of borda count is: %c\n", borda_count(file2));
+    fclose(file2);
 
     end = clock();
     cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
