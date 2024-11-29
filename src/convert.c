@@ -11,7 +11,7 @@ int convert_borda(int line_person, int* array_pref) {
     FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
     char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
     int current_line = 0; // Erklærer den nuværende linje
-    char temp[NUMBER_CANDIDATES];
+    char temp[NUMBER_CANDIDATES] = {0};
     /* fgets læser max "sizeof(text_string) characters fra file stream -
     * - og gemmer dem i string-arrayet "text_string"
     * fgets stopper med at parse text hvis den rammer en newline */
