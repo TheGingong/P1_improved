@@ -7,15 +7,10 @@
 /* Hovedfunktion som modtager antallet af kandidater fra main.c
  * Returnerer karakteren på vinder kandidaten til main.c */
 char america() {
-    states all_states[STATES]; // Laver et array af states structen med antallet af stater
+    /* Sætter votes og winner værdier i structen, all_states, til at være 0 */
+    states all_states[STATES] = {0}; // Laver et array af states structen med antallet af stater
 
     initialize_states(all_states); // Kalder funktion som laver stater og tildeler valgmænd
-
-    /* Sætter votes og winner værdier i structen, all_states, til at være 0 */
-    for (int i = 0; i < STATES; i++) {
-        memset(all_states[i].votes, 0, sizeof(all_states[i].votes)); // memset sætter alle værdier i arrayet, votes, til lig 0
-        all_states[i].winner = 0;
-    }
 
     /* While loop som kører så længe at convert_america ikke returnerer -1 */
     int index = 0; // Index i arrayet defineres til 0
@@ -28,7 +23,7 @@ char america() {
     /* For loop som gennemløber alle stater for at beregne vinderen i hver stat */
     /* Kald vinder funktion som også bruges af borda.c */
     for (int i = 0; i < STATES; i++) {
-        all_states[i].winner = calculate_winner_i(all_states[i].votes, 0);
+        all_states[i].winner = calculate_winner_i(all_states[i].votes, 1);
     }
 
     /* Konventere vinderen fra en integer til en char, for et bedre resultat */
@@ -39,18 +34,15 @@ char america() {
 
 /* Tildeler hver vinder i den enkelte stat med statens antal valgmænd i et samlede array: candidates */
 char assign_electors(states all_states[]) {
-    int candidates[NUMBER_CANDIDATES];
-    memset(candidates, 0, sizeof(candidates)); // Sætter alle værdier i arrayet candidates til 0
+    int candidates[NUMBER_CANDIDATES] = {0};
 
     /* For loop gennemløber hver stats vinder og tildeler valgmændende i arrayet */
     for (int i = 0; i < STATES; i++) {
         candidates[all_states[i].winner] += all_states[i].electors;
-        printf("Candidate %c electors: %d\n", all_states[i].winner, all_states[i].electors);  // Debug: Print the winner for each state
     }
 
     /* Kalder calculate_winner
      * for at bestemme hvilken kandidat der har flest valgmænd og dermed vinder valget */
-
     return calculate_winner_i(candidates, 0);
 }
 

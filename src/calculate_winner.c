@@ -1,9 +1,10 @@
+#include <stdio.h>
 #include "static_variables.h"
 #include "calculate_winner.h"
 
 int calculate_winner_i(const int* candidate_points, int return_index) {
-    int winner_index = 0; // Kandidat A vinder
-    int winner_points = candidate_points[0];
+    int winner_index = 0; // Kandidat A vinder (0 = A)
+    int winner_points = candidate_points[0]; // (A)
 
     for(int i = 1; i < NUMBER_CANDIDATES; i++) {
         if(candidate_points[i] > winner_points) {

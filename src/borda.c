@@ -12,7 +12,7 @@ char borda_count() {
     char voter_preference[NUMBER_CANDIDATES]; // Information om én vælger præference
 
     /* Indlæser værdier i vælger og resultat */
-    for (int i = 0; i < NUMBER_CANDIDATES;i++) {
+    for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         candidate[i] = 'A' + i; // Indlæser char a-z alt efter antal kandidater
         candidate_points[i] = 0; // Tildeler 0 point til hver kandidat
     }
