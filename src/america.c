@@ -27,6 +27,7 @@ char america() {
     /* For loop som gennemløber alle stater for at beregne vinderen i hver stat */
     for (int i = 0; i < STATES; i++) {
         all_states[i].winner = calculate_winner(all_states[i].votes);
+        // test
     }
 
     /* Konventere vinderen fra en integer til en char, for et bedre resultat */
