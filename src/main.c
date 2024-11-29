@@ -6,6 +6,8 @@
 #include "static_variables.h"
 #include <time.h>
 
+#include "convert.h"
+
 int main(void) {
     /* Kalder simluering af det amerikanske valgsystem */
     clock_t start,end;
@@ -17,6 +19,8 @@ int main(void) {
 
     /* Kalder simulering af et valgsystem som bruger Borda count */
     printf("The winner candidate of borda count is: %c\n", borda_count());
+
+    welfare_calculator("s");
 
     end = clock();
     cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
