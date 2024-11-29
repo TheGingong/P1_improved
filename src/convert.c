@@ -5,6 +5,9 @@
 
 #define MAX_LINE_LENGTH 40
 
+
+// Ny optimering
+
 /* convert_borda tager i mod et array af chars og hvilken linjen i text filen den skal sende tilbage i arrayet */
 int convert_borda(int line_person,char* array_pref) {
     FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
