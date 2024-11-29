@@ -13,10 +13,10 @@ int main(void) {
 
     start = clock();
 
-    printf("The winner candidate of the american election is: %c\n\n", america(NUMBER_CANDIDATES));
+    printf("The winner candidate of the american election is: %c\n", america());
 
     /* Kalder simulering af et valgsystem som bruger Borda count */
-    printf("The winner candidate of borda count is: %c\n", borda_count());
+    printf("The winner candidate of borda count is: %c\n\n", borda_count());
 
     end = clock();
     cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
