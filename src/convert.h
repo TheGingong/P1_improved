@@ -1,3 +1,9 @@
+#include "convert.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_LINE_LENGTH 40
+
 struct person {
     int stat;
     int pref;
