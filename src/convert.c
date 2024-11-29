@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "static_variables.h"
 
 #define MAX_LINE_LENGTH 40
 
@@ -10,7 +11,7 @@ int convert_borda(int line_person, int* array_pref) {
     FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
     char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
     int current_line = 0; // Erklærer den nuværende linje
-    char temp1, temp2, temp3, temp4, temp5;
+    char temp[NUMBER_CANDIDATES];
     /* fgets læser max "sizeof(text_string) characters fra file stream -
     * - og gemmer dem i string-arrayet "text_string"
     * fgets stopper med at parse text hvis den rammer en newline */
@@ -25,12 +26,12 @@ int convert_borda(int line_person, int* array_pref) {
             *  Hvis ikke den gemmer 5 characters i arrayet giver den fejl kode.
             */
             if (sscanf(temp_text_str, "%*d( %c%*f %c%*f %c%*f %c%*f %c%*f",
-                &temp1, &temp2, &temp3, &temp4, &temp5) == 5) {
-                array_pref[0] = temp1-'A';
-                array_pref[1] = temp2-'A';
-                array_pref[2] = temp3-'A';
-                array_pref[3] = temp4-'A';
-                array_pref[4] = temp5-'A';
+            &temp[0], &temp[1], &temp[2], &temp[3], &temp[4]) == 5) {
+                array_pref[0] = temp[0]-'A';
+                array_pref[1] = temp[1]-'A';
+                array_pref[2] = temp[2]-'A';
+                array_pref[3] = temp[3]-'A';
+                array_pref[4] = temp[4]-'A';
 
                 //for (int m = 0; m<5; m++) {
                 //    printf("%d\n", array_pref[m]);
