@@ -3,8 +3,7 @@
 #include <string.h>
 #include "america.h"
 #include "borda.h"
-
-#define NUMBER_CANDIDATES 5
+#include "static_variables.h"
 
 int main(void) {
     /* Kalder simluering af det amerikanske valgsystem */

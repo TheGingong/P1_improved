@@ -1,4 +1,4 @@
-#define NUMBER_CANDIDATES 5
+#include "static_variables.h"
 #define STATES 51
 #define NUMBER_OF_VOTERS 100
 

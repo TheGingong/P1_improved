@@ -2,9 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+
 #define MAX_LINE_LENGTH 40
-#define NUMBER_OF_CANDIDATES 5
 
 /* convert_borda tager i mod et array af chars og hvilken linjen i text filen den skal sende tilbage i arrayet */
 int convert_borda(int line_person,char* array_pref) {

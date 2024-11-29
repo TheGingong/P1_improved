@@ -1,0 +1,1 @@
+#define NUMBER_CANDIDATES 5
