@@ -14,7 +14,7 @@ int main(void) {
 
     start = clock();
 
-    printf("The winner candidate of the american election is: %c\n\n", america(file));
+    //printf("The winner candidate of the american election is: %c\n\n", america(file));
     fclose(file);
 
     FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
