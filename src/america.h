@@ -64,7 +64,6 @@ typedef enum {
 } state_names;
 
 /* Prototyper */
-int calculate_winner(const int *array);
 char america(FILE *file);
 void initialize_states(states all_states[]);
-int assign_electors(states all_states[]);
+char assign_electors(states all_states[]);

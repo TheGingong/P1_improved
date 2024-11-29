@@ -5,5 +5,4 @@ struct person {
 };
 
 struct person convert_america(FILE *file);
-int Lav_tal_om_for_soren(int tal);
-int convert_borda(char* array_pref, FILE *file);
+int convert_borda(int* array_pref, FILE *file);
