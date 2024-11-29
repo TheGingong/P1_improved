@@ -63,7 +63,7 @@ typedef enum {
 } state_names;
 
 /* Prototyper */
-int calculate_winner(const int *array, int number_of_candidates);
-char america(int number_of_candidates);
+int calculate_winner(const int *array);
+char america();
 void initialize_states(states all_states[]);
-int assign_electors(states all_states[], int number_of_candidates);
+int assign_electors(states all_states[]);
