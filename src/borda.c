@@ -1,5 +1,6 @@
 #include "borda.h"
 #include <stdio.h>
+#include "calculate_winner.h"
 #include "convert.h"
 #include "static_variables.h"
 
@@ -17,7 +18,8 @@ char borda_count() {
     }
     /*Funktions kald der udfører selve optællingen, og annoncerer vinderen*/
     point_counting(voter_preference,  candidate_points); // Stemme optællings funktion
-    char candidate_winner = winner(candidate_points,candidate); // Udpeger den/de kandidater med flest point
+    //char candidate_winner = winner(candidate_points,candidate); // Udpeger den/de kandidater med flest point
+    char candidate_winner = calculate_winner_i(candidate_points, 0); // Udpeger den/de kandidater med flest point
     return candidate_winner;
 }
 
@@ -37,23 +39,23 @@ void point_counting(char* voter_preference, int* candidate_points) {
 }
 
 /* Funktionen winner fastlægger og printer den eller de kandidater med flest point */
-char winner(const int* candidate_points, const char* candidate) {
-    int current_winner = 0; // Holder styr på den hidtil højeste pointscore
-
-    /* Point score for hver kandidat betragtet i rækkefølge a-z. Den højeste point score gemmes i nuværende_winner */
-    for (int i = 0; i < NUMBER_CANDIDATES;i++) {
-        if (current_winner <= candidate_points[i]) {
-            current_winner = candidate_points[i];
-        }
-    }
-    /* Printer alle kandidater samt deres point */
-   // for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-   //     printf("%c : %d\n", candidate[i], candidate_points[i]);
-   // }
-    /* returnere kandidat med højeste pointscore */
-    for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-        if (current_winner == candidate_points[i]) { // Tjekker om en kandidats point er lig med det højeste antal scorede point
-            return candidate[i];
-        }
-    }
-}
+//int winner(const int* candidate_points, const char* candidate) {
+//    int current_winner = 0; // Holder styr på den hidtil højeste pointscore
+//
+//    /* Point score for hver kandidat betragtet i rækkefølge a-z. Den højeste point score gemmes i nuværende_winner */
+//    for (int i = 0; i < NUMBER_CANDIDATES;i++) {
+//        if (current_winner <= candidate_points[i]) {
+//            current_winner = candidate_points[i];
+//        }
+//    }
+//    /* Printer alle kandidater samt deres point */
+//   // for (int i = 0; i < NUMBER_CANDIDATES; i++) {
+//   //     printf("%c : %d\n", candidate[i], candidate_points[i]);
+//   // }
+//    /* returnere kandidat med højeste pointscore */
+//    for (int i = 0; i < NUMBER_CANDIDATES; i++) {
+//        if (current_winner == candidate_points[i]) { // Tjekker om en kandidats point er lig med det højeste antal scorede point
+//            return candidate[i];
+//        }
+//    }
+//}
