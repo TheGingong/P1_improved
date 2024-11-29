@@ -8,14 +8,16 @@ double welfare_calculator(char winner) {
     double welfare_score = 0;
     double temp;
     char format[MAX_LINE_LENGTH];
+    int count = 0;
     while (fgets(temp_text_str, sizeof(temp_text_str), file) != NULL) {
-        sprintf(format, "%*[^%c]%c%lf", winner, winner);
-            if (sscanf(temp_text_str, format, &temp)<= 1){
+        count++;
+        sprintf(format, "%%*[^%c]%c%%lf", winner,winner);
+            if (sscanf(temp_text_str, format, &temp)== 1){
                 welfare_score += temp;
             } else {
                 printf("Error: Could not parse the line.\n"); // printer fejlkoden
             }
     }
-    return welfare_score/51;
+    return welfare_score/count;
     fclose(file); // Lukker text filen
 }

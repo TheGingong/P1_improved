@@ -20,8 +20,8 @@ int main(void) {
     /* Kalder simulering af et valgsystem som bruger Borda count */
     printf("The winner candidate of borda count is: %c\n\n", borda_count());
 
-    printf("The total welfare for America: %lf\n",welfare_calculator("A"));
-    printf("The total welfare for America: %lf\n\n",welfare_calculator("A"));
+    printf("The total welfare for America: %lf\n",welfare_calculator(america(NUMBER_CANDIDATES)));
+    printf("The total welfare for Borda count: %lf\n\n",welfare_calculator(borda_count()));
 
     end = clock();
     cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
