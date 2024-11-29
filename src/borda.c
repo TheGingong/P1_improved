@@ -7,15 +7,9 @@
 /* Funktion borda_count initialiserer de nødvendige arrays, samt tildeler dem en start værdi */
 char borda_count() {
     /* Initialiserer arrays */
-    char candidate[NUMBER_CANDIDATES]; // Alle mulige kandidater sorteret fra a-z
-    int candidate_points[NUMBER_CANDIDATES]; // Gemmer point for hver kandidat
-    char voter_preference[NUMBER_CANDIDATES]; // Information om én vælger præference
+    int candidate_points[NUMBER_CANDIDATES] = {0}; // Gemmer point for hver kandidat
+    int voter_preference[NUMBER_CANDIDATES] = {0}; // Information om én vælger præference
 
-    /* Indlæser værdier i vælger og resultat */
-    for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-        candidate[i] = 'A' + i; // Indlæser char a-z alt efter antal kandidater
-        candidate_points[i] = 0; // Tildeler 0 point til hver kandidat
-    }
     /*Funktions kald der udfører selve optællingen, og annoncerer vinderen*/
     point_counting(voter_preference,  candidate_points); // Stemme optællings funktion
     //char candidate_winner = winner(candidate_points,candidate); // Udpeger den/de kandidater med flest point
@@ -24,15 +18,15 @@ char borda_count() {
 }
 
 /* Funktion point_counting, henter én vælger præference, og uddeler point til kandidaterne på baggrund præferencen */
-void point_counting(char* voter_preference, int* candidate_points) {
+void point_counting(int* voter_preference, int* candidate_points) {
     int linje = 0; // Optæller der specificerer hvilken linje i convert_borda som betragtes
 
     while (convert_borda(linje, voter_preference) != 0) { // While fortsætter mens tekstfilen stadig har stemmer der skal optælles
-        convert_borda(linje, voter_preference); /* convert_borda konverterer data gemt i
-                                                 * tekstfilen til et array, repræsenteret af voter_preference */
+                /* convert_borda konverterer data gemt i
+                 * tekstfilen til et array, repræsenteret af voter_preference */
         linje++; // Optæller bliver talt op
         for (int i = 0, j = NUMBER_CANDIDATES; i < NUMBER_CANDIDATES; i++, j--) {
-            int k = voter_preference[i] - 'A'; // Udregner indeks som point skal tildeles, indekset gemmes i variablen k
+            int k = voter_preference[i]; // Udregner indeks som point skal tildeles, indekset gemmes i variablen k
             candidate_points[k] += j; // Tildeler j antal point (j bliver talt ned for hver gennemløb)
         }
     }

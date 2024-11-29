@@ -6,11 +6,11 @@
 #define MAX_LINE_LENGTH 40
 
 /* convert_borda tager i mod et array af chars og hvilken linjen i text filen den skal sende tilbage i arrayet */
-int convert_borda(int line_person,char* array_pref) {
+int convert_borda(int line_person, int* array_pref) {
     FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
     char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
     int current_line = 0; // Erklærer den nuværende linje
-
+    char temp1, temp2, temp3, temp4, temp5;
     /* fgets læser max "sizeof(text_string) characters fra file stream -
     * - og gemmer dem i string-arrayet "text_string"
     * fgets stopper med at parse text hvis den rammer en newline */
@@ -25,7 +25,17 @@ int convert_borda(int line_person,char* array_pref) {
             *  Hvis ikke den gemmer 5 characters i arrayet giver den fejl kode.
             */
             if (sscanf(temp_text_str, "%*d( %c%*f %c%*f %c%*f %c%*f %c%*f",
-                &array_pref[0],&array_pref[1], &array_pref[2], &array_pref[3],&array_pref[4])==5) {
+                &temp1, &temp2, &temp3, &temp4, &temp5) == 5) {
+                array_pref[0] = temp1-'A';
+                array_pref[1] = temp2-'A';
+                array_pref[2] = temp3-'A';
+                array_pref[3] = temp4-'A';
+                array_pref[4] = temp5-'A';
+
+                //for (int m = 0; m<5; m++) {
+                //    printf("%d\n", array_pref[m]);
+                //}
+
             } else {
                 printf("Error: Could not parse the line.\n"); // printer fejlkoden
             }
