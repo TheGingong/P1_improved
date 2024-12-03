@@ -8,7 +8,7 @@ double welfare_calculator(char winner) {
         perror("Could not open file.");
     }
 
-    char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
+    char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes
     char format[MAX_LINE_LENGTH];
     double welfare_score = 0, temp;
     int person_count = 0;
