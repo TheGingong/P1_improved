@@ -1,1 +1,1 @@
-int calculate_winner_i(const int* candidate_points, int return_index);
+int calculate_winner_func(const int* array);

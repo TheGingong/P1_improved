@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "america.h"
 #include "borda.h"
-#include "static_variables.h"
 #include <time.h>
 
 int main(void) {

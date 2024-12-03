@@ -1,7 +1,6 @@
 #include "convert.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "static_variables.h"
 
 #define MAX_LINE_LENGTH 40

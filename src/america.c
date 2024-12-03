@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "america.h"
-#include <string.h>
 #include "convert.h"
 #include "calculate_winner.h"
 
@@ -12,8 +11,10 @@ char america(FILE *file) {
 
     initialize_states(all_states); // Kalder funktion som laver stater og tildeler valgmænd
 
+    /* Initialisere person structen som benyttes */
+    struct person current_state = convert_america(file); // Læser den første linje fra convert_america. Hvis den returnere -1 vil den ikke køre while loopet.
+
     /* While loop som kører så længe at convert_america ikke returnerer -1 */
-    struct person current_state = {0};
     while(current_state.stat != -1) {
         current_state = convert_america(file); // Modtager en ny struct, current_state, fra convert_america til 'index' linje
         if (current_state.stat == -1) {
@@ -25,7 +26,7 @@ char america(FILE *file) {
     /* For loop som gennemløber alle stater for at beregne vinderen i hver stat */
     /* Kald vinder funktion som også bruges af borda.c */
     for (int i = 0; i < STATES; i++) {
-        all_states[i].winner = calculate_winner_i(all_states[i].votes, 1);
+        all_states[i].winner = calculate_winner_func(all_states[i].votes);
     }
 
     /* Konventere vinderen fra en integer til en char, for et bedre resultat */
@@ -45,7 +46,8 @@ char assign_electors(states all_states[]) {
 
     /* Kalder calculate_winner
      * for at bestemme hvilken kandidat der har flest valgmænd og dermed vinder valget */
-    return calculate_winner_i(candidates, 0);
+    char winner = calculate_winner_func(candidates);
+    return 'A' + winner; // Returnere den korrekte kandidat ved brug af det index fra calculate_winner_func
 }
 
 /* Her initialiseres alle staterne i USA med korrekte antal valgmænd udfra antal hus repræsentanter og senater pr. stat */
