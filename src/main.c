@@ -36,7 +36,7 @@ int main(void) {
 
     end = clock();
     cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
-    printf("The program executed in: %lf s", cpu_time_used);
+    printf("The program executed in: %lfs", cpu_time_used);
 
     return 0;
 }
