@@ -1,0 +1,1 @@
+double welfare_calculator(char winner);
