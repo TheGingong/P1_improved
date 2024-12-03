@@ -1,0 +1,1 @@
+int calculate_winner_func(const int* array);
