@@ -31,8 +31,7 @@ int main(void) {
     fclose(file2);
   
     /* Velfærd print */
-    printf("The total welfare for America: %lf\n", welfare_calculator(winner_america));
-    printf("The total welfare for Borda count: %lf\n\n", welfare_calculator(winner_borda));
+    social_utility_efficiency(winner_america);
 
     /* Printer programmet eksekverings tid */
     end = clock();
