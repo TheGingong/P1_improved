@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "america.h"
 #include "borda.h"
-#include <time.h>
+#include "welfare_score.h"
 
-#include "convert.h"
 
 int main(void) {
     /* Kalder simluering af det amerikanske valgsystem */

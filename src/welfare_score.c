@@ -1,5 +1,5 @@
-#include "convert.h"
-#include "america.h"
+#include <stdio.h>
+#include "static_variables.h"
 
 double welfare_calculator(char winner) {
     FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
