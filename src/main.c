@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "convert.h"
+#include "realistic_appropriation.h"
 
 int main(void) {
     /* Kalder simluering af det amerikanske valgsystem */

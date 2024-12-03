@@ -1,7 +1,12 @@
 #include <stdio.h>
+#include <math.h>
 #include "convert.h"
+#include "realistic_appropriation.h"
 #include "america.h"
 #include "borda.h"
+
+const int dimensions = 5;
+const int total_voters = 1000;
 
 /* -- NOTER -- */
 /* -- Kontrolparametre --
@@ -43,16 +48,22 @@
 //til sidst vægtes holdningerne blandt vælgerne, og vægten påføres deres holdninger (-dimensional weights-)
     //for alle gælder det, at én mærkesag kommer før en anden osv
 
-/* -- PROGRAMMERING -- */
-typedef struct {
-    double mean_of_cluster; //center of cluster, the mean
-    double spread_of_cluster; //standard deviation from the mean
-    int voters_in_cluster; //amount of voters within selected cluster
-} cluster_t;
+// stemme: (0.3, 0.7, -0.1, -1, 1)
 
-//funktion, der kan generere normalfordelinger pr. dimension
-void gaussian_density () {
-    
+/* -- PROGRAMMERING -- */
+
+//funktion, der kan generere én normalfordeling
+double gaussian_density (cluster_t cluster_n, double voter_x) {
+    return 1 / ( sqrt(2 * M_PI) * cluster_n.spread_cluster ) * exp(-(1/2) * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
+}
+
+void generate_one_gauss (cluster_t cluster_n, double* gauss_array) {
+    int voter_per_gauss = total_voters / dimensions;
+
+    for (int i = 0; i < voter_per_gauss; i++) {
+        gauss_array[i] = gaussian_density(cluster_n, i);
+        printf("%lf", gauss_array[i]);
+    }
 }
 
 void generating_real_votes (int n_dimensions, cluster_t clusters) {
