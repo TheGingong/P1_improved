@@ -7,5 +7,6 @@ add_executable(main main.c
         calculate_winner.c
         realistic_appropriation.c)
 add_library(main_lib main.c)
+target_link_libraries(main m)
 target_include_directories(main_lib PUBLIC .)
 project(P1 C)

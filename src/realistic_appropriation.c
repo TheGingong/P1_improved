@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include <math.h>
 #include "convert.h"
-#include "realistic_appropriation.h"
 #include "america.h"
 #include "borda.h"
+#include "math.h"
 
 const int dimensions = 5;
 const int total_voters = 1000;
 
+#include "realistic_appropriation.h"
 /* -- NOTER -- */
 /* -- Kontrolparametre --
  * Dispersion - klynger der former grupper med samme ideologi (politiske partier, religion, etc)
@@ -48,22 +48,11 @@ const int total_voters = 1000;
 //til sidst vægtes holdningerne blandt vælgerne, og vægten påføres deres holdninger (-dimensional weights-)
     //for alle gælder det, at én mærkesag kommer før en anden osv
 
-// stemme: (0.3, 0.7, -0.1, -1, 1)
-
 /* -- PROGRAMMERING -- */
 
-//funktion, der kan generere én normalfordeling
-double gaussian_density (cluster_t cluster_n, double voter_x) {
-    return 1 / ( sqrt(2 * M_PI) * cluster_n.spread_cluster ) * exp(-(1/2) * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
-}
-
-void generate_one_gauss (cluster_t cluster_n, double* gauss_array) {
-    int voter_per_gauss = total_voters / dimensions;
-
-    for (int i = 0; i < voter_per_gauss; i++) {
-        gauss_array[i] = gaussian_density(cluster_n, i);
-        printf("%lf", gauss_array[i]);
-    }
+//funktion, der kan generere normalfordelinger pr. dimension
+void gaussian_density () {
+    
 }
 
 void generating_real_votes (int n_dimensions, cluster_t clusters) {
@@ -71,4 +60,62 @@ void generating_real_votes (int n_dimensions, cluster_t clusters) {
     for (int i = 0; i <= n_dimensions; i++) {
 
     }
+}
+
+
+
+void spacial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[ANTAL_CANDS]) {
+    candidate_distance_t cand_distances[ANTAL_CANDS];
+
+    for (int i = 0; i < ANTAL_CANDS; i++) {
+        double length = 0;
+        for (int j = 0; j < dimensions; j++) {
+            length += pow((koords[j] - cands[i][j]), 2);
+        }
+        cand_distances[i].id = i;
+        cand_distances[i].distance = sqrt(length);
+    }
+
+
+    qsort(cand_distances, ANTAL_CANDS, sizeof(candidate_distance_t), compare);
+    // printer præf ud for 1 voter
+
+
+    // now time for velfærd
+    double max_length = 0;
+    double min_length = 0;
+    double velfarg= 0;
+
+    for (int i = 0; i < dimensions; i++) {
+        max_length += pow(1-(-1),2);
+    }
+    max_length = sqrt(max_length);
+
+
+    FILE* file = fopen("text-files/test-tekstil.txt", "w");
+    fprintf(file, "%d(", rand() % STATES); //Printer tilfældig stat og '('
+
+    for (int i = 0; i< ANTAL_CANDS; i++){
+        velfarg = 1 - ((cand_distances[i].distance-min_length) / (max_length - min_length));
+        pref[i] = cand_distances[i].id;
+        fprintf(file, "%c%.3lf",'A' + pref[i], velfarg);
+        printf("%c%lf, ", 'A' + pref[i], velfarg);
+    }
+
+    fprintf(file, ")\n"); //Printer ')' og newline
+    fclose(file);
+}
+
+int compare(const void* a, const void *b) {
+    /* Typecaster til en candidate_distance pointer og returner differences af distance felterne*/
+    double diff = ((candidate_distance_t*)a)->distance - ((candidate_distance_t*)b)->distance;
+
+    if (diff < 0)
+        return -1;
+
+    if (diff > 0)
+        return 1;
+
+    else
+        return 0;
 }
