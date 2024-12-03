@@ -42,7 +42,7 @@ int main(void) {
     double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
     double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
 
-    spacial(voter, pref, cands);
+    spatial(voter, pref, cands);
 
     return 0;
 }

@@ -64,7 +64,7 @@ void generating_real_votes (int n_dimensions, cluster_t clusters) {
 
 
 
-void spacial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[ANTAL_CANDS]) {
+void spatial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[ANTAL_CANDS]) {
     candidate_distance_t cand_distances[ANTAL_CANDS];
 
     for (int i = 0; i < ANTAL_CANDS; i++) {
@@ -84,7 +84,7 @@ void spacial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[A
     // now time for velfærd
     double max_length = 0;
     double min_length = 0;
-    double velfarg= 0;
+    double velfarg = 0;
 
     for (int i = 0; i < dimensions; i++) {
         max_length += pow(1-(-1),2);
@@ -100,6 +100,9 @@ void spacial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[A
         pref[i] = cand_distances[i].id;
         fprintf(file, "%c%.3lf",'A' + pref[i], velfarg);
         printf("%c%lf, ", 'A' + pref[i], velfarg);
+        if (i < ANTAL_CANDS-1) {
+            fprintf(file, " "); //Printer mellemrum efter hver nytte, undtaget af den sidste
+        }
     }
 
     fprintf(file, ")\n"); //Printer ')' og newline

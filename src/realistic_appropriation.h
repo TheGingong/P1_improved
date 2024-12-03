@@ -14,5 +14,5 @@ typedef struct {
 } cluster_t;
 
 void generate_one_gauss (cluster_t cluster_n, double* gauss_array);
-void spacial(double koords[dimensions], char pref[ANTAL_CANDS], double* cands[ANTAL_CANDS]);
+void spatial(double koords[dimensions], char pref[ANTAL_CANDS], double* cands[ANTAL_CANDS]);
 int compare(const void* a, const void *b);
