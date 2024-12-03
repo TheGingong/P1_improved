@@ -20,7 +20,7 @@ int convert_borda(int* array_pref, FILE *file) {
     *  Hvis ikke den gemmer 5 characters i arrayet giver den fejl kode. */
     if (sscanf(temp_text_str, "%*d( %c%*f %c%*f %c%*f %c%*f %c%*f",
         &temp[0],&temp[1],&temp[2],&temp[3],&temp[4]) == 5) {
-            array_pref[0] = temp[0]-'A';
+            array_pref[0] = temp[0]-'A'; // Typecasting til int
             array_pref[1] = temp[1]-'A';
             array_pref[2] = temp[2]-'A';
             array_pref[3] = temp[3]-'A';
