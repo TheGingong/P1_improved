@@ -18,6 +18,7 @@ double welfare_calculator(char winner) {
                 printf("Error: Could not parse the line.\n"); // printer fejlkoden
             }
     }
+    fclose(file);
     return welfare_score/count;
-    fclose(file); // Lukker text filen
+     // Lukker text filen
 }
