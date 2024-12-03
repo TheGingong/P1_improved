@@ -20,7 +20,7 @@ int main(void) {
     FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
 
     /* Kalder simulering af et valgsystem som bruger Borda count */
-    //printf("The winner candidate of borda count is: %c\n\n", borda_count(file2));
+    printf("The winner candidate of borda count is: %c\n\n", borda_count(file2));
     fclose(file2);
 
     end = clock();

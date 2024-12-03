@@ -16,9 +16,9 @@ char america(FILE *file) {
     struct person current_state = {0};
     while(current_state.stat != -1) {
         current_state = convert_america(file); // Modtager en ny struct, current_state, fra convert_america til 'index' linje
-        //if (current_state.stat == -1) {
-        //    break;
-        //}
+        if (current_state.stat == -1) {
+            break;
+        }
         all_states[current_state.stat].votes[current_state.pref]++; // Tæller votes op i all_states udfra præferencen hos den individuelle person
     }
 
