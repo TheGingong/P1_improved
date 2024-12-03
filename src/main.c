@@ -3,12 +3,17 @@
 #include "america.h"
 #include "borda.h"
 #include <time.h>
+#include "vote_generation.h"
 
 #include "convert.h"
 
 int main(void) {
+    /* Generere stemmefil */
+    generate_vote_file(2000);
+
+
     /* Kalder simluering af det amerikanske valgsystem */
-    FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
+    FILE *file = fopen("text-files/file1.txt", "r"); // Filen med præferencer åbnes i read mode.
     clock_t start,end;
     double cpu_time_used;
 
@@ -18,7 +23,7 @@ int main(void) {
     printf("The winner candidate of the american election is: %c\n", winner_america);
     fclose(file);
 
-    FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
+    FILE *file2 = fopen("text-files/file1.txt", "r"); // Filen med præferencer åbnes i read mode.
 
     /* Kalder simulering af et valgsystem som bruger Borda count */
     char winner_borda = borda_count(file2);
