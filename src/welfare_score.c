@@ -14,7 +14,7 @@ double welfare_calculator(char winner) {
     int person_count = 0;
     while (fgets(temp_text_str, sizeof(temp_text_str), file) != NULL) { // Kører så længe der ikke er en tom linje
         person_count++; //Count for hver linje/person, så gennemsnittet kan findes til sidst
-        sprintf(format, "%%*[^%c]%c%%lf", winner,winner); // Læser op til og forbi vinder, for at finde velfærd hos kandidaten
+        sprintf(format, "%%*[^%c]%c%%lf", winner, winner); // Læser op til og forbi vinder, for at finde velfærd hos kandidaten
             if (sscanf(temp_text_str, format, &temp) == 1){ // Loop som efter hver korrekt læsning summere velfærdsscoren
                 welfare_score += temp;
             } else {
@@ -23,4 +23,8 @@ double welfare_calculator(char winner) {
     }
     fclose(file); // Lukker text filen
     return welfare_score / person_count; // Gennemsnitlige velfærd for personerne
+}
+
+double social_utility_efficiency() {
+
 }
