@@ -14,18 +14,20 @@ int main(void) {
 
     start = clock();
 
-    printf("The winner candidate of the american election is: %c\n", america(file));
+    char winner_america = america(file);
+    printf("The winner candidate of the american election is: %c\n", winner_america);
     fclose(file);
 
     FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
 
     /* Kalder simulering af et valgsystem som bruger Borda count */
-    printf("The winner candidate of borda count is: %c\n\n", borda_count(file2));
+    char winner_borda = borda_count(file2);
+    printf("The winner candidate of borda count is: %c\n\n", winner_borda);
     fclose(file2);
   
     /* Velfærd print */
-    printf("The total welfare for America: %lf\n", welfare_calculator(america(NUMBER_CANDIDATES)));
-    printf("The total welfare for Borda count: %lf\n\n", welfare_calculator(borda_count()));
+    printf("The total welfare for America: %lf\n", welfare_calculator(winner_america));
+    //printf("The total welfare for Borda count: %lf\n\n", welfare_calculator(winner_borda));
 
     end = clock();
     cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
