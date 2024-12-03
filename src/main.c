@@ -9,6 +9,9 @@
 int main(void) {
     /* Kalder simluering af det amerikanske valgsystem */
     FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
+    if (file == NULL) {
+        perror("Could not open file");
+    }
     clock_t start,end;
     double cpu_time_used;
 
@@ -19,7 +22,9 @@ int main(void) {
     fclose(file);
 
     FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
-
+    if (file2 == NULL) {
+        perror("Could not open file");
+    }
     /* Kalder simulering af et valgsystem som bruger Borda count */
     char winner_borda = borda_count(file2);
     printf("The winner candidate of borda count is: %c\n\n", winner_borda);

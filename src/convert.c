@@ -3,20 +3,16 @@
 #include <stdlib.h>
 #include "static_variables.h"
 
-/* convert_borda tager i mod et array af chars og hvilken linjen i text filen den skal sende tilbage i arrayet */
+/* convert_borda tager i mod et array af ints og finder hvad en person har stemt */
 int convert_borda(int* array_pref, FILE *file) {
-
     char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
     char temp[NUMBER_CANDIDATES] = {0};
-    if (fgets(temp_text_str, sizeof(temp_text_str), file) == NULL) {
-        return 0; // returner 0 for fejl
-    }
-
-
-    
     /* fgets læser max "sizeof(text_string) characters fra file stream -
     * - og gemmer dem i string-arrayet "text_string"
     * fgets stopper med at parse text hvis den rammer en newline */
+    if (fgets(temp_text_str, sizeof(temp_text_str), file) == NULL) {
+        return 0; // returner 0 for fejl
+    }
             /* %c Gemmer en enkelt character kan være hvad som helst i en tekst streng.
             * %*f Kombinere det at læse en float og så ignorer den med stjernen.
             * %f Gemmer en float værdi.
@@ -32,27 +28,17 @@ int convert_borda(int* array_pref, FILE *file) {
                 array_pref[2] = temp[2]-'A';
                 array_pref[3] = temp[3]-'A';
                 array_pref[4] = temp[4]-'A';
-
-                //for (int m = 0; m<5; m++) {
-                //    printf("%d\n", array_pref[m]);
-                //}
-
             } else {
-                printf("Error: Could not parse the line.\n"); // printer fejlkoden
+                printf("Error: Could not parse the line.\n"); // printer fejlkode hvis ikke den indlæser 5
             }
             return 1; // returner 1 for succes
 
     }
 
 
-/* convert_america tager imod en linje på tekstfilen der skal læses.
- * Tekst fil bliver læst og indlæser værdier til struck person der returnes */
+/* convert_america taget tekst fil, læser og indlæser værdier til struck ny_person der returnes */
 struct person convert_america(FILE *file) {
     struct person ny_person;
-    if (file == NULL) {
-        perror("Could not open file");
-    }
-
     char temp_text_str[MAX_LINE_LENGTH]; // Laver en temp string for at kunne bruge fgets
     int current_line = 0;
 
@@ -65,10 +51,9 @@ struct person convert_america(FILE *file) {
     }
     char temp; // midlertidig variabel for at kunne typecast til int senere
     if (sscanf(temp_text_str, "%d( %c", &ny_person.stat, &temp) == 2) { // Sscanf læser en string og indlæser værdier i de specificeret variabler
-        ny_person.pref = temp - 'A'; // typecasting the char to an in
+        ny_person.pref = temp - 'A'; // typecasting the char to an int
     } else {
-                printf("Error: Could not parse the line.\n");
+        printf("Error: Could not parse the line.\n"); // printer fejlkode hvis ikke den indlæser 5
     }
-    return ny_person;
-
+    return ny_person; // returner ny_person struct for succes
 }
