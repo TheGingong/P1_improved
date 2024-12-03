@@ -1,6 +1,4 @@
 #include "convert.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include "static_variables.h"
 
 /* convert_borda tager i mod et array af ints og finder hvad en person har stemt */

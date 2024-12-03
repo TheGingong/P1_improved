@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "america.h"
 #include "convert.h"
 #include "calculate_winner.h"

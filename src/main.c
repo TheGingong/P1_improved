@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "america.h"
 #include "borda.h"
-#include <time.h>
+#include "welfare_score.h"
 
-#include "convert.h"
 
 int main(void) {
     clock_t start,end;
@@ -32,8 +32,9 @@ int main(void) {
   
     /* Velfærd print */
     printf("The total welfare for America: %lf\n", welfare_calculator(winner_america));
-    //printf("The total welfare for Borda count: %lf\n\n", welfare_calculator(winner_borda));
+    printf("The total welfare for Borda count: %lf\n\n", welfare_calculator(winner_borda));
 
+    /* Printer programmet eksekverings tid */
     end = clock();
     cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
     printf("The program executed in: %lf s", cpu_time_used);
