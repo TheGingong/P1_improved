@@ -1,32 +1,31 @@
+#include <string.h>
 #include "../h-filer/convert.h"
 #include "../h-filer/static_variables.h"
 
 /* convert_borda tager i mod et array af ints og finder hvad en person har stemt */
 int convert_borda(int* array_pref, FILE *file) {
     char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
-    char temp[NUMBER_CANDIDATES] = {0};
+
     /* fgets læser max "sizeof(text_string) characters fra file stream -
     * - og gemmer dem i string-arrayet "text_string"
     * fgets stopper med at parse text hvis den rammer en newline */
     if (fgets(temp_text_str, sizeof(temp_text_str), file) == NULL) {
         return 0; // returner 0 for fejl
     }
-    /* %c Gemmer en enkelt character kan være hvad som helst i en tekst streng.
-    * %*f Kombinere det at læse en float og så ignorer den med stjernen.
-    * %f Gemmer en float værdi.
-    * "*" Istedet for at gemme så har stjernen den funktion at ignorer det den læser.
-    *  sscanf kigger i temp_text_str og gør sig brug af de forskellige gemme variabler nævnt ovenfor til at gemme i
-    *  Arrayet's forskellige pladser
-    *  Hvis ikke den gemmer 5 characters i arrayet giver den fejl kode. */
-    if (sscanf(temp_text_str, "%*d( %c%*f %c%*f %c%*f %c%*f %c%*f",
-        &temp[0],&temp[1],&temp[2],&temp[3],&temp[4]) == 5) {
-            array_pref[0] = temp[0]-'A'; // Typecasting til int
-            array_pref[1] = temp[1]-'A';
-            array_pref[2] = temp[2]-'A';
-            array_pref[3] = temp[3]-'A';
-            array_pref[4] = temp[4]-'A';
-    } else {
-        printf("Error: Could not parse the line.\n"); // printer fejlkode hvis ikke den indlæser 5
+
+    /* Benytter strtok, fra string.h library for at tilgå de nødvendige dele af hver linje i tekstfilen.
+     * Strtok splitter hver linje op med '\0' ved den delimiter man specificere, fx. '(' eller mellemrum.
+     * Tildeler de individuelle del-strenge strtok danner, og indsætter dem for array_pref til det nuværende index så hver vælger får den korrekte præference ordning.
+     * Token begrebet benyttes ofte til at beskrive at det er del elemeneter i en lang sekvens. */
+    char* token = strtok(temp_text_str, "(");
+    token = strtok(NULL, "(");
+
+    token = strtok(token, " ");
+    int index = 0; // Kandidat index
+    while (token != NULL) { // Fortsætter while loop indtil token returnerer NULL hvilket vil sige at linjen er færdig
+        array_pref[index] = token[0] - 'A'; // Tildeler her hvert første element i de indivuelle delstrings, som strtok danner, til array_pref kandidat indexet
+        token = strtok(NULL, " ");
+        index++;
     }
     return 1; // returner 1 for succes
 }
@@ -34,7 +33,7 @@ int convert_borda(int* array_pref, FILE *file) {
 
 /* convert_america taget tekst fil, læser og indlæser værdier til struck ny_person der returnes */
 struct person convert_america(FILE *file) {
-    struct person ny_person;
+    struct person ny_person = {0};
     char temp_text_str[MAX_LINE_LENGTH]; // Laver en temp string for at kunne bruge fgets
 
     /* fgets læser max "sizeof(text_string) characters fra file stream -
