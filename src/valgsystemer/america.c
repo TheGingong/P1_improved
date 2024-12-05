@@ -1,6 +1,6 @@
-#include "america.h"
-#include "convert.h"
-#include "calculate_winner.h"
+#include "../h-filer/america.h"
+#include "../h-filer/convert.h"
+#include "../h-filer/calculate_winner.h"
 
 /* Hovedfunktion som modtager antallet af kandidater fra main.c
  * Returnerer karakteren på vinder kandidaten til main.c */
