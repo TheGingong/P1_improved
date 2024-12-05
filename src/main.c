@@ -45,6 +45,14 @@ int main(void) {
 
     spatial(voter, pref, cands);
 
+    double test_array[200];
+    cluster_t test; test.mean_cluster = 0; test.spread_cluster = 0.1; test.voters_cluster = 100;
+    double min_value = -1.0;
+    double max_value = 1.0;
+    generate_one_gauss(test, test_array, min_value, max_value);
+
+
+
     //Array med x-værdier
     double number_array[200];
     for (int i = 0; i < 200; i++) {
