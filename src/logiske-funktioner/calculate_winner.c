@@ -1,5 +1,5 @@
-#include "static_variables.h"
-#include "calculate_winner.h"
+#include "../h-filer/static_variables.h"
+#include "../h-filer/calculate_winner.h"
 
 int calculate_winner_func(const int* scores) {
     int max_score_index = 0; // Kandidat A initialiserede som vinder af valget

@@ -1,7 +1,7 @@
-#include "borda.h"
-#include "convert.h"
-#include "calculate_winner.h"
-#include "static_variables.h"
+#include "../h-filer/borda.h"
+#include "../h-filer/convert.h"
+#include "../h-filer/calculate_winner.h"
+#include "../h-filer/static_variables.h"
 
 /* Funktion borda_count initialiserer de nødvendige arrays, samt tildeler dem en start værdi */
 char borda_count(FILE *file) {

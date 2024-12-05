@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "america.h"
-#include "borda.h"
-#include "welfare_score.h"
+#include "./h-filer/america.h"
+#include "./h-filer/borda.h"
+#include "./h-filer/welfare_score.h"
 
 int main(void) {
     /* Initialisere variabler til clock_t struct */

@@ -1,5 +1,5 @@
-#include "convert.h"
-#include "static_variables.h"
+#include "../h-filer/convert.h"
+#include "../h-filer/static_variables.h"
 
 /* convert_borda tager i mod et array af ints og finder hvad en person har stemt */
 int convert_borda(int* array_pref, FILE *file) {
