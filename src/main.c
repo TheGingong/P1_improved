@@ -5,6 +5,7 @@
 #include <time.h>
 #include "realistic_appropriation.h"
 #include "convert.h"
+#include "pbPlots.h"
 
 
 int main(void) {
@@ -44,15 +45,30 @@ int main(void) {
 
     spatial(voter, pref, cands);
 
-    double test_array[200];
-    cluster_t test; test.mean_cluster = 150; test.spread_cluster = 20; test.voters_cluster = 200;
-    generate_one_gauss(test, test_array);
-
+    //Array med x-værdier
     double number_array[200];
     for (int i = 0; i < 200; i++) {
         number_array[i] = i;
     }
-    create_graph(number_array, test_array);
 
+    //Cluster 1
+    double test_array[200];
+    cluster_t test; test.mean_cluster = 150; test.spread_cluster = 20; test.voters_cluster = 200;
+    generate_one_gauss(test, test_array);
+    create_graph(number_array, test_array, "Cluster1");
+
+    //Cluster 2
+    double test_array2[200];
+    cluster_t cluster2; cluster2.mean_cluster = 50; cluster2.spread_cluster = 30; cluster2.voters_cluster = 200;
+    generate_one_gauss(cluster2, test_array2);
+    create_graph(number_array, test_array2, "Cluster2");
+
+    //Mixture
+    double mixture_array[200];
+    gaussian_mixture(test_array, test_array2, 200, mixture_array);
+    create_graph(number_array, mixture_array, "Mix");
+
+
+    FreeAllocations();
     return 0;
 }

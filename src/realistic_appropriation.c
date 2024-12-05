@@ -133,14 +133,23 @@ int compare(const void* a, const void *b) {
         return 0;
 }
 
-void create_graph (double *array, double *array2) {
+/* Laver graf ved brug af pbPlots */
+void create_graph (double *x_akse, double *y_akse, char prefix[]) {
     RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();
-    DrawScatterPlot(imageRef, 600, 400, array, 200, array2, 200, "Error in creating image");
+    /* Bestemmer størrelsen på billedet, og x og y aksen*/
+    DrawScatterPlot(imageRef, 600, 400, x_akse, 200, y_akse, 200, "Error in creating image");
 
     size_t length;
-    ByteArray *pngdata = ConvertToPNG(imageRef->image);
-    WriteToFile(pngdata, "graf.png");
+    ByteArray *pngdata = ConvertToPNG(imageRef->image); //Konvertere til png
+    char filename[64];
+    sprintf(filename, "%s.png", prefix); //Sætter .png efter prefixet, for at danne filnavn
+    WriteToFile(pngdata, filename);
     DeleteImage(imageRef->image);
+}
 
-    FreeAllocations();
+/* Udregner Guassian mixture, ved at tage summen af begge fordelinger */
+void gaussian_mixture(double array1[], double array2[], int size, double* mix_array){
+    for (int i = 0; i < size; i++) {
+        mix_array[i] = array1[i]+array2[i];
+    }
 }
