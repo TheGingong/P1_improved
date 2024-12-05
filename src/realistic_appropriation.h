@@ -17,5 +17,6 @@ void generate_one_gauss(cluster_t cluster_n,  double* gauss_array, double min_va
 void generating_real_votes (int n_dimensions, cluster_t clusters);
 void spatial(double koords[dimensions], char pref[ANTAL_CANDS], double* cands[ANTAL_CANDS]);
 int compare(const void* a, const void *b);
+void create_graph (double *array, double *array2);
 int compare_doubles(const void* a, const void* b);
 double gaussian_mixture(double array1[], double array2[], int size, double* mix_array);

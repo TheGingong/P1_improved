@@ -41,6 +41,7 @@ int main(void) {
     double cand3[] = {0.2, 0.9, -1, 0.6, 1};
     double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
     double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
+
     spatial(voter, pref, cands);
 
     double test_array[200];
@@ -50,6 +51,12 @@ int main(void) {
     generate_one_gauss(test, test_array, min_value, max_value);
 
 
+
+    double number_array[200];
+    for (int i = 0; i < 200; i++) {
+        number_array[i] = i;
+    }
+    create_graph(number_array, test_array);
 
     return 0;
 }

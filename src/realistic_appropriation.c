@@ -4,6 +4,8 @@
 #include "america.h"
 #include "borda.h"
 #include "math.h"
+#include "pbPlots.h"
+#include "supportLib.h"
 
 const int dimensions = 5;
 const int total_voters = 1000;
@@ -171,3 +173,15 @@ int compare_doubles(const void* a, const void* b) {
 }
 
 
+
+void create_graph (double *array, double *array2) {
+    RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();
+    DrawScatterPlot(imageRef, 600, 400, array, 200, array2, 200, "Error in creating image");
+
+    size_t length;
+    ByteArray *pngdata = ConvertToPNG(imageRef->image);
+    WriteToFile(pngdata, "graf.png");
+    DeleteImage(imageRef->image);
+
+    FreeAllocations();
+}
