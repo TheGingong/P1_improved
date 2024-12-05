@@ -1,7 +1,6 @@
 #include "welfare_score.h"
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "static_variables.h"
 
 /* Funktion til at beregne social utility efficiency hos vinder kandidaten */
