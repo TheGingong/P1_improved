@@ -51,8 +51,15 @@ const int total_voters = 1000;
 /* -- PROGRAMMERING -- */
 
 //funktion, der kan generere normalfordelinger pr. dimension
-void gaussian_density () {
-    
+double gaussian_density (cluster_t cluster_n, double voter_x) {
+    return 1 / ( sqrt(2 * M_PI) * cluster_n.spread_cluster ) * exp(-(1/2) * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
+}
+void generate_one_gauss (cluster_t cluster_n, double* gauss_array) {
+    int voter_per_gauss = total_voters / dimensions;
+    for (int i = 0; i < voter_per_gauss; i++) {
+        gauss_array[i] = gaussian_density(cluster_n, i);
+        printf("%lf", gauss_array[i]);
+    }
 }
 
 void generating_real_votes (int n_dimensions, cluster_t clusters) {
