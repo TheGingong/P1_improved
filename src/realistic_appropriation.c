@@ -56,8 +56,11 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
 }
 
 void generate_one_gauss (cluster_t cluster_n, double* gauss_array) {
-    for (int i = 0; i < cluster_n.voters_cluster; i++) {
-        gauss_array[i] = 100*gaussian_density(cluster_n, i);
+    double most_left = 0 - fabs(cluster_n.mean_cluster);
+    double most_right = cluster_n.voters_cluster - fabs(cluster_n.mean_cluster);
+    int i; double j;
+    for (i = 0, j = most_left; j < most_right; i++, j++) {
+        gauss_array[i] = 10*gaussian_density(cluster_n, i);
         printf("%d %lf\n", i, gauss_array[i] );
     }
 }
