@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include "convert.h"
 #include "america.h"
 #include "borda.h"
@@ -55,11 +56,42 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
     return 1 / ( sqrt(2 * M_PI) * cluster_n.spread_cluster ) * exp(-0.5 * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
 }
 
-void generate_one_gauss (cluster_t cluster_n, double* gauss_array) {
+double generate_normal_using_density(cluster_t cluster_n, double min_value, double max_value) {
+    double sample;
+    double density_at_sample;
+    double random_value;
+
+    // Loop until we accept a sample (this is the rejection sampling part)
+    do {
+        // Generate a random value uniformly distributed between min_value and max_value
+        sample = (double) rand() / RAND_MAX * (max_value - min_value) + min_value;
+
+        // Get the Gaussian density at this sample point
+        density_at_sample = gaussian_density(cluster_n, sample);
+
+        // Generate a random value between 0 and the maximum density at the peak (this represents a uniform sample)
+        random_value = (double) rand() / RAND_MAX * gaussian_density(cluster_n, cluster_n.mean_cluster);
+
+    } while (random_value > density_at_sample); // Accept only if the random value is below the density
+
+    return sample; // Return the accepted sample
+}
+
+void generate_one_gauss(cluster_t cluster_n, double* gauss_array, double min_value, double max_value) {
+    srand(time(NULL));  // Seed the random number generator
+
+    // Generate normally distributed values for each voter using the rejection sampling method
     for (int i = 0; i < cluster_n.voters_cluster; i++) {
-        gauss_array[i] = 100*gaussian_density(cluster_n, i);
-        printf("%d %lf\n", i, gauss_array[i] );
+        double value = generate_normal_using_density(cluster_n, min_value, max_value);
+        gauss_array[i] = value;
     }
+
+    //qsort(gauss_array, cluster_n.voters_cluster, sizeof(double), compare_doubles);
+
+    for (int i = 0; i < cluster_n.voters_cluster; i++) {
+        printf("%lf\n", gauss_array[i]);
+}
+
 }
 
 void generating_real_votes (int n_dimensions, cluster_t clusters) {
@@ -127,3 +159,15 @@ int compare(const void* a, const void *b) {
     else
         return 0;
 }
+
+int compare_doubles(const void* a, const void* b) {
+    double diff = *(double*)a - *(double*)b;
+
+    if (diff < 0)
+        return -1;
+    if (diff > 0)
+        return 1;
+    return 0;
+}
+
+

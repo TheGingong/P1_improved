@@ -41,12 +41,15 @@ int main(void) {
     double cand3[] = {0.2, 0.9, -1, 0.6, 1};
     double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
     double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
-
     spatial(voter, pref, cands);
 
     double test_array[200];
-    cluster_t test; test.mean_cluster = 100; test.spread_cluster = 20; test.voters_cluster = 200;
-    generate_one_gauss(test, test_array);
+    cluster_t test; test.mean_cluster = 0; test.spread_cluster = 0.1; test.voters_cluster = 100;
+    double min_value = -1.0;
+    double max_value = 1.0;
+    generate_one_gauss(test, test_array, min_value, max_value);
+
+
 
     return 0;
 }
