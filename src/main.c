@@ -45,8 +45,14 @@ int main(void) {
     spatial(voter, pref, cands);
 
     double test_array[200];
-    cluster_t test; test.mean_cluster = 100; test.spread_cluster = 20; test.voters_cluster = 200;
+    cluster_t test; test.mean_cluster = 150; test.spread_cluster = 20; test.voters_cluster = 200;
     generate_one_gauss(test, test_array);
+
+    double number_array[200];
+    for (int i = 0; i < 200; i++) {
+        number_array[i] = i;
+    }
+    create_graph(number_array, test_array);
 
     return 0;
 }
