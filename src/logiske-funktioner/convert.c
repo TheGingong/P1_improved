@@ -30,7 +30,6 @@ int convert_borda(int* array_pref, FILE *file) {
     return 1; // returner 1 for succes
 }
 
-
 /* convert_america taget tekst fil, læser og indlæser værdier til struck ny_person der returnes */
 struct person convert_america(FILE *file) {
     struct person ny_person = {0};
