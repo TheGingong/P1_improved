@@ -2,8 +2,8 @@
 #include "../h-filer/calculate_winner.h"
 
 int calculate_winner_func(const int* scores) {
-    int max_score_index = 0; // Kandidat A initialiserede som vinder af valget
-    int max_score = scores[0]; // Kandidat A's score bliver sat som den kandidat med højest score
+    int max_score_index = 0; // Første kandidat initialiserede som vinder af valget
+    int max_score = scores[0]; // Første kandidat's score bliver sat som den kandidat med højest score
 
     /* For loop som gennemløber alle kandidater, og sammenligner score blandt dem.
      * Finder vinder blandt kandidaterne baseret på scoren. */
