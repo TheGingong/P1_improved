@@ -5,7 +5,7 @@
 #include "./h-filer/america.h"
 #include "./h-filer/borda.h"
 #include "./h-filer/welfare_score.h"
-#include "realistic_appropriation.h"
+#include "./h-filer/realistic_appropriation.h"
 
 int main(void) {
     /* Initialisere variabler til clock_t struct */
