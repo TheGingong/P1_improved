@@ -33,3 +33,8 @@ for (int i = 0; i < 5; i++) {
 HUSKELISTE:<br/>
 Husk at lave mellemrum mellem funktion så det kan læses! <br/>
 Husk gode variabel/funktion navne som klart beskriver hvad vi bruger det til!
+
+
+Til spatial voting <br\>
+https://en.wikipedia.org/wiki/Rejection_sampling
+

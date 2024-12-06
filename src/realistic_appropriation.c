@@ -155,6 +155,7 @@ void spatial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[A
     fclose(file);
 }
 
+/* qsort compare funktion til doubles i en struckt */
 int compare(const void* a, const void *b) {
     /* Typecaster til en candidate_distance pointer og returner differences af distance felterne*/
     double diff = ((candidate_distance_t*)a)->distance - ((candidate_distance_t*)b)->distance;
@@ -169,6 +170,7 @@ int compare(const void* a, const void *b) {
         return 0;
 }
 
+/* qsort compare funktion til doubles */
 int compare_doubles(const void* a, const void* b) {
     double diff = *(double*)a - *(double*)b;
 
