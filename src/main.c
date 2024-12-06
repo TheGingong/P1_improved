@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "./h-filer/static_variables.h"
 #include "./h-filer/america.h"
 #include "./h-filer/borda.h"
 #include "./h-filer/welfare_score.h"

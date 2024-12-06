@@ -1,4 +1,4 @@
-#include "./h-filer/static_variables.h"
+#include "../h-filer/static_variables.h"
 
 #define ANTAL_CANDS 4
 #define DIMENSIONS 5
