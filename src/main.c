@@ -44,19 +44,31 @@ int main(void) {
 
     spatial(voter, pref, cands);
 
-    double test_array[200];
-    cluster_t test; test.mean_cluster = 0; test.spread_cluster = 0.1; test.voters_cluster = 100;
-    double min_value = -1.0;
-    double max_value = 1.0;
-    generate_one_gauss(test, test_array, min_value, max_value);
 
 
+    double total_model_array[dimensions][total_voters];
+    double min_value = -1.0, max_value = 1.0;
+    //array af cluster strcuts
+    cluster_t cluster_array[clusters];
+    make_cluster_array(cluster_array, clusters);
+    //kør funktion
+    //generate_one_gauss(test, total_model_array, min_value, max_value);
+    assemble_gauss(cluster_array, total_model_array);
 
-    double number_array[200];
-    for (int i = 0; i < 200; i++) {
-        number_array[i] = i;
-    }
-    create_graph(number_array, test_array);
 
+    //double test_array[200];
+    //cluster_t test; test.mean_cluster = 0; test.spread_cluster = 0.1; test.voters_cluster = 100;
+    //double min_value = -1.0;
+    //double max_value = 1.0;
+    //generate_one_gauss(test, test_array, min_value, max_value);
+//
+//
+//
+    //double number_array[200];
+    //for (int i = 0; i < 200; i++) {
+    //    number_array[i] = i;
+    //}
+    //create_graph(number_array, test_array);
+//
     return 0;
 }

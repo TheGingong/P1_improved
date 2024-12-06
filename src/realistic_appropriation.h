@@ -1,6 +1,7 @@
 #define ANTAL_CANDS 4
-#define dimensions 5
-#define clusters 5
+#define dimensions 2
+#define clusters 4
+#define total_voters 200
 
 typedef struct {
     int id;         // Candidate ID
@@ -15,9 +16,9 @@ typedef struct {
     int voters_cluster; //amount of voters within selected cluster
 } cluster_t;
 
-void generate_one_gauss(cluster_t cluster_n, double** gauss_2d_array, double min_value, double max_value, int dimension_j);
-void make_cluster_array (cluster_t* cluster_array, int total_voters, int total_clusters);
-void assemble_gauss (cluster_t* cluster_array, double** gauss_2d_array);
+void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[dimensions][total_voters], double min_value, double max_value, int dimension_j);
+void make_cluster_array (cluster_t cluster_array[clusters], int total_clusters);
+void assemble_gauss (cluster_t cluster_array[clusters], double gauss_2d_array[dimensions][total_voters]);
 void spatial(double koords[dimensions], char pref[ANTAL_CANDS], double* cands[ANTAL_CANDS]);
 int compare(const void* a, const void *b);
 void create_graph (double *array, double *array2);

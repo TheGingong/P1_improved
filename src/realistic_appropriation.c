@@ -77,20 +77,21 @@ double generate_normal_using_density(cluster_t cluster_n, double min_value, doub
 }
 
 //array of cluster structs
-void make_cluster_array (cluster_t* cluster_array, int total_voters, int total_clusters) {
+void make_cluster_array (cluster_t cluster_array[clusters], int total_clusters) {
     int min_value = -1, max_value = 1, min_value_spread = 0;
     for (int i = 0; i < clusters; i++) {
         cluster_array->mean_cluster = min_value + (double) rand() / RAND_MAX * (max_value - min_value);
         cluster_array->spread_cluster = min_value_spread + (double) rand() / RAND_MAX * (max_value - min_value_spread);
         cluster_array->voters_cluster = total_voters / total_clusters;
+        printf("cluster.mean = %lf, cluster spread = %lf, voters = %d\n", cluster_array->mean_cluster, cluster_array->spread_cluster, cluster_array->voters_cluster);
     }
 }
 
-void generate_one_gauss(cluster_t cluster_n, double** gauss_2d_array, double min_value, double max_value, int dimension_j) {
+void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[dimensions][total_voters], double min_value, double max_value, int dimension_j) {
     srand(time(NULL));  // Seed the random number generator
 
     // Generate normally distributed values for each voter using the rejection sampling method
-    for (int i = 0; i < dimensions; i++) {
+    for (int i = 0; i < total_voters; i++) {
         double value = generate_normal_using_density(cluster_n, min_value, max_value);
         gauss_2d_array[dimension_j][i] = value;
     }
@@ -99,14 +100,17 @@ void generate_one_gauss(cluster_t cluster_n, double** gauss_2d_array, double min
 
 }
 
-void assemble_gauss (cluster_t* cluster_array, double** gauss_2d_array) {
+void assemble_gauss (cluster_t cluster_array[clusters], double gauss_2d_array[dimensions][total_voters]) {
     int min_value = -1, max_value = 1;
     for (int i = 0; i < dimensions ;i++) {
-        generate_one_gauss(cluster_array[i], gauss_2d_array[i][], min_value, max_value, i);
 
-        for (int j = 0; j < cluster_array->voters_cluster; j++) {
-            printf("%lf\n", gauss_2d_array[i][j]);
+        for (int h = 0; h < clusters; h++) {        for (int j = 0; j < (total_voters); j++) {
+            generate_one_gauss(cluster_array[h], gauss_2d_array, min_value, max_value, i);
+            //printf("i = %d, j = %d\n ",i, j);
+            printf("printer nu gauss_2d_array[%d][%d] = %lf\n",i, j, gauss_2d_array[i][j]);
+            }
         }
+
     }
 }
 
