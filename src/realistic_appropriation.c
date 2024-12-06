@@ -2,201 +2,157 @@
 #include <time.h>
 #include "convert.h"
 #include "america.h"
-#include "borda.h"
 #include "math.h"
 #include "pbPlots.h"
 #include "supportLib.h"
-#include <time.h>
 #include "realistic_appropriation.h"
+
 /* -- NOTER -- */
 /* -- Kontrolparametre --
  * Dispersion - klynger der former grupper med samme ideologi (politiske partier, religion, etc)
- * Correlation - høreorient fører til mere højreorient, sammenhæng mellem forskellige holdninger
+ * Correlation - højreorient fører til mere højreorient, sammenhæng mellem forskellige holdninger
  * Noise - der vil fremkomme folk som ikke stemmer rationelt
  * Limiting extreme ideologies - normalfordeling
  * Dimensional weights - visse sager vægtes højere end andre
  */
 
-/* én normalfordeling medfører én cluster, hvilket implier én basis holdning, som alle holdninger samels om
- * flere normalfordelinger, for hver klynge der skal være, er mere korrekt.
- * - normalfordelingernes median er forskellig, afgør politisk centrum for klynge
- * - spredning varierer, nogle klyner er større eller mindre end andre, altså varians i medlemmer pr klynge
- * -
- */
-
-/* -- variable --
- * antal dimensioner (mærkesager)
- * antal klynger pr dimension
- *     - spredning
- *     - middel (lokation på spacial)
- *     - vælgere i klyngen (50-300)
- *
- */
-
-/* -- stemmer består af --
- * USA stat
- * antal kandidater med vægtning pr kandidat
- */
-
-//stemmer genereres over x antal dimensioner (1 dimension, 1 mærkesag)
-
-//hver dimension har x antal klynger (1 klynge, 1 normalfordeling) (-dispersion- -limiting extreme ideologies-)
-
-//hver klynge har 50-300 medlemmer (varians i klyngestr)
-        //der genereres ~2-5% impartial vælgere (-noise-)
-
-//til sidst vægtes holdningerne blandt vælgerne, og vægten påføres deres holdninger (-dimensional weights-)
-    //for alle gælder det, at én mærkesag kommer før en anden osv
-
 /* -- PROGRAMMERING -- */
 
-//funktion, der kan generere én normalfordeling
-double gaussian_density (cluster_t cluster_n, double voter_x) {
-    return 1 / ( sqrt(2 * M_PI) * cluster_n.spread_cluster ) * exp(-0.5 * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
-}
+/*TODO: IKKE GJORT ENDNU:
+ *  Kontrolparametre
+ *  - - noise og strategiske stemmer
+ *  - - correlation
+ *  - - weights til distanceformel
+ *  Optimering
+ *  Ikke uniformt antal stemmer pr cluster
+ *  Generering af kandidater
+ *  Generering af stater reflekterer virkelige populationer
+ */
 
-double generate_normal_using_density(cluster_t cluster_n, double min_value, double max_value) {
-    double sample;
-    double density_at_sample;
-    double random_value;
-
-    // Loop until we accept a sample (this is the rejection sampling part)
-    do {
-        // Generate a random value uniformly distributed between min_value and max_value
-        sample = (double) rand() / RAND_MAX * (max_value - min_value) + min_value;
-
-        // Get the Gaussian density at this sample point
-        density_at_sample = gaussian_density(cluster_n, sample);
-
-        // Generate a random value between 0 and the maximum density at the peak (this represents a uniform sample)
-        random_value = (double) rand() / RAND_MAX * gaussian_density(cluster_n, cluster_n.mean_cluster);
-
-    } while (random_value > density_at_sample); // Accept only if the random value is below the density
-
-    return sample; // Return the accepted sample
-}
-
-//array of cluster structs
-void make_cluster_array (cluster_t cluster_array[clusters], int total_clusters) {
-    int min_value = -1, max_value = 1, min_value_spread = 0;
-    for (int i = 0; i < clusters; i++) {
-        cluster_array->mean_cluster = min_value + (double) rand() / RAND_MAX * (max_value - min_value);
-        cluster_array->spread_cluster = min_value_spread + (double) rand() / RAND_MAX * (max_value - min_value_spread);
-        cluster_array->voters_cluster = total_voters / total_clusters;
-    }
-}
-
-void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[total_voters][dimensions], double min_value, double max_value, int dimension_j) {
-    srand(time(NULL));  // Seed the random number generator
-
-    // Generate normally distributed values for each voter using the rejection sampling method
-    for (int i = 0; i < total_voters; i++) {
-        double value = generate_normal_using_density(cluster_n, min_value, max_value);
-        gauss_2d_array[i][dimension_j] = value;
-    }
-
-    //qsort(gauss_array, cluster_n.voters_cluster, sizeof(double), compare_doubles);
-
-}
-
-void assemble_gauss (cluster_t cluster_array[clusters], double gauss_2d_array[total_voters][dimensions], FILE* file) {
-    int min_value = -1, max_value = 1;
-    for (int i = 0; i < dimensions ;i++) {
-
-        for (int h = 0; h < clusters; h++) {
-            for (int j = 0; j < (total_voters); j++) {
-                generate_one_gauss(cluster_array[h], gauss_2d_array, min_value, max_value, i);
+/* Funktion, der kører andre underordnede funktioner.
+ * Formålet er, at samle alle elementerne, og skriver resultaterne i tekstfilen */
+void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
+    for (int i = 0; i < DIMENSIONS ;i++) {
+        make_cluster_array(cluster_array);
+        for (int h = 0; h < CLUSTERS; h++) {
+            for (int j = 0; j < (TOTAL_VOTERS); j++) {
+                generate_one_gauss(cluster_array[h], gauss_2d_array, i);
             }
         }
-
     }
-
-    // Kalder spatial med allle koordinaterne
-    for (int i = 0; i < total_voters; i++) {
+    for (int i = 0; i < TOTAL_VOTERS; i++) { // Bruger spacial-stemmemodel for at skabe vælgerpræferencer
         spatial(gauss_2d_array[i], file);
     }
-
-
 }
 
+/* Funktion, der opsætter en array af structs (cluster_t) */
+void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
+    for (int i = 0; i < CLUSTERS; i++) {
+        // Sætter middelværdien til en tilfældig værdi fra -1 til 1
+        cluster_array[i].mean_cluster = MIN_VALUE + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE);
+        // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
+        cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
+        // Fordeler vælgere uniformt på mængden af normalfordelinger
+        cluster_array[i].voters_cluster = TOTAL_VOTERS / CLUSTERS;
+    }
+}
 
-void spatial(double koords[dimensions], FILE* file) {
+/* Funktion, der genererer tilfældige stemmer for én vælger i den j'te dimension*/
+void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j) {
+    srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
-    /* cands burde fixes på en måde */
+    // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
+    for (int i = 0; i < TOTAL_VOTERS; i++) {
+        double value = generate_normal_using_density(cluster_n);
+        gauss_2d_array[i][dimension_j] = value;
+    }
+}
+
+/* Funktion, som generer et koordinat i én dimension for én stemme */
+double generate_normal_using_density(cluster_t cluster_n) {
+    double sample, density_at_sample, random_value;
+    /* Do-while, som finder en tilfældig værdi (sample), og sammenligner med en anden tilfældig værdi (random_value).
+     * Hvis tætheden for sample er mindre end den for random_value, findes der et nyt sample og en ny random.
+     * Dette sikrer, at der er flere værdier tæt om middelværdien, 0, hvilket gør at de fleste genererede data ligger om 0 */
+    do { // Funktionen kører indtil der findes en acceptabel værdi (dette kaldes rejection sampling)
+        sample = (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE) + MIN_VALUE; // Genererer et punkt fra -1 til 1
+
+        density_at_sample = gaussian_density(cluster_n, sample); //Tætheden findes for sample-punktet
+
+        // Finder en tilfældig værdi mellem 0, og tætheden for middelværdien
+        random_value = (double) rand() / RAND_MAX * gaussian_density(cluster_n, cluster_n.mean_cluster);
+
+    } while (random_value > density_at_sample); // Tjekker, om sample er større end den tilfældige værdi, accepterer hvis den er
+    return sample; // Returnerer sample-værdien
+}
+
+/* Funktion, der kan generere sandsynligheden for ét udfald i en normalfordeling (cluster) */
+double gaussian_density (cluster_t cluster_n, double voter_x) {
+    // Følgende er tæthedsfunktionen (også kaldet Gauss-funktionen)
+    return 1 / ( sqrt(2 * M_PI) * cluster_n.spread_cluster )
+           * exp(-0.5 * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
+}
+
+/* Funktion, som tager vælgeres rangeringskoordinater, og beregner længden fra dem til kandidternes
+ * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
+void spatial(double koords[DIMENSIONS], FILE* file) {
+
+    // til videreudvikling
     double cand1[] = {1, 0.2, 0.5, -0.4, 0.9};
     double cand2[] = {-0.4, 0.4, 0.2, 1, -0.9};
     double cand3[] = {0.2, 0.9, -1, 0.6, 1};
     double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
     double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
 
-    candidate_distance_t cand_distances[ANTAL_CANDS];
+    candidate_distance_t cand_distances[ANTAL_CANDS]; // Array af candidate_distance_t structs
 
-
+    /* Loop der itererer over antal kandidater */
     for (int i = 0; i < ANTAL_CANDS; i++) {
         double length = 0;
-        for (int j = 0; j < dimensions; j++) {
-            length += pow((koords[j] - cands[i][j]), 2);
+        for (int j = 0; j < DIMENSIONS; j++) { // Loop der itererer over antal dimensioner
+            length += pow((koords[j] - cands[i][j]), 2); // Euklids distanceformel (summerer over flere dimensioner)
         }
-        cand_distances[i].id = i;
-        cand_distances[i].distance = sqrt(length);
+        cand_distances[i].id = i; // Tilegn indeks til den korresponderende vælger i struct-array'et
+        cand_distances[i].distance = sqrt(length); // Tilegn længden fra vælger til kandidat på korresponderende plads i struct-array
     }
 
-
+    /* Sorterer således den kandidat der er kortest til fra vælger, står først */
     qsort(cand_distances, ANTAL_CANDS, sizeof(candidate_distance_t), compare);
-    // printer præf ud for 1 voter
 
+    /* Der initieres variabler til brug for velfærds-beregning */
+    double max_length = 0, min_length = 0, welfare = 0;
 
-    // now time for velfærd
-    double max_length = 0;
-    double min_length = 0;
-    double velfarg = 0;
-
-    for (int i = 0; i < dimensions; i++) {
+    /* Udregner maksimale længde en vælger kan være fra en kandidat
+     * (velfærd på 0 for værst mulig, velfærd på 1 for bedst mulig) */
+    for (int i = 0; i < DIMENSIONS; i++) {
         max_length += pow(1-(-1),2);
     }
-    max_length = sqrt(max_length);
+    max_length = sqrt(max_length); // Euklids igen
 
-    fprintf(file, "%d(", rand() % STATES); //Printer tilfældig stat og '('
-
+    /* Udregner velfærd baseret på distance, og printer dette til tekstfilen med en tilfældig stat (0-50) foran */
+    fprintf(file, "%d(", rand() % STATES); // Printer tilfældig stat og '('
     for (int i = 0; i< ANTAL_CANDS; i++){
-        velfarg = 1 - ((cand_distances[i].distance-min_length) / (max_length - min_length));
-        fprintf(file, "%c%.3lf",'A' + cand_distances[i].id, velfarg);
-        //printf("%c%lf, ", 'A' + cand_distances[i].id, velfarg);
+        welfare = 1 - ((cand_distances[i].distance-min_length) / (max_length - min_length)); // Normaliserer distance 0 til 1
+
+        fprintf(file, "%c%.3lf",'A' + cand_distances[i].id, welfare); // Printer værdierne til tekstfilen
         if (i < ANTAL_CANDS-1) {
-            fprintf(file, " "); //Printer mellemrum efter hver nytte, undtaget af den sidste
+            fprintf(file, " "); // Printer mellemrum efter hver nytte, på nær den sidste
         }
     }
-
-    fprintf(file, ")\n"); //Printer ')' og newline
+    fprintf(file, ")\n"); // Printer ')' og newline
 }
 
-/* qsort compare funktion til doubles i en struckt */
+/* qsort compare funktion til doubles i en struct */
 int compare(const void* a, const void *b) {
-    /* Typecaster til en candidate_distance pointer og returner differences af distance felterne*/
+    /* Typecaster til en candidate_distance pointer, og returner differencen mellem distancefelterne */
     double diff = ((candidate_distance_t*)a)->distance - ((candidate_distance_t*)b)->distance;
 
-    if (diff < 0)
-        return -1;
-
-    if (diff > 0)
-        return 1;
-
-    else
-        return 0;
+    if (diff < 0) return -1;
+    if (diff > 0) return 1;
+    else return 0;
 }
 
-int compare_doubles(const void* a, const void* b) {
-    double diff = *(double*)a - *(double*)b;
-
-    if (diff < 0)
-        return -1;
-    if (diff > 0)
-        return 1;
-    return 0;
-}
-
-
-/* Laver graf ved brug af pbPlots */
+/* Følgende bruges til at lave grafer ved brug af biblioteket, pbPlots, som behjælper debugging */
 void create_graph (double *x_akse, double *y_akse, char prefix[]) {
 
     _Bool success;
@@ -264,11 +220,4 @@ void create_graph (double *x_akse, double *y_akse, char prefix[]) {
    // sprintf(filename, "%s.png", prefix); //Sætter .png efter prefixet, for at danne filnavn
    // WriteToFile(pngdata, filename);
    // DeleteImage(imageRef->image);
-}
-
-/* Udregner Guassian mixture, ved at tage summen af begge fordelinger */
-void gaussian_mixture(double array1[], double array2[], int size, double* mix_array){
-    for (int i = 0; i < size; i++) {
-        mix_array[i] = array1[i]+array2[i];
-    }
 }

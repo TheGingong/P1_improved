@@ -1,26 +1,30 @@
 #define ANTAL_CANDS 4
-#define dimensions 5
-#define clusters 7
-#define total_voters 103
+#define DIMENSIONS 5
+#define CLUSTERS 6
+#define TOTAL_VOTERS 150
+#define MIN_VALUE -1
+#define MAX_VALUE 1
+#define MIN_VALUE_SPREAD 0
 
+/* Struct for en normalfordeling, indeholder dens middelværdi, spredning, og antal vælgere for én normalfordeling */
 typedef struct {
-    int id;         // Candidate ID
-    double distance; // Distance from voter
-} candidate_distance_t;
-
-
-//constant values for a single cluster
-typedef struct {
-    double mean_cluster; //center of cluster, the mean
-    double spread_cluster; //standard deviation from the mean
-    int voters_cluster; //amount of voters within selected cluster
+    double mean_cluster; // Middelværdi
+    double spread_cluster; // Spredning
+    int voters_cluster; // Vælgere for undertegnede normalfordeling
 } cluster_t;
 
-void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[total_voters][dimensions], double min_value, double max_value, int dimension_j);
-void make_cluster_array (cluster_t cluster_array[clusters], int total_clusters);
-void assemble_gauss (cluster_t cluster_array[clusters], double gauss_2d_array[total_voters][dimensions], FILE* file);
-void spatial(double koords[dimensions], FILE* file);
+/* Struct for længde fra én holdning tilhørende en vælger, til en kandidat */
+typedef struct {
+    int id; // Kandidat-indeks
+    double distance; // Distance fra vælger
+} candidate_distance_t;
+
+/* Prototyper */
+void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file);
+void make_cluster_array (cluster_t cluster_array[CLUSTERS]);
+void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j);
+double generate_normal_using_density(cluster_t cluster_n);
+double gaussian_density (cluster_t cluster_n, double voter_x);
+void spatial(double koords[DIMENSIONS], FILE* file);
 int compare(const void* a, const void *b);
 void create_graph (double *x_akse, double *y_akse, char prefix[]);
-void gaussian_mixture(double array1[], double array2[], int size, double* mix_array);
-int compare_doubles(const void* a, const void* b);
