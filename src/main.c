@@ -35,17 +35,6 @@ int main(void) {
     cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
     printf("The program executed in: %lf s\n", cpu_time_used);
 
-    double voter[] = {0.2, 1, -0.5, 0.1, 0.7};
-    char pref[] = {0};
-    double cand1[] = {1, 0.2, 0.5, -0.4, 0.9};
-    double cand2[] = {-0.4, 0.4, 0.2, 1, -0.9};
-    double cand3[] = {0.2, 0.9, -1, 0.6, 1};
-    double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
-    double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
-
-    spatial(voter, pref, cands);
-
-
 
     //Array med x-værdier
     double number_array[200];
@@ -61,17 +50,20 @@ int main(void) {
     //generate_one_gauss(test, test_array, min_value, max_value);
     //create_graph(number_array, test_array, "Cluster1");
 
-    double total_model_array[dimensions][total_voters];
+
+    FILE* file3 = fopen("text-files/test-tekstil.txt", "w");
+    double total_model_array[total_voters][dimensions];
     //array af cluster strcuts
     cluster_t cluster_array[clusters];
     make_cluster_array(cluster_array, clusters);
     //kør funktion
     //generate_one_gauss(test, total_model_array, min_value, max_value);
-    assemble_gauss(cluster_array, total_model_array);
+    assemble_gauss(cluster_array, total_model_array, file3);
+    fclose(file3);
 
-    for (int i = 0; i < 200; i++) {
-        printf("%lf\n", test_array[i]);
-    }
+    //for (int i = 0; i < 200; i++) {
+    //    printf("%lf\n", test_array[i]);
+    //}
 
  printf("\n");
 

@@ -83,39 +83,52 @@ void make_cluster_array (cluster_t cluster_array[clusters], int total_clusters) 
         cluster_array->mean_cluster = min_value + (double) rand() / RAND_MAX * (max_value - min_value);
         cluster_array->spread_cluster = min_value_spread + (double) rand() / RAND_MAX * (max_value - min_value_spread);
         cluster_array->voters_cluster = total_voters / total_clusters;
-        printf("cluster.mean = %lf, cluster spread = %lf, voters = %d\n", cluster_array->mean_cluster, cluster_array->spread_cluster, cluster_array->voters_cluster);
     }
 }
 
-void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[dimensions][total_voters], double min_value, double max_value, int dimension_j) {
+void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[total_voters][dimensions], double min_value, double max_value, int dimension_j) {
     srand(time(NULL));  // Seed the random number generator
 
     // Generate normally distributed values for each voter using the rejection sampling method
     for (int i = 0; i < total_voters; i++) {
         double value = generate_normal_using_density(cluster_n, min_value, max_value);
-        gauss_2d_array[dimension_j][i] = value;
+        gauss_2d_array[i][dimension_j] = value;
     }
 
     //qsort(gauss_array, cluster_n.voters_cluster, sizeof(double), compare_doubles);
 
 }
 
-void assemble_gauss (cluster_t cluster_array[clusters], double gauss_2d_array[dimensions][total_voters]) {
+void assemble_gauss (cluster_t cluster_array[clusters], double gauss_2d_array[total_voters][dimensions], FILE* file) {
     int min_value = -1, max_value = 1;
     for (int i = 0; i < dimensions ;i++) {
 
-        for (int h = 0; h < clusters; h++) {        for (int j = 0; j < (total_voters); j++) {
-            generate_one_gauss(cluster_array[h], gauss_2d_array, min_value, max_value, i);
-            //printf("i = %d, j = %d\n ",i, j);
-            printf("printer nu gauss_2d_array[%d][%d] = %lf\n",i, j, gauss_2d_array[i][j]);
+        for (int h = 0; h < clusters; h++) {
+            for (int j = 0; j < (total_voters); j++) {
+                generate_one_gauss(cluster_array[h], gauss_2d_array, min_value, max_value, i);
             }
         }
 
     }
+
+    // Kalder spatial med allle koordinaterne
+    for (int i = 0; i < total_voters; i++) {
+        spatial(gauss_2d_array[i], file);
+    }
+
+
 }
 
 
-void spatial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[ANTAL_CANDS]) {
+void spatial(double koords[dimensions], FILE* file) {
+
+    /* cands burde fixes på en måde */
+    double cand1[] = {1, 0.2, 0.5, -0.4, 0.9};
+    double cand2[] = {-0.4, 0.4, 0.2, 1, -0.9};
+    double cand3[] = {0.2, 0.9, -1, 0.6, 1};
+    double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
+    double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
+
     candidate_distance_t cand_distances[ANTAL_CANDS];
 
 
@@ -143,21 +156,18 @@ void spatial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[A
     }
     max_length = sqrt(max_length);
 
-
-    FILE* file = fopen("text-files/test-tekstil.txt", "w");
     fprintf(file, "%d(", rand() % STATES); //Printer tilfældig stat og '('
 
     for (int i = 0; i< ANTAL_CANDS; i++){
         velfarg = 1 - ((cand_distances[i].distance-min_length) / (max_length - min_length));
         fprintf(file, "%c%.3lf",'A' + cand_distances[i].id, velfarg);
-        printf("%c%lf, ", 'A' + cand_distances[i].id, velfarg);
+        //printf("%c%lf, ", 'A' + cand_distances[i].id, velfarg);
         if (i < ANTAL_CANDS-1) {
             fprintf(file, " "); //Printer mellemrum efter hver nytte, undtaget af den sidste
         }
     }
 
     fprintf(file, ")\n"); //Printer ')' og newline
-    fclose(file);
 }
 
 /* qsort compare funktion til doubles i en struckt */
