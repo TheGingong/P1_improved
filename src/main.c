@@ -1,15 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "./h-filer/static_variables.h"
 #include "./h-filer/america.h"
 #include "./h-filer/borda.h"
 #include "./h-filer/welfare_score.h"
+#include "realistic_appropriation.h"
 
 int main(void) {
     /* Initialisere variabler til clock_t struct */
     clock_t start,end;
     start = clock();
+  
+    /* Initiering */
+    FILE* file3 = fopen("text-files/test-tekstil.txt", "w");
+    
+    if (file3 == NULL) { // Tjekker om filen kan åbnes
+        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+    }
+  
+    double total_model_array[TOTAL_VOTERS][DIMENSIONS];
+    cluster_t cluster_array[CLUSTERS];
+    /* Kør funktion */
+    //generate_one_gauss(test, total_model_array, min_value, max_value);
+    assemble_gauss(cluster_array, total_model_array, file3);
+    fclose(file3);
 
+    /* Kan lave grafer til debugging*/
+    //create_graph(test_array, test_array2, "hej");
+    //FreeAllocations();
 
     FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med stemmer åbnes i read mode.
     if (file == NULL) { // Tjekker om filen kan åbnes
