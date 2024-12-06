@@ -32,16 +32,27 @@
 /* Funktion, der kører andre underordnede funktioner.
  * Formålet er, at samle alle elementerne, og skriver resultaterne i tekstfilen */
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
+    double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS];
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);
+
+        for (int k = 0; k < NUMBER_CANDIDATES; k++) {
+            candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
+            printf("%lf\n", candidates_coordinates[k][i]);
+        }
+
         for (int h = 0; h < CLUSTERS; h++) {
             for (int j = 0; j < (TOTAL_VOTERS); j++) {
                 generate_one_gauss(cluster_array[h], gauss_2d_array, i);
             }
         }
     }
+
+
+    //generate_candidates(candidates_coordinates, cluster_array); //Genererer array af kandidaters koordinater
+
     for (int i = 0; i < TOTAL_VOTERS; i++) { // Bruger spacial-stemmemodel for at skabe vælgerpræferencer
-        spatial(gauss_2d_array[i], file);
+        spatial(gauss_2d_array[i], candidates_coordinates, file);
     }
 }
 
@@ -93,16 +104,23 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
            * exp(-0.5 * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
 }
 
+void generate_candidates(double candidates_coordinates[DIMENSIONS][NUMBER_CANDIDATES], cluster_t cluster_array[CLUSTERS]) {
+    for (int i = 0; i < NUMBER_CANDIDATES; i++) {
+        for (int j = 0; j < DIMENSIONS; j++) {
+        }
+    }
+}
+
 /* Funktion, som tager vælgeres rangeringskoordinater, og beregner længden fra dem til kandidternes
  * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
-void spatial(double koords[DIMENSIONS], FILE* file) {
+void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file) {
 
     // til videreudvikling
-    double cand1[] = {1, 0.2, 0.5, -0.4, 0.9};
-    double cand2[] = {-0.4, 0.4, 0.2, 1, -0.9};
-    double cand3[] = {0.2, 0.9, -1, 0.6, 1};
-    double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
-    double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
+    //double cand1[] = {1, 0.2, 0.5, -0.4, 0.9};
+    //double cand2[] = {-0.4, 0.4, 0.2, 1, -0.9};
+    //double cand3[] = {0.2, 0.9, -1, 0.6, 1};
+    //double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
+    //double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
 
     candidate_distance_t cand_distances[ANTAL_CANDS]; // Array af candidate_distance_t structs
 
@@ -110,7 +128,7 @@ void spatial(double koords[DIMENSIONS], FILE* file) {
     for (int i = 0; i < ANTAL_CANDS; i++) {
         double length = 0;
         for (int j = 0; j < DIMENSIONS; j++) { // Loop der itererer over antal dimensioner
-            length += pow((koords[j] - cands[i][j]), 2); // Euklids distanceformel (summerer over flere dimensioner)
+            length += pow((koords[j] - candidates_coordinates[i][j]), 2); // Euklids distanceformel (summerer over flere dimensioner)
         }
         cand_distances[i].id = i; // Tilegn indeks til den korresponderende vælger i struct-array'et
         cand_distances[i].distance = sqrt(length); // Tilegn længden fra vælger til kandidat på korresponderende plads i struct-array

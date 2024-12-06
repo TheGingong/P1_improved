@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "realistic_appropriation.h"
+#include "static_variables.h"
 
 int main(void) {
     /* Starter tidstagning af computing time */
