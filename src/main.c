@@ -1,36 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "./h-filer/static_variables.h"
+#include "./h-filer/america.h"
+#include "./h-filer/borda.h"
+#include "./h-filer/welfare_score.h"
 #include "realistic_appropriation.h"
-#include "static_variables.h"
 
 int main(void) {
-    /* Starter tidstagning af computing time */
+    /* Initialisere variabler til clock_t struct */
     clock_t start,end;
-    double cpu_time_used;
     start = clock();
-
-    /* Kalder simluering af det amerikanske valgsystem */
-    //FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
-
-    //char winner_america = america(file);
-    //printf("The winner candidate of the american election is: %c\n", winner_america);
-    //fclose(file);
-//
-    //FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med præferencer åbnes i read mode.
-//
-    ///* Kalder simulering af et valgsystem som bruger Borda count */
-    //char winner_borda = borda_count(file2);
-    //printf("The winner candidate of borda count is: %c\n\n", winner_borda);
-    //fclose(file2);
-  //
-
-    /* Velfærd print */
-    //printf("The total welfare for America: %lf\n", welfare_calculator(winner_america));
-    //printf("The total welfare for Borda count: %lf\n\n", welfare_calculator(winner_borda));
-
+  
     /* Initiering */
     FILE* file3 = fopen("text-files/test-tekstil.txt", "w");
+    
+    if (file3 == NULL) { // Tjekker om filen kan åbnes
+        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+    }
+  
     double total_model_array[TOTAL_VOTERS][DIMENSIONS];
     cluster_t cluster_array[CLUSTERS];
     /* Kør funktion */
@@ -42,9 +30,35 @@ int main(void) {
     //create_graph(test_array, test_array2, "hej");
     //FreeAllocations();
 
-    /* Beregner computing time */
+    FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med stemmer åbnes i read mode.
+    if (file == NULL) { // Tjekker om filen kan åbnes
+        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+    }
+
+    /* Kalder simluering af det amerikanske valgsystem */
+    char winner_america = america(file); // Gemmer vinderen fra america
+    printf("The winner candidate of the american election is: %c\n", winner_america);
+    fclose(file);
+
+    FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med stemmer åbnes i read mode.
+
+    if (file2 == NULL) { // Tjekker om filen kan åbnes
+        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+    }
+
+    /* Kalder simulering af et valgsystem som bruger Borda count */
+    char winner_borda = borda_count(file2); // Gemmer vinderen fra borda
+    printf("The winner candidate of borda count is: %c\n\n", winner_borda);
+    fclose(file2);
+  
+    /* Social utility efficiency print */
+    printf("The social utility efficiency for the american election is: %.3lf%%\n", social_utility_efficiency(winner_america));
+    printf("The social utility efficiency for borda count is: %.3lf%%\n\n", social_utility_efficiency(winner_borda));
+
+    /* Printer programmet eksekverings tid */
     end = clock();
-    cpu_time_used = ((double)(end - start))/CLOCKS_PER_SEC;
-    printf("The program executed in: %lf s\n", cpu_time_used);
+    double cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("The program executed in: %lf s", cpu_time_used);
+
     return 0;
 }

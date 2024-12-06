@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include "america.h"
-#include "convert.h"
-#include "calculate_winner.h"
+#include "../h-filer/america.h"
+#include "../h-filer/convert.h"
+#include "../h-filer/calculate_winner.h"
 
 /* Hovedfunktion som modtager antallet af kandidater fra main.c
  * Returnerer karakteren på vinder kandidaten til main.c */
@@ -16,11 +15,8 @@ char america(FILE *file) {
 
     /* While loop som kører så længe at convert_america ikke returnerer -1 */
     while(current_state.stat != -1) {
-        current_state = convert_america(file); // Modtager en ny struct, current_state, fra convert_america til 'index' linje
-        if (current_state.stat == -1) {
-            break;
-        }
         all_states[current_state.stat].votes[current_state.pref]++; // Tæller votes op i all_states udfra præferencen hos den individuelle person
+        current_state = convert_america(file); // Modtager en ny struct, current_state, fra convert_america til 'index' linje
     }
 
     /* For loop som gennemløber alle stater for at beregne vinderen i hver stat */

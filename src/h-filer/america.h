@@ -1,7 +1,6 @@
 #include "static_variables.h"
 #include <stdio.h>
 #define STATES 51
-#define NUMBER_OF_VOTERS 100
 
 typedef struct {
     int votes[NUMBER_CANDIDATES];
