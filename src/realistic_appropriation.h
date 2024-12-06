@@ -21,6 +21,6 @@ void make_cluster_array (cluster_t cluster_array[clusters], int total_clusters);
 void assemble_gauss (cluster_t cluster_array[clusters], double gauss_2d_array[dimensions][total_voters]);
 void spatial(double koords[dimensions], char pref[ANTAL_CANDS], double* cands[ANTAL_CANDS]);
 int compare(const void* a, const void *b);
-void create_graph (double *array, double *array2);
+void create_graph (double *x_akse, double *y_akse, char prefix[]);
+void gaussian_mixture(double array1[], double array2[], int size, double* mix_array);
 int compare_doubles(const void* a, const void* b);
-double gaussian_mixture(double array1[], double array2[], int size, double* mix_array);
