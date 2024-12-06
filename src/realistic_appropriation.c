@@ -98,10 +98,6 @@ void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[dimensions][t
 
     //qsort(gauss_array, cluster_n.voters_cluster, sizeof(double), compare_doubles);
 
-    for (int i = 0; i < cluster_n.voters_cluster; i++) {
-        printf("%lf\n", gauss_array[i]);
-}
-
 }
 
 void assemble_gauss (cluster_t cluster_array[clusters], double gauss_2d_array[dimensions][total_voters]) {

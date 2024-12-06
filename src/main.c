@@ -58,11 +58,10 @@ int main(void) {
     cluster_t test; test.mean_cluster = 0; test.spread_cluster = 0.4; test.voters_cluster = 200;
     double min_value = -1.0;
     double max_value = 1.0;
-    generate_one_gauss(test, test_array, min_value, max_value);
+    //generate_one_gauss(test, test_array, min_value, max_value);
     //create_graph(number_array, test_array, "Cluster1");
 
     double total_model_array[dimensions][total_voters];
-    double min_value = -1.0, max_value = 1.0;
     //array af cluster strcuts
     cluster_t cluster_array[clusters];
     make_cluster_array(cluster_array, clusters);
@@ -79,35 +78,17 @@ int main(void) {
     //Cluster 2
     double test_array2[200];
     cluster_t test2; test2.mean_cluster = 0.2; test2.spread_cluster = 0.4; test2.voters_cluster = 200;
-    generate_one_gauss(test2, test_array2, min_value, max_value);
     //create_graph(number_array, test_array2, "Cluster2");
 
-    for (int i = 0; i < 200; i++) {
-        printf("%lf\n", test_array2[i]);
-    }
 
-    //double test_array[200];
-    //cluster_t test; test.mean_cluster = 0; test.spread_cluster = 0.1; test.voters_cluster = 100;
-    //double min_value = -1.0;
-    //double max_value = 1.0;
-    //generate_one_gauss(test, test_array, min_value, max_value);
-//
-//
-//
-    //double number_array[200];
-    //for (int i = 0; i < 200; i++) {
-    //    number_array[i] = i;
-    //}
-    //create_graph(number_array, test_array);
-//
-    create_graph(test_array, test_array2, "hej");
+    //create_graph(test_array, test_array2, "hej");
 
     //Mixture
-    double mixture_array[200];
-    gaussian_mixture(test_array, test_array2, 200, mixture_array);
-    create_graph(number_array, mixture_array, "Mix");
-
-
-    FreeAllocations();
+    //double mixture_array[200];
+    //gaussian_mixture(test_array, test_array2, 200, mixture_array);
+    //create_graph(number_array, mixture_array, "Mix");
+//
+//
+    //FreeAllocations();
     return 0;
 }
