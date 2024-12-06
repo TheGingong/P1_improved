@@ -6,11 +6,8 @@
 #include "math.h"
 #include "pbPlots.h"
 #include "supportLib.h"
-
-const int dimensions = 5;
-const int total_voters = 1000;
-
 #include "realistic_appropriation.h"
+
 /* -- NOTER -- */
 /* -- Kontrolparametre --
  * Dispersion - klynger der former grupper med samme ideologi (politiske partier, religion, etc)
@@ -79,32 +76,44 @@ double generate_normal_using_density(cluster_t cluster_n, double min_value, doub
     return sample; // Return the accepted sample
 }
 
-void generate_one_gauss(cluster_t cluster_n, double* gauss_array, double min_value, double max_value) {
+//array of cluster structs
+void make_cluster_array (cluster_t* cluster_array, int total_voters, int total_clusters) {
+    int min_value = -1, max_value = 1, min_value_spread = 0;
+    for (int i = 0; i < clusters; i++) {
+        cluster_array->mean_cluster = min_value + (double) rand() / RAND_MAX * (max_value - min_value);
+        cluster_array->spread_cluster = min_value_spread + (double) rand() / RAND_MAX * (max_value - min_value_spread);
+        cluster_array->voters_cluster = total_voters / total_clusters;
+    }
+}
+
+void generate_one_gauss(cluster_t cluster_n, double** gauss_2d_array, double min_value, double max_value, int dimension_j) {
     srand(time(NULL));  // Seed the random number generator
 
     // Generate normally distributed values for each voter using the rejection sampling method
-    for (int i = 0; i < cluster_n.voters_cluster; i++) {
+    for (int i = 0; i < dimensions; i++) {
         double value = generate_normal_using_density(cluster_n, min_value, max_value);
-        gauss_array[i] = value;
+        gauss_2d_array[dimension_j][i] = value;
     }
 
     //qsort(gauss_array, cluster_n.voters_cluster, sizeof(double), compare_doubles);
 
-    for (int i = 0; i < cluster_n.voters_cluster; i++) {
-        printf("%lf\n", gauss_array[i]);
 }
 
-}
+void assemble_gauss (cluster_t* cluster_array, double** gauss_2d_array) {
+    int min_value = -1, max_value = 1;
+    for (int i = 0; i < dimensions ;i++) {
+        generate_one_gauss(cluster_array[i], gauss_2d_array[i][], min_value, max_value, i);
 
-void generating_real_votes (int n_dimensions, cluster_t clusters) {
-    //generer x klynger i n dimensioner
-    for (int i = 0; i <= n_dimensions; i++) {
-
+        for (int j = 0; j < cluster_array->voters_cluster; j++) {
+            printf("%lf\n", gauss_2d_array[i][j]);
+        }
     }
 }
 
+
 void spatial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[ANTAL_CANDS]) {
     candidate_distance_t cand_distances[ANTAL_CANDS];
+
 
     for (int i = 0; i < ANTAL_CANDS; i++) {
         double length = 0;
@@ -114,7 +123,6 @@ void spatial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[A
         cand_distances[i].id = i;
         cand_distances[i].distance = sqrt(length);
     }
-
 
     qsort(cand_distances, ANTAL_CANDS, sizeof(candidate_distance_t), compare);
     // printer præf ud for 1 voter
@@ -136,9 +144,8 @@ void spatial(double koords[dimensions], char pref[ANTAL_CANDS],  double* cands[A
 
     for (int i = 0; i< ANTAL_CANDS; i++){
         velfarg = 1 - ((cand_distances[i].distance-min_length) / (max_length - min_length));
-        pref[i] = cand_distances[i].id;
-        fprintf(file, "%c%.3lf",'A' + pref[i], velfarg);
-        printf("%c%lf, ", 'A' + pref[i], velfarg);
+        fprintf(file, "%c%.3lf",'A' + cand_distances[i].id, velfarg);
+        printf("%c%lf, ", 'A' + cand_distances[i].id, velfarg);
         if (i < ANTAL_CANDS-1) {
             fprintf(file, " "); //Printer mellemrum efter hver nytte, undtaget af den sidste
         }
