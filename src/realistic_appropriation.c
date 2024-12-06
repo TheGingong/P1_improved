@@ -5,6 +5,7 @@
 #include "math.h"
 #include "pbPlots.h"
 #include "supportLib.h"
+#include <time.h>
 
 const int dimensions = 5;
 const int total_voters = 1000;
@@ -90,7 +91,7 @@ void generate_one_gauss(cluster_t cluster_n, double* gauss_array, double min_val
     //qsort(gauss_array, cluster_n.voters_cluster, sizeof(double), compare_doubles);
 
     for (int i = 0; i < cluster_n.voters_cluster; i++) {
-        printf("%lf\n", gauss_array[i]);
+       // printf("%lf\n", gauss_array[i]);
 }
 
 }
@@ -174,16 +175,72 @@ int compare_doubles(const void* a, const void* b) {
 
 /* Laver graf ved brug af pbPlots */
 void create_graph (double *x_akse, double *y_akse, char prefix[]) {
-    RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();
-    /* Bestemmer størrelsen på billedet, og x og y aksen*/
-    DrawScatterPlot(imageRef, 600, 400, x_akse, 200, y_akse, 200, "Error in creating image");
 
-    size_t length;
-    ByteArray *pngdata = ConvertToPNG(imageRef->image); //Konvertere til png
-    char filename[64];
-    sprintf(filename, "%s.png", prefix); //Sætter .png efter prefixet, for at danne filnavn
-    WriteToFile(pngdata, filename);
-    DeleteImage(imageRef->image);
+    _Bool success;
+    StringReference *errorMessage;
+    RGBA color;
+    color.r = 0; //Sort
+    color.g = 255; //Rød
+    color.b = 0; //Grøn
+    color.a = 1;
+
+    StartArenaAllocator();
+
+    ScatterPlotSeries *series = GetDefaultScatterPlotSeriesSettings();
+    series->xs = x_akse;
+    series->xsLength = 200;
+    series->ys = y_akse;
+    series->ysLength = 200;
+    series->linearInterpolation = false;
+//	series->lineType = L"dotted";
+ //   series->lineTypeLength = wcslen(series->lineType);
+    series->pointType = L"dots";
+    series->pointTypeLength = wcslen(series->pointType);
+   // series->lineThickness = 1;
+    series->color = &color;
+
+    ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
+    settings->width = 1000;
+    settings->height = 600;
+    settings->autoBoundaries = true;
+    settings->autoPadding = true;
+    settings->title = L"Koordianter";
+    settings->titleLength = wcslen(settings->title);
+    settings->xLabel = L"X axis";
+    settings->xLabelLength = wcslen(settings->xLabel);
+    settings->yLabel = L"Y axis";
+    settings->yLabelLength = wcslen(settings->yLabel);
+    ScatterPlotSeries *s [] = {series};
+    settings->scatterPlotSeries = s;
+    settings->scatterPlotSeriesLength = 1;
+
+    RGBABitmapImageReference *canvasReference = CreateRGBABitmapImageReference();
+    errorMessage = (StringReference *)malloc(sizeof(StringReference));
+    success = DrawScatterPlotFromSettings(canvasReference, settings, errorMessage);
+
+    if(success){
+        ByteArray *pngdata = ConvertToPNG(canvasReference->image);
+        char filename[64];
+        sprintf(filename, "%s.png", prefix); //Sætter .png efter prefixet, for at danne filnavn
+        WriteToFile(pngdata, filename);
+        DeleteImage(canvasReference->image);
+    }else{
+        fprintf(stderr, "Error: ");
+        for(int i = 0; i < errorMessage->stringLength; i++){
+            fprintf(stderr, "%c", errorMessage->string[i]);
+        }
+        fprintf(stderr, "\n");
+    }
+
+   // RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();
+   // /* Bestemmer størrelsen på billedet, og x og y aksen*/
+   // //DrawScatterPlot(imageRef, 600, 400, x_akse, 200, y_akse, 200, "Error in creating image");
+   // size_t length;
+   // ByteArray *pngdata = ConvertToPNG(imageRef->image); //Konvertere til png
+   // char filename[64];
+   // sprintf(filename, "%s.png", prefix); //Sætter .png efter prefixet, for at danne filnavn
+   // WriteToFile(pngdata, filename);
+   // DeleteImage(imageRef->image);
 }
 
 /* Udregner Guassian mixture, ved at tage summen af begge fordelinger */

@@ -45,13 +45,6 @@ int main(void) {
 
     spatial(voter, pref, cands);
 
-    double test_array[200];
-    cluster_t test; test.mean_cluster = 0; test.spread_cluster = 0.1; test.voters_cluster = 100;
-    double min_value = -1.0;
-    double max_value = 1.0;
-    generate_one_gauss(test, test_array, min_value, max_value);
-
-
 
     //Array med x-værdier
     double number_array[200];
@@ -61,15 +54,29 @@ int main(void) {
 
     //Cluster 1
     double test_array[200];
-    cluster_t test; test.mean_cluster = 150; test.spread_cluster = 20; test.voters_cluster = 200;
-    generate_one_gauss(test, test_array);
-    create_graph(number_array, test_array, "Cluster1");
+    cluster_t test; test.mean_cluster = 0; test.spread_cluster = 0.4; test.voters_cluster = 200;
+    double min_value = -1.0;
+    double max_value = 1.0;
+    generate_one_gauss(test, test_array, min_value, max_value);
+    //create_graph(number_array, test_array, "Cluster1");
+
+    for (int i = 0; i < 200; i++) {
+        printf("%lf\n", test_array[i]);
+    }
+
+ printf("\n");
 
     //Cluster 2
     double test_array2[200];
-    cluster_t cluster2; cluster2.mean_cluster = 50; cluster2.spread_cluster = 30; cluster2.voters_cluster = 200;
-    generate_one_gauss(cluster2, test_array2);
-    create_graph(number_array, test_array2, "Cluster2");
+    cluster_t test2; test2.mean_cluster = 0.2; test2.spread_cluster = 0.4; test2.voters_cluster = 200;
+    generate_one_gauss(test2, test_array2, min_value, max_value);
+    //create_graph(number_array, test_array2, "Cluster2");
+
+    for (int i = 0; i < 200; i++) {
+        printf("%lf\n", test_array2[i]);
+    }
+
+    create_graph(test_array, test_array2, "hej");
 
     //Mixture
     double mixture_array[200];
