@@ -44,10 +44,11 @@ void read_candidate_welfare(candidate_welfare *candidate) {
             candidate[i].candidate = 'A' + i; // Her initializeres kandidaterne
             sprintf(format, "%%*[^%c]%c%%lf", candidate[i].candidate, candidate[i].candidate); // sprintf gemmer læsningsformatet som sscanf skal bruge
                                                                                                // fortæller sscanf at den skal springe over alt til-og-med en char og derefter skal læse long float værdien
-            if (sscanf(temp_text_str, format, &temp) == 1){
+            if (sscanf(temp_text_str, format, &temp)){
                 candidate[i].welfare += temp; // Summerer den indlæste velfærdsscoren til den nuværende kandidat i loopet
+                //printf("Candidate %c welfare: %lf\n", candidate[i].candidate, candidate[i].welfare);
             } else {
-                printf("Error: Could not parse the line.\n");
+                printf("Error: Could not parse the line welfare_score.c.\n");
             }
         }
     }

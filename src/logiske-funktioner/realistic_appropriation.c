@@ -38,7 +38,7 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
         for (int k = 0; k < NUMBER_CANDIDATES; k++) {
             candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
-            printf("%lf\n", candidates_coordinates[k][i]);
+            //printf("%lf\n", candidates_coordinates[k][i]);
         }
 
         for (int h = 0; h < CLUSTERS; h++) {

@@ -13,11 +13,11 @@ int main(void) {
   
     /* Initiering */
     FILE* file3 = fopen("text-files/test-tekstil.txt", "w");
-    
+
     if (file3 == NULL) { // Tjekker om filen kan åbnes
         perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
     }
-  
+
     double total_model_array[TOTAL_VOTERS][DIMENSIONS];
     cluster_t cluster_array[CLUSTERS];
     /* Kør funktion */
