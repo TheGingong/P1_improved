@@ -21,7 +21,7 @@ double social_utility_efficiency(char winner) {
     double winner_welfare = candidate[winner_index].welfare; // Gemmer vinderens velfærd i winner_welfare
 
     /* Beregningen af social utility efficiency mellem vinder kandidaten og den kandidat med højest velfærdsscore */
-    double SUE_value = (winner_welfare) / (max_welfare_score) * 100;
+    double SUE_value = (winner_welfare / max_welfare_score) * 100;
 
     return SUE_value; // Returnere procent værdien til main for print
 }
