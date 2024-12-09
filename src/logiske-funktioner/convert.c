@@ -42,6 +42,7 @@ struct person convert_america(FILE *file) {
         ny_person.stat = -1; // Hvis fgets har læst til en newline returneres 'ny_person.stat' med -1 for at signalere slutningen af tekstfilen
         return ny_person;
     }
+
     char temp; // midlertidig variabel for at kunne typecast til int senere
     if (sscanf(temp_text_str, "%d( %c", &ny_person.stat, &temp) == 2) { // Sscanf læser en string og indlæser værdier i de specificeret variabler
         ny_person.pref = temp - 'A'; // typecasting the char to an int
