@@ -32,22 +32,43 @@
  * Formålet er, at samle alle elementerne, og skriver resultaterne i tekstfilen */
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
     double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS];
+    srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
+    int density = 1;
+    int box_muller = 0;
+
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);
 
-        /* Genererer kanditat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
-         * Ved tilfælde af flere kandidator end clusters, vil clusterne blive gentaget */
-        for (int k = 0; k < NUMBER_CANDIDATES; k++) {
-            candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
-            //printf("%lf\n", candidates_coordinates[k][i]);
-        }
 
-        for (int h = 0; h < CLUSTERS; h++) {
-            //for (int j = 0; j < (TOTAL_VOTERS); j++) {
+        if (density) {
+            /* Genererer kanditat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
+             * Ved tilfælde af flere kandidator end clusters, vil clusterne blive gentaget */
+            for (int k = 0; k < NUMBER_CANDIDATES; k++) {
+                candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
+                //printf("%lf\n", candidates_coordinates[k][i]);
+            }
+
+            for (int h = 0; h < CLUSTERS; h++) {
+
                 generate_one_gauss(cluster_array[h], gauss_2d_array, i, h);
-            //}
+
+            }
+        }// else if (box_muller) {
+//
+         //   for (int k = 0; k < NUMBER_CANDIDATES; k++) {
+         //       candidates_coordinates[k][i] = generate_normal_using_muller(cluster_array[k%CLUSTERS]);
+         //       //printf("%lf\n", candidates_coordinates[k][i]);
+         //   }
+//
+         //   for (int h = 0; h < CLUSTERS; h++) {
+//
+         //       generate_one_muller(cluster_array[h], gauss_2d_array, i, h);
+//
+         //   }
+//
+
+
         }
-    }
 
 
     //generate_candidates(candidates_coordinates, cluster_array); //Genererer array af kandidaters koordinater
@@ -65,13 +86,12 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
         cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
         // Fordeler vælgere uniformt på mængden af normalfordelinger
-        cluster_array[i].voters_cluster = TOTAL_VOTERS / CLUSTERS;
+        cluster_array[i].voters_cluster = (double)TOTAL_VOTERS / (double)CLUSTERS;
     }
 }
 
 /* Funktion, der genererer tilfældige stemmer for én vælger i den j'te dimension*/
 void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
-    srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
     // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
     for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
@@ -104,6 +124,22 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
     return 1 / ( sqrt(2 * M_PI) * cluster_n.spread_cluster )
            * exp(-0.5 * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
 }
+
+
+
+//void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
+//
+//    // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
+//    for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
+//        double value = generate_normal_using_muller(cluster_n);
+//        gauss_2d_array[i][dimension_j] = value;
+//    }
+//}
+//
+//double generate_normal_using_muller(cluster_t cluster_n) { }
+
+
+
 
 
 /* Funktion, som tager vælgeres rangeringskoordinater, og beregner længden fra dem til kandidternes
@@ -146,6 +182,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
 
     /* Printer tilfældelig stat til filen, må gerne være på baggrund af indbyggertal */
     fprintf(file, "%d(", rand() % STATES); // Printer tilfældig stat og '('
+
     /* Udregner velfærd baseret på distance, og printer dette til tekstfilen med en tilfældig stat (0-50) foran */
     for (int i = 0; i< NUMBER_CANDIDATES; i++){
         welfare = 1 - ((cand_distances[i].distance-min_length) / (max_length - min_length)); // Normaliserer distance 0 til 1

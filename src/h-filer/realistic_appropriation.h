@@ -1,6 +1,6 @@
 #include "../h-filer/static_variables.h"
 
-#define DIMENSIONS 7
+#define DIMENSIONS 5
 #define CLUSTERS 6
 #define TOTAL_VOTERS 1000
 #define MIN_VALUE -1
