@@ -86,7 +86,7 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
         cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
         // Fordeler vælgere uniformt på mængden af normalfordelinger
-        cluster_array[i].voters_cluster = TOTAL_VOTERS / CLUSTERS;
+        cluster_array[i].voters_cluster = (double)TOTAL_VOTERS / (double)CLUSTERS;
     }
 }
 
@@ -147,13 +147,6 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
  * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
 void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file) {
 
-    // til videreudvikling
-    //double cand1[] = {1, 0.2, 0.5, -0.4, 0.9};
-    //double cand2[] = {-0.4, 0.4, 0.2, 1, -0.9};
-    //double cand3[] = {0.2, 0.9, -1, 0.6, 1};
-    //double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
-    //double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
-
     candidate_distance_t cand_distances[NUMBER_CANDIDATES]; // Array af candidate_distance_t structs
 
     /* Loop der itererer over antal kandidater */
@@ -182,7 +175,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
 
 
     /* Printer tilfældelig stat til filen, må gerne være på baggrund af indbyggertal */
-    fprintf(file, "%d(", rand() % STATES); // Printer tilfældig stat og '('
+    fprintf(file, "%d(", create_state()); // Printer tilfældig stat og '('
 
     /* Udregner velfærd baseret på distance, og printer dette til tekstfilen med en tilfældig stat (0-50) foran */
     for (int i = 0; i< NUMBER_CANDIDATES; i++){
@@ -194,6 +187,16 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
         }
     }
     fprintf(file, ")\n"); // Printer ')' og newline
+}
+
+int create_state() {
+    int stat = rand() % ANTAL_VALGMÆND + 1;
+    int i = 0, counter = 0;
+
+    while (stat > counter) {
+        counter += electors[i++];
+    }
+    return --i;
 }
 
 /* qsort compare funktion til doubles i en struct */

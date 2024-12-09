@@ -1,6 +1,7 @@
     #include "static_variables.h"
 #include <stdio.h>
 #define STATES 51
+#define ANTAL_VALGMÆND 538
 
 typedef struct {
     int votes[NUMBER_CANDIDATES];
@@ -20,6 +21,9 @@ typedef enum {
     VIRGINIA, WASHINGTON, WEST_VIRGINIA, WISCONSIN, WYOMING
 } state_names;
 
+
+/* Array med antallet af valgmænd for hver stat (2020-2030).
+ * Rækkefølgen følger state_names enum rækkefølgen */
 static int electors[STATES] = {
     9, 3, 11, 6, 54, 10, 7, 3, 3,
     30, 16, 4, 4, 19, 11, 6, 6, 8, 8, 4,
