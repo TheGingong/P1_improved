@@ -64,8 +64,8 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
         cluster_array[i].mean_cluster = MIN_VALUE + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE);
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
         cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
-        // Fordeler vælgere uniformt på mængden af normalfordelinger
-        cluster_array[i].voters_cluster = TOTAL_VOTERS / CLUSTERS;
+        // Fordeler vælgere uniformt på mængden af normalfordelinger, og runder op for at undgå decimaltal
+        cluster_array[i].voters_cluster = ceil((double)TOTAL_VOTERS / (double)CLUSTERS);
     }
 }
 
