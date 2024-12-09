@@ -69,6 +69,7 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
 
         }
+    }
 
 
     //generate_candidates(candidates_coordinates, cluster_array); //Genererer array af kandidaters koordinater
@@ -86,12 +87,13 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
         cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
         // Fordeler vælgere uniformt på mængden af normalfordelinger
-        cluster_array[i].voters_cluster = (double)TOTAL_VOTERS / (double)CLUSTERS;
+        cluster_array[i].voters_cluster = TOTAL_VOTERS / CLUSTERS;
     }
 }
 
 /* Funktion, der genererer tilfældige stemmer for én vælger i den j'te dimension*/
 void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
+    srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
     // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
     for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
