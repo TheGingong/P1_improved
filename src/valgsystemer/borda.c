@@ -17,12 +17,12 @@ char borda_count(FILE *file) {
 }
 
 /* Funktion point_counting, henter én vælger præference, og uddeler point til kandidaterne på baggrund præferencen */
-void point_counting(int* voter_preference, int* candidate_points, FILE *file) {
-    int k = 0;
+void point_counting(int voter_preference[], int* candidate_points, FILE *file) {
+    int candidate_index = 0;
     while (convert_borda(voter_preference, file) != 0) { // While fortsætter mens tekstfilen stadig har stemmer der skal optælles
-        for (int i = 0, j = NUMBER_CANDIDATES; i < NUMBER_CANDIDATES; i++, j--) {
-            k = voter_preference[i]; // Udregner indeks som point skal tildeles, indekset gemmes i variablen k
-            candidate_points[k] += j; // Tildeler j antal point (j bliver talt ned for hver gennemløb)
+        for (int i = 0, points = NUMBER_CANDIDATES; i < NUMBER_CANDIDATES; i++, points--) {
+            candidate_index = voter_preference[i]; // Udregner indeks som point skal tildeles, indekset gemmes i variablen k
+            candidate_points[candidate_index] += points; // Tildeler j antal point (j bliver talt ned for hver gennemløb)
         }
     }
 }
