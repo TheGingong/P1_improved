@@ -69,7 +69,6 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
 
         }
-    }
 
 
     //generate_candidates(candidates_coordinates, cluster_array); //Genererer array af kandidaters koordinater
