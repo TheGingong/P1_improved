@@ -1,9 +1,8 @@
 #include "../h-filer/static_variables.h"
 
-#define ANTAL_CANDS 4
-#define DIMENSIONS 5
+#define DIMENSIONS 7
 #define CLUSTERS 6
-#define TOTAL_VOTERS 150
+#define TOTAL_VOTERS 1000
 #define MIN_VALUE -1
 #define MAX_VALUE 1
 #define MIN_VALUE_SPREAD 0
@@ -24,10 +23,9 @@ typedef struct {
 /* Prototyper */
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file);
 void make_cluster_array (cluster_t cluster_array[CLUSTERS]);
-void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j);
+void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h);
 double generate_normal_using_density(cluster_t cluster_n);
 double gaussian_density (cluster_t cluster_n, double voter_x);
-void generate_candidates(double candidates_coordinates[DIMENSIONS][NUMBER_CANDIDATES], cluster_t cluster_array[CLUSTERS]);
 void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file);
 int compare(const void* a, const void *b);
 void create_graph (double *x_akse, double *y_akse, char prefix[]);

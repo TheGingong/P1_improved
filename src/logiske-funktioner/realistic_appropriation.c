@@ -23,9 +23,8 @@
  *  - - noise og strategiske stemmer
  *  - - correlation
  *  - - weights til distanceformel
- *  Optimering
  *  Ikke uniformt antal stemmer pr cluster
- *  Generering af kandidater
+ *  Generering af kandidater (50% done)
  *  Generering af stater reflekterer virkelige populationer
  */
 
@@ -36,15 +35,17 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);
 
+        /* Genererer kanditat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
+         * Ved tilfælde af flere kandidator end clusters, vil clusterne blive gentaget */
         for (int k = 0; k < NUMBER_CANDIDATES; k++) {
             candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
             //printf("%lf\n", candidates_coordinates[k][i]);
         }
 
         for (int h = 0; h < CLUSTERS; h++) {
-            for (int j = 0; j < (TOTAL_VOTERS); j++) {
-                generate_one_gauss(cluster_array[h], gauss_2d_array, i);
-            }
+            //for (int j = 0; j < (TOTAL_VOTERS); j++) {
+                generate_one_gauss(cluster_array[h], gauss_2d_array, i, h);
+            //}
         }
     }
 
@@ -69,13 +70,13 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
 }
 
 /* Funktion, der genererer tilfældige stemmer for én vælger i den j'te dimension*/
-void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j) {
+void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
     srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
     // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
-    for (int i = 0; i < TOTAL_VOTERS; i++) {
-        double value = generate_normal_using_density(cluster_n);
-        gauss_2d_array[i][dimension_j] = value;
+    for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
+            double value = generate_normal_using_density(cluster_n);
+            gauss_2d_array[i][dimension_j] = value;
     }
 }
 
@@ -104,12 +105,6 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
            * exp(-0.5 * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
 }
 
-void generate_candidates(double candidates_coordinates[DIMENSIONS][NUMBER_CANDIDATES], cluster_t cluster_array[CLUSTERS]) {
-    for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-        for (int j = 0; j < DIMENSIONS; j++) {
-        }
-    }
-}
 
 /* Funktion, som tager vælgeres rangeringskoordinater, og beregner længden fra dem til kandidternes
  * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
@@ -122,10 +117,10 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
     //double cand4[] = {-1, 0.1, -0.2, 0.7, -0.1};
     //double* cands[ANTAL_CANDS] = {cand1, cand2, cand3, cand4};
 
-    candidate_distance_t cand_distances[ANTAL_CANDS]; // Array af candidate_distance_t structs
+    candidate_distance_t cand_distances[NUMBER_CANDIDATES]; // Array af candidate_distance_t structs
 
     /* Loop der itererer over antal kandidater */
-    for (int i = 0; i < ANTAL_CANDS; i++) {
+    for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         double length = 0;
         for (int j = 0; j < DIMENSIONS; j++) { // Loop der itererer over antal dimensioner
             length += pow((koords[j] - candidates_coordinates[i][j]), 2); // Euklids distanceformel (summerer over flere dimensioner)
@@ -135,7 +130,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
     }
 
     /* Sorterer således den kandidat der er kortest til fra vælger, står først */
-    qsort(cand_distances, ANTAL_CANDS, sizeof(candidate_distance_t), compare);
+    qsort(cand_distances, NUMBER_CANDIDATES, sizeof(candidate_distance_t), compare);
 
     /* Der initieres variabler til brug for velfærds-beregning */
     double max_length = 0, min_length = 0, welfare = 0;
@@ -147,13 +142,16 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
     }
     max_length = sqrt(max_length); // Euklids igen
 
-    /* Udregner velfærd baseret på distance, og printer dette til tekstfilen med en tilfældig stat (0-50) foran */
+
+
+    /* Printer tilfældelig stat til filen, må gerne være på baggrund af indbyggertal */
     fprintf(file, "%d(", rand() % STATES); // Printer tilfældig stat og '('
-    for (int i = 0; i< ANTAL_CANDS; i++){
+    /* Udregner velfærd baseret på distance, og printer dette til tekstfilen med en tilfældig stat (0-50) foran */
+    for (int i = 0; i< NUMBER_CANDIDATES; i++){
         welfare = 1 - ((cand_distances[i].distance-min_length) / (max_length - min_length)); // Normaliserer distance 0 til 1
 
         fprintf(file, "%c%.3lf",'A' + cand_distances[i].id, welfare); // Printer værdierne til tekstfilen
-        if (i < ANTAL_CANDS-1) {
+        if (i < NUMBER_CANDIDATES-1) {
             fprintf(file, " "); // Printer mellemrum efter hver nytte, på nær den sidste
         }
     }
