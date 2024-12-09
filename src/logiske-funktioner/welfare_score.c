@@ -48,7 +48,7 @@ void read_candidate_welfare(candidate_welfare *candidate) {
                 candidate[i].welfare += temp; // Summerer den indlæste velfærdsscoren til den nuværende kandidat i loopet
                 //printf("Candidate %c welfare: %lf\n", candidate[i].candidate, candidate[i].welfare);
             } else {
-                printf("Error: Could not parse the line welfare_score.c.\n");
+                printf("Error: Could not parse the line (welfare_score.c).\n");
             }
         }
     }
