@@ -17,7 +17,7 @@ double social_utility_efficiency(char winner) {
     }
 
     /* Kalder hashing funktion for at få vinderne i hhv. borda og americas velfærdsscore */
-    int winner_index = hashing(winner, candidate);
+    int winner_index = index_finder(winner, candidate);
     double winner_welfare = candidate[winner_index].welfare; // Gemmer vinderens velfærd i winner_welfare
 
     /* Beregningen af social utility efficiency mellem vinder kandidaten og den kandidat med højest velfærdsscore */
