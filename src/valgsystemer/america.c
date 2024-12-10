@@ -1,11 +1,16 @@
-#include "../h-filer/america.h"
+#include "../h-filer/valgsystemer.h"
 #include "../h-filer/convert.h"
 #include "../h-filer/calculate_winner.h"
 
-
 /* Hovedfunktion som modtager antallet af kandidater fra main.c
  * Returnerer karakteren på vinder kandidaten til main.c */
-char america(FILE *file) {
+char america() {
+    FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med stemmer åbnes i read mode.
+
+    if (file == NULL) { // Tjekker om filen kan åbnes
+        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+    }
+
     /* Sætter votes og winner værdier i structen, all_states, til at være 0 */
     states all_states[STATES] = {0}; // Laver et array af states structen med antallet af stater
 
@@ -28,6 +33,8 @@ char america(FILE *file) {
 
     /* Konventere vinderen fra en integer til en char, for et bedre resultat */
     char winner = assign_electors(all_states);
+
+    fclose(file);
 
     return winner;
 }

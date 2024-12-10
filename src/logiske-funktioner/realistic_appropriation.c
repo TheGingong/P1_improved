@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <time.h>
-#include "../h-filer/convert.h"
-#include "../h-filer/america.h"
+#include "../h-filer/valgsystemer.h"
 #include "../h-filer/realistic_appropriation.h"
 #include "math.h"
 #include "pbPlots.h"
