@@ -30,3 +30,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
 int create_state();
 int compare(const void* a, const void *b);
 void create_graph (double *x_akse, double *y_akse, char prefix[]);
+
+void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h);
+double generate_normal_using_box_muller(cluster_t cluster_n);
+void box_muller(double *z1, double *z2);
