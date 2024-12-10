@@ -38,13 +38,13 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);
 
-
+        /* If statement så man kan køre tæthedsfunktionen eller Box Muller */
         if (density) {
             /* Genererer kandidat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
              * Ved tilfælde af flere kandidater end clusters, vil clusters blive gentaget */
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
                 candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
-                //printf("%lf\n", candidates_coordinates[k][i]);
+
             }
             for (int h = 0; h < CLUSTERS; h++) {
                 generate_one_gauss(cluster_array[h], gauss_2d_array, i, h);
@@ -120,7 +120,7 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
            * exp(-0.5 * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
 }
 
-/*  */
+/* Box Muller algoritme der ud fra 2 uniform-fordelte tal genererer 2 normalfordelte tal */
 void box_muller(double *z1, double *z2) {
     double u1 = (double)rand() / RAND_MAX;
     double u2 = (double)rand() / RAND_MAX;
@@ -130,29 +130,28 @@ void box_muller(double *z1, double *z2) {
 }
 
 
-// Function to use Box-Muller for cluster-specific Gaussian sampling
+/* Funktion der benytter spread og mean til ændre det normalfordelte tal */
 double generate_normal_using_box_muller(cluster_t cluster_n) {
     static int use_last = 0;
     static double z1, z2;
 
-    // If we have a previously computed value, reuse it
-    if (use_last) {
+    if (use_last) { // Hvis vi har et tidligere ubenyttet udregnet tal, benyt det
         use_last = 0;
 
-        return cluster_n.mean_cluster + z2 * cluster_n.spread_cluster;
+        return cluster_n.mean_cluster + z2 * cluster_n.spread_cluster; // +mean og *spread
     }
 
-    // Generate new samples
-    box_muller(&z1, &z2);
+    box_muller(&z1, &z2); // Generer nye normalfordelte tal
     use_last = 1;
-    return cluster_n.mean_cluster + z1 * cluster_n.spread_cluster;
+    return cluster_n.mean_cluster + z1 * cluster_n.spread_cluster; // +mean og *spread
 }
 
 
+/* Samme som "generate_one_gauss" men bare med Box Muller algoritmen */
 void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
     srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
-    // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
+    // Funktionen generate_normal_using_muller bruges, og tilegner opinioner for vælgere i den gældende dimension
     for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
         double value = generate_normal_using_box_muller(cluster_n);
         gauss_2d_array[i][dimension_j] = value;
