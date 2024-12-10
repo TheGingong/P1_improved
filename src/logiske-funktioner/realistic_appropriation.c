@@ -41,8 +41,8 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
 
         if (density) {
-            /* Genererer kanditat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
-             * Ved tilfælde af flere kandidator end clusters, vil clusterne blive gentaget */
+            /* Genererer kandidat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
+             * Ved tilfælde af flere kandidater end clusters, vil clusters blive gentaget */
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
                 candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
                 //printf("%lf\n", candidates_coordinates[k][i]);
@@ -194,7 +194,7 @@ void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS
 
 
 
-/* Funktion, som tager vælgeres rangeringskoordinater, og beregner længden fra dem til kandidternes
+/* Funktion, som tager vælgeres rangerings-koordinater, og beregner længden fra dem til kandidaternes
  * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
 void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file) {
 
@@ -206,7 +206,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
         for (int j = 0; j < DIMENSIONS; j++) { // Loop der itererer over antal dimensioner
             length += pow((koords[j] - candidates_coordinates[i][j]), 2); // Euklids distanceformel (summerer over flere dimensioner)
         }
-        cand_distances[i].id = i; // Tilegn indeks til den korresponderende vælger i struct-array'et
+        cand_distances[i].id = i; // Tilegn indeks til den korresponderende vælger i struct-arrayet
         cand_distances[i].distance = sqrt(length); // Tilegn længden fra vælger til kandidat på korresponderende plads i struct-array
     }
 
@@ -225,7 +225,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
 
 
 
-    /* Printer tilfældelig stat til filen, må gerne være på baggrund af indbyggertal */
+    /* Printer tilfældig stat til filen, må gerne være på baggrund af indbyggertal */
     fprintf(file, "%d(", create_state()); // Printer tilfældig stat og '('
 
     /* Udregner velfærd baseret på distance, og printer dette til tekstfilen med en tilfældig stat (0-50) foran */
@@ -240,10 +240,17 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
    fprintf(file, ")\n"); // Printer ')' og newline
 }
 
+/* Generere en vægtet tilfældig stemme,
+ * med hyppigere udfald for en stat med flere valgmænd */
 int create_state() {
-    int stat = rand() % ANTAL_VALGMÆND;
+    int stat = rand() % ANTAL_VALGMÆND + 1; //Generere et tilfældigt tal, ikke større end antallet af valgmænd
     int i = 0, counter = 0;
 
+    /* Hver stat er vægtet på baggrund af statens antal valgmænd
+     * Hver stat er inddelt i intervaller efter valgmænd,
+     * eksempelvis har Alabama intervallet 1-9, og Alaska har intervallet 10-12
+     * While-loopet undersøger hvilken stat det tilfældigt-genererede tal tilhører.
+     */
     while (stat > counter + electors[i]) {
         counter += electors[i];
         i++;
@@ -261,7 +268,7 @@ int compare(const void* a, const void *b) {
     else return 0;
 }
 
-/* Følgende bruges til at lave grafer ved brug af biblioteket, pbPlots, som behjælper debugging */
+/* Følgende bruges til at lave grafer ved brug af biblioteket, pbPlots, som hjælper til debugging */
 void create_graph (double *x_akse, double *y_akse, char prefix[]) {
 
     _Bool success;
@@ -292,7 +299,7 @@ void create_graph (double *x_akse, double *y_akse, char prefix[]) {
     settings->height = 600;
     settings->autoBoundaries = true;
     settings->autoPadding = true;
-    settings->title = L"Koordianter";
+    settings->title = L"Koordinater";
     settings->titleLength = wcslen(settings->title);
     settings->xLabel = L"X axis";
     settings->xLabelLength = wcslen(settings->xLabel);
