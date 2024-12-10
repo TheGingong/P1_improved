@@ -186,17 +186,18 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
             fprintf(file, " "); // Printer mellemrum efter hver nytte, på nær den sidste
         }
     }
-    fprintf(file, ")\n"); // Printer ')' og newline
+   fprintf(file, ")\n"); // Printer ')' og newline
 }
 
 int create_state() {
-    int stat = rand() % ANTAL_VALGMÆND + 1;
+    int stat = rand() % ANTAL_VALGMÆND;
     int i = 0, counter = 0;
 
-    while (stat > counter) {
-        counter += electors[i++];
+    while (stat > counter + electors[i]) {
+        counter += electors[i];
+        i++;
     }
-    return --i;
+    return i;
 }
 
 /* qsort compare funktion til doubles i en struct */
