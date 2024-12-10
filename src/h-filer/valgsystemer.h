@@ -1,5 +1,4 @@
-    #include "static_variables.h"
-#include <stdio.h>
+#include "static_variables.h"
 #define STATES 51
 #define ANTAL_VALGMÆND 538
 
@@ -21,7 +20,6 @@ typedef enum {
     VIRGINIA, WASHINGTON, WEST_VIRGINIA, WISCONSIN, WYOMING
 } state_names;
 
-
 /* Array med antallet af valgmænd for hver stat (2020-2030).
  * Rækkefølgen følger state_names enum rækkefølgen */
 static int electors[STATES] = {
@@ -32,8 +30,8 @@ static int electors[STATES] = {
     9, 3, 11, 40, 6, 3, 13, 12, 4, 10, 3
 };
 
-
 /* Prototyper */
-char america(FILE *file);
+char america();
 void initialize_states(states all_states[]);
 char assign_electors(states all_states[]);
+char borda_count(); // Borda prototype

@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "./h-filer/america.h"
-#include "./h-filer/borda.h"
+#include "./h-filer/valgsystemer.h"
 #include "./h-filer/welfare_score.h"
 #include "./h-filer/realistic_appropriation.h"
 
@@ -29,26 +28,13 @@ int main(void) {
     //create_graph(test_array, test_array2, "hej");
     //FreeAllocations();
 
-    FILE *file = fopen("text-files/test-tekstil.txt", "r"); // Filen med stemmer åbnes i read mode.
-    if (file == NULL) { // Tjekker om filen kan åbnes
-        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
-    }
-
     /* Kalder simluering af det amerikanske valgsystem */
-    char winner_america = america(file); // Gemmer vinderen fra america
+    char winner_america = america(); // Gemmer vinderen fra america
     printf("The winner candidate of the american election is: %c\n", winner_america);
-    fclose(file);
-
-    FILE *file2 = fopen("text-files/test-tekstil.txt", "r"); // Filen med stemmer åbnes i read mode.
-
-    if (file2 == NULL) { // Tjekker om filen kan åbnes
-        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
-    }
 
     /* Kalder simulering af et valgsystem som bruger Borda count */
-    char winner_borda = borda_count(file2); // Gemmer vinderen fra borda
+    char winner_borda = borda_count(); // Gemmer vinderen fra borda
     printf("The winner candidate of borda count is: %c\n\n", winner_borda);
-    fclose(file2);
   
     /* Social utility efficiency print */
     printf("The social utility efficiency for the american election is: %.3lf%%\n", social_utility_efficiency(winner_america));
