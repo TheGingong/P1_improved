@@ -33,8 +33,8 @@
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
     double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS];
     srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
-    int density = 1;
-    int box_muller = 0;
+    int density = 0;
+    int box_muller = 1;
 
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);
@@ -51,24 +51,32 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
             for (int h = 0; h < CLUSTERS; h++) {
 
                 generate_one_gauss(cluster_array[h], gauss_2d_array, i, h);
+                //printf("mean = %lf, spread = %lf for dimension %d for cluster nr %d\n ", cluster_array[h].mean_cluster,cluster_array[h].spread_cluster ,i, h);
 
             }
-        }// else if (box_muller) {
-//
-         //   for (int k = 0; k < NUMBER_CANDIDATES; k++) {
-         //       candidates_coordinates[k][i] = generate_normal_using_muller(cluster_array[k%CLUSTERS]);
-         //       //printf("%lf\n", candidates_coordinates[k][i]);
-         //   }
-//
-         //   for (int h = 0; h < CLUSTERS; h++) {
-//
-         //       generate_one_muller(cluster_array[h], gauss_2d_array, i, h);
-//
-         //   }
-//
 
+
+        } else if (box_muller) {
+
+            for (int k = 0; k < NUMBER_CANDIDATES; k++) {
+                candidates_coordinates[k][i] = generate_normal_using_box_muller(cluster_array[k%CLUSTERS]);
+                //printf("%lf\n", candidates_coordinates[k][i]);
+            }
+
+
+            for (int h = 0; h < CLUSTERS; h++) {
+
+                generate_one_muller(cluster_array[h], gauss_2d_array, i, h);
+                //printf("mean = %lf, spread = %lf for dimension %d for cluster nr %d\n ", cluster_array[h].mean_cluster,cluster_array[h].spread_cluster ,i, h);
+
+            }
 
         }
+
+    }
+
+
+
 
 
     //generate_candidates(candidates_coordinates, cluster_array); //Genererer array af kandidaters koordinater
@@ -76,6 +84,20 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
     for (int i = 0; i < TOTAL_VOTERS; i++) { // Bruger spacial-stemmemodel for at skabe vælgerpræferencer
         spatial(gauss_2d_array[i], candidates_coordinates, file);
     }
+
+    //
+    //// ARRAY FOR X OG ARRAY FOR Y
+    //double xarray[TOTAL_VOTERS];
+    //double yarray[TOTAL_VOTERS];
+    //for (int i = 0; i < TOTAL_VOTERS; i++) {
+    //    xarray[i] = gauss_2d_array[i][0];
+    //    yarray[i] = gauss_2d_array[i][1];
+    //    printf("x%d = %lf\n", i, xarray[i]);
+    //    printf("y%d = %lf\n", i, yarray[i]);
+    //}
+//
+    //create_graph(xarray, xarray, "density");
+    //create_graph(yarray, yarray, "box");
 }
 
 /* Funktion, der opsætter en array af structs (cluster_t) */
@@ -84,7 +106,7 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
         // Sætter middelværdien til en tilfældig værdi fra -1 til 1
         cluster_array[i].mean_cluster = MIN_VALUE + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE);
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
-        cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
+        cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + 0.1 * (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
         // Fordeler vælgere uniformt på mængden af normalfordelinger
         cluster_array[i].voters_cluster = TOTAL_VOTERS / CLUSTERS;
     }
@@ -126,19 +148,48 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
            * exp(-0.5 * pow((voter_x - cluster_n.mean_cluster) / cluster_n.spread_cluster, 2));
 }
 
+/*  */
+void box_muller(double *z1, double *z2) {
+    double u1 = (double)rand() / RAND_MAX;
+    double u2 = (double)rand() / RAND_MAX;
+
+    *z1 = sqrt(-2 * log(u1)) * cos(2 * M_PI * u2);
+    *z2 = sqrt(-2 * log(u1)) * sin(2 * M_PI * u2);
+}
 
 
-//void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
-//
-//    // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
-//    for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
-//        double value = generate_normal_using_muller(cluster_n);
-//        gauss_2d_array[i][dimension_j] = value;
-//    }
-//}
-//
-//double generate_normal_using_muller(cluster_t cluster_n) { }
+// Function to use Box-Muller for cluster-specific Gaussian sampling
+double generate_normal_using_box_muller(cluster_t cluster_n) {
+    static int use_last = 0;
+    static double z1, z2;
 
+    // If we have a previously computed value, reuse it
+    if (use_last) {
+        use_last = 0;
+        //printf("z2 = %lf\n", z2);
+
+        return cluster_n.mean_cluster + z2 * cluster_n.spread_cluster;
+        //return z2;
+    }
+
+    // Generate new samples
+    box_muller(&z1, &z2);
+    use_last = 1;
+        //printf("z1 = %lf\n", z1);
+    return cluster_n.mean_cluster + z1 * cluster_n.spread_cluster;
+    //return z1;
+}
+
+
+void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
+    srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
+
+    // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
+    for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
+        double value = generate_normal_using_box_muller(cluster_n);
+        gauss_2d_array[i][dimension_j] = value;
+    }
+}
 
 
 
