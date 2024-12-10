@@ -47,7 +47,7 @@ struct person convert_america(FILE *file) {
     if (sscanf(temp_text_str, "%d( %c", &ny_person.stat, &temp) == 2) { // Sscanf læser en string og indlæser værdier i de specificeret variabler
         ny_person.pref = temp - 'A'; // typecasting the char to an int
     } else {
-        printf("Error: Could not parse the line.\n"); // printer fejlkode hvis ikke den indlæser 5
+        printf("Error: Could not parse the line (convert.c).\n"); // printer fejlkode hvis ikke den indlæser 5
     }
     return ny_person; // returner ny_person struct for succes
 }

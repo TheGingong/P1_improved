@@ -17,11 +17,11 @@ double social_utility_efficiency(char winner) {
     }
 
     /* Kalder hashing funktion for at få vinderne i hhv. borda og americas velfærdsscore */
-    int winner_index = hashing(winner, candidate);
+    int winner_index = index_finder(winner, candidate);
     double winner_welfare = candidate[winner_index].welfare; // Gemmer vinderens velfærd i winner_welfare
 
     /* Beregningen af social utility efficiency mellem vinder kandidaten og den kandidat med højest velfærdsscore */
-    double SUE_value = (winner_welfare) / (max_welfare_score) * 100;
+    double SUE_value = (winner_welfare / max_welfare_score) * 100;
 
     return SUE_value; // Returnere procent værdien til main for print
 }
@@ -48,7 +48,7 @@ void read_candidate_welfare(candidate_welfare *candidate) {
                 candidate[i].welfare += temp; // Summerer den indlæste velfærdsscoren til den nuværende kandidat i loopet
                 //printf("Candidate %c welfare: %lf\n", candidate[i].candidate, candidate[i].welfare);
             } else {
-                printf("Error: Could not parse the line welfare_score.c.\n");
+                printf("Error: Could not parse the line (welfare_score.c).\n");
             }
         }
     }
@@ -56,7 +56,7 @@ void read_candidate_welfare(candidate_welfare *candidate) {
 }
 
 /* Hashing funktion som returnerer et index, i candidate arrayet, for den kandidat den modtager */
-int hashing(char winner, candidate_welfare candidate[]) {
+int index_finder(char winner, candidate_welfare candidate[]) {
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         if (candidate[i].candidate == winner) {
             return i;
