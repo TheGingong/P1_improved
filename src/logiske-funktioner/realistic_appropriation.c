@@ -219,7 +219,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
     /* Udregner maksimale længde en vælger kan være fra en kandidat
      * (velfærd på 0 for værst mulig, velfærd på 1 for bedst mulig) */
     for (int i = 0; i < DIMENSIONS; i++) {
-        max_length += pow(MAX_VALUE-(-MIN_VALUE),2);
+        max_length += pow(MAX_VALUE-(MIN_VALUE),2);
     }
     max_length = sqrt(max_length); // Euklids igen
 
