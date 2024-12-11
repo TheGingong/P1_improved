@@ -8,11 +8,13 @@
 #include "./h-filer/welfare_score.h"
 
 void test_winner_america();
+void test_convert_america();
 void test_calc_winner_func();
 
 int main(void) {
     test_winner_america();
     test_calc_winner_func();
+    test_convert_america();
     return 0;
 }
 
@@ -31,6 +33,7 @@ void test_winner_america() {
 
     /* Assert */
     assert(winner == 'D');
+    fclose(test_file);
 }
 
 /* Testing af Borda */
@@ -60,5 +63,23 @@ void test_calc_winner_func(){
 /* Test af convert borda */
 
 /* Test af convert america */
+void test_convert_america() {
+    /* Arrange */
+    FILE *test_convert_america = fopen("test/test.txt", "r");
+
+    if (test_convert_america == NULL) {
+        perror("Could not open file");
+        exit(EXIT_FAILURE);
+    }
+
+    /* Act */
+    struct person test = convert_america(test_convert_america);
+
+    /* Assert */
+    assert(test.stat == 40 && test.pref == 3);
+    fclose(test_convert_america);
+}
+
+
 
 /* Test af welfare score */
