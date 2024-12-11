@@ -3,8 +3,8 @@
 #define DIMENSIONS 1
 #define CLUSTERS 1
 #define TOTAL_VOTERS 500
-#define MIN_VALUE -3.5
-#define MAX_VALUE 3.5
+#define MIN_VALUE -1
+#define MAX_VALUE 1
 #define MIN_SPREAD 0.001  // Minimum spread value
 #define MAX_SPREAD 0.4  // Maximum spread value
 
