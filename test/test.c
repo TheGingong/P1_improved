@@ -101,14 +101,23 @@ void test_convert_borda() {
 /* Test af convert america */
 void test_convert_america() {
     /* Arrange */
-    FILE *test_file = open_file("test/test1.txt");
+    FILE *test_file1 = open_file("test/test1.txt");
+    FILE *test_file2 = open_file("test/test2.txt");
+    FILE *test_file3 = open_file("test/test3.txt");
 
     /* Act */
-    struct person test = convert_america(test_file);
+    struct person test1 = convert_america(test_file1);
+    struct person test2 = convert_america(test_file2);
+    struct person test3 = convert_america(test_file3);
+    fclose(test_file1);
+    fclose(test_file2);
+    fclose(test_file3);
 
     /* Assert */
-    assert(test.stat == 40 && test.pref == 3);
-    fclose(test_file);
+    assert(test1.stat == 40 && test1.pref == 3);
+    assert(test2.stat == 0 && test2.pref == 3);
+    assert(test3.stat == 0 && test3.pref == 2);
+
 }
 
 /* Test af welfare score */
