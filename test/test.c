@@ -1,18 +1,20 @@
 #include <assert.h>
 #include <stdlib.h>
-#include "./h-filer/realistic_appropriation.h"
-#include "./h-filer/calculate_winner.h"
-#include "./h-filer/static_variables.h"
-#include "./h-filer/valgsystemer.h"
-#include "./h-filer/convert.h"
-#include "./h-filer/welfare_score.h"
+#include "../src/h-filer/realistic_appropriation.h"
+#include "../src/h-filer/calculate_winner.h"
+#include "../src/h-filer/static_variables.h"
+#include "../src/h-filer/valgsystemer.h"
+#include "../src/h-filer/convert.h"
+#include "../src/h-filer/welfare_score.h"
 
 void test_winner_america();
+void test_winner_borda();
 void test_convert_america();
 void test_calc_winner_func();
 
 int main(void) {
     test_winner_america();
+    test_winner_borda();
     test_calc_winner_func();
     test_convert_america();
     return 0;
@@ -37,6 +39,22 @@ void test_winner_america() {
 }
 
 /* Testing af Borda */
+void test_winner_borda() {
+    /* Arrange */
+    FILE *test_file = fopen("test/test.txt", "r");
+
+    if (test_file == NULL) {
+        perror("Could not open file");
+        exit(EXIT_FAILURE);
+    }
+
+    /* Act */
+    char winner = borda_count(test_file);
+
+    /* Assert */
+    assert(winner == 'D');
+    fclose(test_file);
+}
 
 /* Test af calculate winner */
 void test_calc_winner_func(){
