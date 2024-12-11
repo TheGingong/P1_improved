@@ -25,8 +25,15 @@ int main(void) {
 
     fclose(file_for_america);
 
+    FILE *borda_file = fopen("test/test.txt", "r"); // Filen med stemmer åbnes i read mode.
+
+    if (borda_file == NULL) { // Tjekker om filen kan åbnes
+        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+        exit(EXIT_FAILURE);
+    }
+
     /* Kalder simulering af et valgsystem som bruger Borda count */
-    char winner_borda = borda_count(); // Gemmer vinderen fra borda
+    char winner_borda = borda_count(borda_file); // Gemmer vinderen fra borda
     printf("The winner candidate of borda count is: %c\n\n", winner_borda);
 
     /* Social utility efficiency print */

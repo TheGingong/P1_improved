@@ -35,4 +35,4 @@ static int electors[STATES] = {
 char america(FILE* file);
 void initialize_states(states all_states[]);
 char assign_electors(states all_states[]);
-char borda_count(); // Borda prototype
+char borda_count(FILE* borda_file); // Borda prototype
