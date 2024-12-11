@@ -13,16 +13,14 @@ int main(void) {
     /* Genererer stemmer */
     generate_data();
 
-    FILE *file_for_america = open_file("text-files/test-tekstil.txt"); // Filen med stemmer åbnes vha. funktion open_file()
-
     /* Kalder simluering af det amerikanske valgsystem */
+    FILE *file_for_america = open_file("text-files/test-tekstil.txt"); // Filen med stemmer åbnes vha. funktion open_file()
     char winner_america = america(file_for_america); // Gemmer vinderen fra america
     printf("The winner candidate of the american election is: %c\n", winner_america);
     fclose(file_for_america);
 
-    FILE *borda_file = open_file("text-files/test-tekstil.txt"); // Filen med stemmer åbnes vha. funktion open_file()
-
     /* Kalder simulering af et valgsystem som bruger Borda count */
+    FILE *borda_file = open_file("text-files/test-tekstil.txt"); // Filen med stemmer åbnes vha. funktion open_file()
     char winner_borda = borda_count(borda_file); // Gemmer vinderen fra borda
     printf("The winner candidate of borda count is: %c\n\n", winner_borda);
     fclose(borda_file);
@@ -37,16 +35,4 @@ int main(void) {
     printf("The program executed in: %lf s", cpu_time_used);
 
     return 0;
-}
-
-/* Åbner en fil */
-FILE* open_file(const char* file_path) {
-    FILE *file = fopen(file_path, "r");
-
-    if (file == NULL) { // Tjekker om filen kan åbnes
-        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
-        exit(EXIT_FAILURE);
-    }
-
-    return file;
 }

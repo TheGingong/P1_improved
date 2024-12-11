@@ -13,7 +13,6 @@ void test_winner_borda();
 void test_convert_america();
 void test_calc_winner_func();
 void test_convert_borda();
-FILE* open_file(const char* file_path);
 
 int main(void) {
     /* Tester funktioner */
@@ -151,14 +150,3 @@ void test_convert_america() {
 }
 
 /* Test af welfare score */
-
-/* Åbner en fil */
-FILE* open_file(const char* file_path) {
-    FILE *file = fopen(file_path, "r");
-
-    if (file == NULL) {
-        perror("Could not open file");
-        exit(EXIT_FAILURE);
-    }
-    return file;
-}
