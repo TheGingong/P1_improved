@@ -47,14 +47,22 @@ void test_winner_america() {
 /* Testing af Borda */
 void test_winner_borda() {
     /* Arrange */
-    FILE *test_file = open_file("test/test1.txt");
+    FILE *test_file1 = open_file("test/test1.txt");
+    FILE *test_file2 = open_file("test/test2.txt");
+    FILE *test_file3 = open_file("test/test3.txt");
 
     /* Act */
-    char winner = borda_count(test_file);
-    fclose(test_file);
+    char winner1 = borda_count(test_file1);
+    char winner2 = borda_count(test_file2);
+    char winner3 = borda_count(test_file3);
+    fclose(test_file1);
+    fclose(test_file2);
+    fclose(test_file3);
 
     /* Assert */
-    assert(winner == 'D');
+    assert(winner1 == 'D');
+    assert(winner2 == 'C');
+    assert(winner3 == 'D');
 }
 
 /* Test af calculate winner */
@@ -122,7 +130,7 @@ void test_convert_america() {
 
 /* Test af welfare score */
 
-/* Åbner en fil igennem  */
+/* Åbner en fil igennem */
 FILE* open_file(const char* file_path) {
     FILE *file = fopen(file_path, "r");
 
