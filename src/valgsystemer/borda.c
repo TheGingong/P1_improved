@@ -23,7 +23,5 @@ char borda_count(FILE* borda_file) {
 
     char candidate_winner = calculate_winner_func(candidate_points); // Udpeger den/de kandidater med flest point
 
-    fclose(borda_file);
-
     return 'A' + candidate_winner; // Returnere den rigtige kandidat ved brug af index fra calculate_winner_func
 }

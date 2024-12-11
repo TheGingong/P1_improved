@@ -36,6 +36,8 @@ int main(void) {
     char winner_borda = borda_count(borda_file); // Gemmer vinderen fra borda
     printf("The winner candidate of borda count is: %c\n\n", winner_borda);
 
+    fclose(borda_file);
+
     /* Social utility efficiency print */
     printf("The social utility efficiency for the american election is: %.3lf%%\n", social_utility_efficiency(winner_america));
     printf("The social utility efficiency for borda count is: %.3lf%%\n\n", social_utility_efficiency(winner_borda));
