@@ -14,6 +14,8 @@ void test_winner_borda();
 void test_convert_america();
 void test_calc_winner_func();
 void test_convert_borda();
+int is_almost_equal(double actual, double expected);
+void test_SUE();
 
 int main(void) {
     /* Tester funktioner */
@@ -22,6 +24,7 @@ int main(void) {
     test_calc_winner_func();
     test_convert_borda();
     test_convert_america();
+    //test_SUE();
     return 0;
 }
 
@@ -165,7 +168,8 @@ void test_SUE() {
     fclose(test_file2);
     fclose(test_file3);
     /* Assert */
-    //assert(fabs(score1, 92.46) < 0.01);
+    //assert(fabs(score1 == 92.46) < 0.01);
+    assert(is_almost_equal(score1, 92.46));
     //assert(score2, 100.0);
     //assert(score3, 95.47);
 
@@ -180,4 +184,8 @@ FILE* open_file(const char* file_path) {
         exit(EXIT_FAILURE);
     }
     return file;
+}
+
+int is_almost_equal(double actual, double expected) {
+    return fabs(actual - expected) < 0.000001;
 }

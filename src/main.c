@@ -5,7 +5,6 @@
 #include "./h-filer/welfare_score.h"
 #include "./h-filer/realistic_appropriation.h"
 
-
 int main(void) {
     /* Initialisere variabler til clock_t struct */
     clock_t start,end;
@@ -35,6 +34,7 @@ int main(void) {
 
     fclose(welfare_america);
     fclose(welfare_borda);
+
     /* Printer programmet eksekverings tid */
     end = clock();
     double cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
