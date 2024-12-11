@@ -4,11 +4,13 @@
 #include "./h-filer/valgsystemer.h"
 #include "./h-filer/welfare_score.h"
 #include "./h-filer/realistic_appropriation.h"
+#include <unistd.h>
 
 int main(void) {
     /* Initialisere variabler til clock_t struct */
     clock_t start,end;
     start = clock();
+    srand(time(0) + getpid());  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
     generate_data();
 

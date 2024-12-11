@@ -65,10 +65,12 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
              * Ved tilfælde af flere kandidater end clusters, vil clusters blive gentaget */
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
                 candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
+
             }
             for (int h = 0; h < CLUSTERS; h++) {
                 generate_one_gauss(cluster_array[h], gauss_2d_array, i, h);
             }
+
 
         } else if (box_muller) {
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
@@ -79,22 +81,32 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
                 generate_one_muller(cluster_array[h], gauss_2d_array, i, h);
             }
         }
+
+
     }
+
 
     /* Kører spatial funktionen for hver voter, der generere en præference baseret rangering */
     for (int i = 0; i < TOTAL_VOTERS; i++) { // Bruger spacial-stemmemodel for at skabe vælgerpræferencer
         spatial(gauss_2d_array[i], candidates_coordinates, file);
     }
+
 }
 
 /* Funktion, der opsætter en array af structs (cluster_t) */
 void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
+
+
     for (int i = 0; i < CLUSTERS; i++) {
         // Sætter middelværdien til en tilfældig værdi fra -1 til 1
         cluster_array[i].mean_cluster = MIN_VALUE + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE);
 
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
-        cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + (double) rand() / RAND_MAX * (MAX_VALUE_SPREAD - MIN_VALUE_SPREAD);
+
+        // Generate random spread from uniform distribution
+        cluster_array[i].spread_cluster = (double) rand() / RAND_MAX * (MAX_SPREAD - MIN_SPREAD) + MIN_SPREAD;
+
+        //cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + 0.5 * (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
 
         // Fordeler vælgere uniformt på mængden af normalfordelinger
         cluster_array[i].voters_cluster = (double)TOTAL_VOTERS / (double)CLUSTERS;
@@ -126,6 +138,8 @@ double generate_normal_using_density(cluster_t cluster_n) {
         random_value = (double) rand() / RAND_MAX * gaussian_density(cluster_n, cluster_n.mean_cluster);
 
     } while (random_value > density_at_sample); // Tjekker, om sample er større end den tilfældige værdi, accepterer hvis den er
+    //printf("%lf %lf\n", sample, density_at_sample);
+
     return sample; // Returnerer sample-værdien
 }
 
@@ -150,6 +164,7 @@ void box_muller(double *z1, double *z2) {
     *z2 = sqrt(-2 * log(u1)) * sin(2 * M_PI * u2);
 }
 
+
 /* Funktion der benytter spread og mean til ændre det normalfordelte tal */
 double generate_normal_using_box_muller(cluster_t cluster_n) {
     static int use_last = 0;
@@ -157,7 +172,6 @@ double generate_normal_using_box_muller(cluster_t cluster_n) {
 
     if (use_last) { // Hvis vi har et tidligere ubenyttet udregnet tal, benyt det
         use_last = 0;
-
         return cluster_n.mean_cluster + z2 * cluster_n.spread_cluster; // +mean og *spread
     }
 
@@ -165,6 +179,7 @@ double generate_normal_using_box_muller(cluster_t cluster_n) {
     use_last = 1;
     return cluster_n.mean_cluster + z1 * cluster_n.spread_cluster; // +mean og *spread
 }
+
 
 /* Samme som "generate_one_gauss" men bare med Box Muller algoritmen */
 void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
@@ -175,6 +190,9 @@ void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS
         gauss_2d_array[i][dimension_j] = value;
     }
 }
+
+
+
 
 /* Funktion, som tager vælgeres rangerings-koordinater, og beregner længden fra dem til kandidaternes
  * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
@@ -201,9 +219,11 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
     /* Udregner maksimale længde en vælger kan være fra en kandidat
      * (velfærd på 0 for værst mulig, velfærd på 1 for bedst mulig) */
     for (int i = 0; i < DIMENSIONS; i++) {
-        max_length += pow(1-(-1),2);
+        max_length += pow(MAX_VALUE-(-MIN_VALUE),2);
     }
     max_length = sqrt(max_length); // Euklids igen
+
+
 
     /* Printer tilfældig stat til filen, må gerne være på baggrund af indbyggertal */
     fprintf(file, "%d(", create_state()); // Printer tilfældig stat og '('
