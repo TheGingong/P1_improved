@@ -5,6 +5,7 @@
 #include "./h-filer/welfare_score.h"
 #include "./h-filer/realistic_appropriation.h"
 
+
 int main(void) {
     /* Initialisere variabler til clock_t struct */
     clock_t start,end;
@@ -26,9 +27,14 @@ int main(void) {
     fclose(borda_file);
 
     /* Social utility efficiency print */
-    printf("The social utility efficiency for the american election is: %.3lf%%\n", social_utility_efficiency(winner_america));
-    printf("The social utility efficiency for borda count is: %.3lf%%\n\n", social_utility_efficiency(winner_borda));
+    FILE *welfare_america = open_file("text-files/test-tekstil.txt");
+    FILE *welfare_borda = open_file("text-files/test-tekstil.txt");
 
+    printf("The social utility efficiency for the american election is: %.3lf%%\n", social_utility_efficiency(winner_america, welfare_america));
+    printf("The social utility efficiency for borda count is: %.3lf%%\n\n", social_utility_efficiency(winner_borda, welfare_borda));
+
+    fclose(welfare_america);
+    fclose(welfare_borda);
     /* Printer programmet eksekverings tid */
     end = clock();
     double cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;

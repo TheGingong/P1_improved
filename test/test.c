@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <math.h>
 #include "../src/h-filer/realistic_appropriation.h"
 #include "../src/h-filer/calculate_winner.h"
 #include "../src/h-filer/static_variables.h"
@@ -150,3 +151,33 @@ void test_convert_america() {
 }
 
 /* Test af welfare score */
+void test_SUE() {
+    /* Arrange */
+    FILE *test_file1 = open_file("test/test1.txt");
+    FILE *test_file2 = open_file("test/test2.txt");
+    FILE *test_file3 = open_file("test/test3.txt");
+    /* Act */
+    double score1 = social_utility_efficiency('A', test_file1);
+    double score2 = social_utility_efficiency('B', test_file1);
+    double score3 = social_utility_efficiency('C', test_file1);
+
+    fclose(test_file1);
+    fclose(test_file2);
+    fclose(test_file3);
+    /* Assert */
+    //assert(fabs(score1, 92.46) < 0.01);
+    //assert(score2, 100.0);
+    //assert(score3, 95.47);
+
+}
+
+/* Åbner en fil */
+FILE* open_file(const char* file_path) {
+    FILE *file = fopen(file_path, "r");
+
+    if (file == NULL) {
+        perror("Could not open file");
+        exit(EXIT_FAILURE);
+    }
+    return file;
+}
