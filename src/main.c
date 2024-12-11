@@ -9,8 +9,8 @@ int main(void) {
     /* Initialisere variabler til clock_t struct */
     clock_t start,end;
     start = clock();
-  
-   generate_data();
+
+    generate_data();
 
     /* Kalder simluering af det amerikanske valgsystem */
     char winner_america = america(); // Gemmer vinderen fra america
@@ -19,7 +19,7 @@ int main(void) {
     /* Kalder simulering af et valgsystem som bruger Borda count */
     char winner_borda = borda_count(); // Gemmer vinderen fra borda
     printf("The winner candidate of borda count is: %c\n\n", winner_borda);
-  
+
     /* Social utility efficiency print */
     printf("The social utility efficiency for the american election is: %.3lf%%\n", social_utility_efficiency(winner_america));
     printf("The social utility efficiency for borda count is: %.3lf%%\n\n", social_utility_efficiency(winner_borda));

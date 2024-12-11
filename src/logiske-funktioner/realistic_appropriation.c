@@ -98,8 +98,15 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
     for (int i = 0; i < CLUSTERS; i++) {
         // Sætter middelværdien til en tilfældig værdi fra -1 til 1
         cluster_array[i].mean_cluster = MIN_VALUE + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE);
+
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
         cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + 0.5 * (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
+
+        // Fejl håndtering
+        if (cluster_array[i].spread_cluster == 0) {
+            cluster_array[i].spread_cluster = 0.0001;
+        }
+
         // Fordeler vælgere uniformt på mængden af normalfordelinger
         cluster_array[i].voters_cluster = (double)TOTAL_VOTERS / (double)CLUSTERS;
     }
@@ -144,6 +151,11 @@ double gaussian_density (cluster_t cluster_n, double voter_x) {
 void box_muller(double *z1, double *z2) {
     double u1 = (double)rand() / RAND_MAX;
     double u2 = (double)rand() / RAND_MAX;
+
+    // Fejl håndtering så vi ikke står med ln(0) som ikke findes
+    if (u1 == 0.0) {
+        u1 = 0.0001;
+    }
 
     *z1 = sqrt(-2 * log(u1)) * cos(2 * M_PI * u2);
     *z2 = sqrt(-2 * log(u1)) * sin(2 * M_PI * u2);
