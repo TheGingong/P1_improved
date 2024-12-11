@@ -143,7 +143,7 @@ void test_convert_america() {
 
 /* Test af welfare score */
 
-/* Åbner en fil igennem  */
+/* Åbner en fil */
 FILE* open_file(const char* file_path) {
     FILE *file = fopen(file_path, "r");
 
