@@ -65,12 +65,10 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
              * Ved tilfælde af flere kandidater end clusters, vil clusters blive gentaget */
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
                 candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
-
             }
             for (int h = 0; h < CLUSTERS; h++) {
                 generate_one_gauss(cluster_array[h], gauss_2d_array, i, h);
             }
-
 
         } else if (box_muller) {
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
@@ -81,16 +79,12 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
                 generate_one_muller(cluster_array[h], gauss_2d_array, i, h);
             }
         }
-
-
     }
-
 
     /* Kører spatial funktionen for hver voter, der generere en præference baseret rangering */
     for (int i = 0; i < TOTAL_VOTERS; i++) { // Bruger spacial-stemmemodel for at skabe vælgerpræferencer
         spatial(gauss_2d_array[i], candidates_coordinates, file);
     }
-
 }
 
 /* Funktion, der opsætter en array af structs (cluster_t) */
@@ -100,12 +94,7 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
         cluster_array[i].mean_cluster = MIN_VALUE + (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE);
 
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
-        cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + 0.5 * (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
-
-        // Fejl håndtering
-        if (cluster_array[i].spread_cluster == 0) {
-            cluster_array[i].spread_cluster = 0.0001;
-        }
+        cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + (double) rand() / RAND_MAX * (MAX_VALUE_SPREAD - MIN_VALUE_SPREAD);
 
         // Fordeler vælgere uniformt på mængden af normalfordelinger
         cluster_array[i].voters_cluster = (double)TOTAL_VOTERS / (double)CLUSTERS;
@@ -161,7 +150,6 @@ void box_muller(double *z1, double *z2) {
     *z2 = sqrt(-2 * log(u1)) * sin(2 * M_PI * u2);
 }
 
-
 /* Funktion der benytter spread og mean til ændre det normalfordelte tal */
 double generate_normal_using_box_muller(cluster_t cluster_n) {
     static int use_last = 0;
@@ -178,7 +166,6 @@ double generate_normal_using_box_muller(cluster_t cluster_n) {
     return cluster_n.mean_cluster + z1 * cluster_n.spread_cluster; // +mean og *spread
 }
 
-
 /* Samme som "generate_one_gauss" men bare med Box Muller algoritmen */
 void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
 
@@ -188,9 +175,6 @@ void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS
         gauss_2d_array[i][dimension_j] = value;
     }
 }
-
-
-
 
 /* Funktion, som tager vælgeres rangerings-koordinater, og beregner længden fra dem til kandidaternes
  * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
@@ -220,8 +204,6 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
         max_length += pow(1-(-1),2);
     }
     max_length = sqrt(max_length); // Euklids igen
-
-
 
     /* Printer tilfældig stat til filen, må gerne være på baggrund af indbyggertal */
     fprintf(file, "%d(", create_state()); // Printer tilfældig stat og '('

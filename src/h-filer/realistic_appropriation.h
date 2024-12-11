@@ -5,7 +5,8 @@
 #define TOTAL_VOTERS 3300
 #define MIN_VALUE -1
 #define MAX_VALUE 1
-#define MIN_VALUE_SPREAD 0
+#define MIN_VALUE_SPREAD 0.0001
+#define MAX_VALUE_SPREAD 0.5
 
 /* Struct for en normalfordeling, indeholder dens middelværdi, spredning, og antal vælgere for én normalfordeling */
 typedef struct {
