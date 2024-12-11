@@ -25,7 +25,7 @@ int main(void) {
 
     fclose(file_for_america);
 
-    FILE *borda_file = fopen("test/test.txt", "r"); // Filen med stemmer åbnes i read mode.
+    FILE *borda_file = fopen("text-files/test-tekstil.txt", "r"); // Filen med stemmer åbnes i read mode.
 
     if (borda_file == NULL) { // Tjekker om filen kan åbnes
         perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes

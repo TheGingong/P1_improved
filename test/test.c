@@ -26,20 +26,28 @@ int main(void) {
 /* Testing af om den rigtige kandidat bliver valgt */
 void test_winner_america() {
     /* Arrange */
-    FILE *test_file = open_file("test/test.txt");
+    FILE *test_file1 = open_file("test/test1.txt");
+    FILE *test_file2 = open_file("test/test2.txt");
+    FILE *test_file3 = open_file("test/test3.txt");
 
     /* Act */
-    char winner = america(test_file);
-    fclose(test_file);
+    char winner1 = america(test_file1);
+    char winner2 = america(test_file2);
+    char winner3 = america(test_file3);
+    fclose(test_file1);
+    fclose(test_file2);
+    fclose(test_file3);
 
     /* Assert */
-    assert(winner == 'D');
+    assert(winner1 == 'D');
+    assert(winner2 == 'C');
+    assert(winner3 == 'E');
 }
 
 /* Testing af Borda */
 void test_winner_borda() {
     /* Arrange */
-    FILE *test_file = open_file("test/test.txt");
+    FILE *test_file = open_file("test/test1.txt");
 
     /* Act */
     char winner = borda_count(test_file);
@@ -74,7 +82,7 @@ void test_calc_winner_func(){
 /* Test af convert borda */
 void test_convert_borda() {
     /* Act */
-    FILE *test_file = open_file("test/test.txt");
+    FILE *test_file = open_file("test/test1.txt");
 
     /* Initialisering af arrays som bruges af convert borda */
     int voter_preference[NUMBER_CANDIDATES] = {0};
@@ -93,7 +101,7 @@ void test_convert_borda() {
 /* Test af convert america */
 void test_convert_america() {
     /* Arrange */
-    FILE *test_file = open_file("test/test.txt");
+    FILE *test_file = open_file("test/test1.txt");
 
     /* Act */
     struct person test = convert_america(test_file);
