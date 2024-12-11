@@ -6,7 +6,8 @@ add_executable(main main.c
         logiske-funktioner/welfare_score.c
         logiske-funktioner/calculate_winner.c
         logiske-funktioner/realistic_appropriation.c
-        logiske-funktioner/NOTUSED_vote_generation.c)
+        logiske-funktioner/NOTUSED_vote_generation.c
+        logiske-funktioner/utils.c)
 add_library(main_lib main.c
             valgsystemer/america.c
             valgsystemer/borda.c
@@ -14,7 +15,8 @@ add_library(main_lib main.c
             logiske-funktioner/welfare_score.c
             logiske-funktioner/calculate_winner.c
             logiske-funktioner/realistic_appropriation.c
-            logiske-funktioner/NOTUSED_vote_generation.c)
+            logiske-funktioner/NOTUSED_vote_generation.c
+            logiske-funktioner/utils.c)
 target_link_libraries(main m pbPlots)
 target_include_directories(main_lib PUBLIC .)
 project(P1 C)
