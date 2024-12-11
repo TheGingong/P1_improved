@@ -21,6 +21,7 @@ typedef struct {
 } candidate_distance_t;
 
 /* Prototyper */
+void generate_data();
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file);
 void make_cluster_array (cluster_t cluster_array[CLUSTERS]);
 void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h);

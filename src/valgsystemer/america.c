@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "../h-filer/valgsystemer.h"
 #include "../h-filer/convert.h"
 #include "../h-filer/calculate_winner.h"
@@ -9,6 +11,7 @@ char america() {
 
     if (america_file == NULL) { // Tjekker om filen kan åbnes
         perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+        exit(EXIT_FAILURE);
     }
 
     /* Sætter votes og winner værdier i structen, all_states, til at være 0 */

@@ -27,6 +27,27 @@
  *  Generering af stater reflekterer virkelige populationer
  */
 
+void generate_data() {
+    /* Initiering */
+    FILE* generate_data_file = fopen("text-files/test-tekstil.txt", "w");
+
+    if (generate_data_file == NULL) { // Tjekker om filen kan åbnes
+        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+        exit(EXIT_FAILURE);
+    }
+
+    double total_model_array[TOTAL_VOTERS][DIMENSIONS];
+    cluster_t cluster_array[CLUSTERS];
+    /* Kør funktion */
+    //generate_one_gauss(test, total_model_array, min_value, max_value);
+    assemble_gauss(cluster_array, total_model_array, generate_data_file);
+    fclose(generate_data_file);
+
+    /* Kan lave grafer til debugging*/
+    //create_graph(test_array, test_array2, "hej");
+    //FreeAllocations();
+}
+
 /* Funktion, der kører andre underordnede funktioner.
  * Formålet er, at samle alle elementerne, og skriver resultaterne i tekstfilen */
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
