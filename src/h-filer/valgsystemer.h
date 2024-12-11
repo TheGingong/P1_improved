@@ -1,4 +1,5 @@
 #include "static_variables.h"
+#include <stdio.h>
 #define STATES 51
 #define ANTAL_VALGMÆND 538
 
@@ -31,7 +32,7 @@ static int electors[STATES] = {
 };
 
 /* Prototyper */
-char america();
+char america(FILE* america_file);
 void initialize_states(states all_states[]);
 char assign_electors(states all_states[]);
 char borda_count(); // Borda prototype

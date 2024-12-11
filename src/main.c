@@ -12,9 +12,18 @@ int main(void) {
 
     generate_data();
 
+    FILE *file_for_america = fopen("text-files/test-tekstil.txt", "r"); // Filen med stemmer åbnes i read mode.
+
+    if (file_for_america == NULL) { // Tjekker om filen kan åbnes
+        perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes
+        exit(EXIT_FAILURE);
+    }
+
     /* Kalder simluering af det amerikanske valgsystem */
-    char winner_america = america(); // Gemmer vinderen fra america
+    char winner_america = america(file_for_america); // Gemmer vinderen fra america
     printf("The winner candidate of the american election is: %c\n", winner_america);
+
+    fclose(file_for_america);
 
     /* Kalder simulering af et valgsystem som bruger Borda count */
     char winner_borda = borda_count(); // Gemmer vinderen fra borda
