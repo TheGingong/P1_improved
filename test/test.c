@@ -7,15 +7,15 @@
 #include "./h-filer/convert.h"
 #include "./h-filer/welfare_score.h"
 
-void test_winner_america1();
+void test_winner_america();
 
 int main(void) {
-    test_winner_america1();
+    test_winner_america();
     return 0;
 }
 
 /* Testing af om den rigtige kandidat bliver valgt */
-void test_winner_america1() {
+void test_winner_america() {
     /* Arrange */
     FILE *test_file = fopen("test/test.txt", "r");
 
@@ -30,3 +30,13 @@ void test_winner_america1() {
     /* Assert */
     assert(winner == 'D');
 }
+
+/* Testing af Borda */
+
+/* Test af calculate winner */
+
+/* Test af convert borda */
+
+/* Test af convert america */
+
+/* Test af welfare score */

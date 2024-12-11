@@ -15,6 +15,6 @@ add_library(main_lib main.c
             logiske-funktioner/calculate_winner.c
             logiske-funktioner/realistic_appropriation.c
             logiske-funktioner/NOTUSED_vote_generation.c)
-target_link_libraries(main_lib m pbPlots)
+target_link_libraries(main m pbPlots)
 target_include_directories(main_lib PUBLIC .)
 project(P1 C)

@@ -6,19 +6,19 @@
 
 /* Hovedfunktion som modtager antallet af kandidater fra main.c
  * Returnerer karakteren på vinder kandidaten til main.c */
-char america(FILE* america_file) {
+char america(FILE* file) {
     /* Sætter votes og winner værdier i structen, all_states, til at være 0 */
     states all_states[STATES] = {0}; // Laver et array af states structen med antallet af stater
 
     initialize_states(all_states); // Kalder funktion som laver stater og tildeler valgmænd
 
     /* Initialisere person structen som benyttes */
-    struct person current_state = convert_america(america_file); // Læser den første linje fra convert_america. Hvis den returnere -1 vil den ikke køre while loopet.
+    struct person current_state = convert_america(file); // Læser den første linje fra convert_america. Hvis den returnere -1 vil den ikke køre while loopet.
 
     /* While loop som kører så længe at convert_america ikke returnerer -1 */
     while(current_state.stat != -1) {
         all_states[current_state.stat].votes[current_state.pref]++; // Tæller votes op i all_states udfra præferencen hos den individuelle person
-        current_state = convert_america(america_file); // Modtager en ny struct, current_state, fra convert_america til 'index' linje
+        current_state = convert_america(file); // Modtager en ny struct, current_state, fra convert_america til 'index' linje
     }
 
     /* For loop som gennemløber alle stater for at beregne vinderen i hver stat */
