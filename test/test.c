@@ -8,9 +8,11 @@
 #include "./h-filer/welfare_score.h"
 
 void test_winner_america();
+void test_calc_winner_func();
 
 int main(void) {
     test_winner_america();
+    test_calc_winner_func();
     return 0;
 }
 
@@ -34,6 +36,26 @@ void test_winner_america() {
 /* Testing af Borda */
 
 /* Test af calculate winner */
+void test_calc_winner_func(){
+    // Arrange
+    /* 3 cases med forskellige indeks' som vinder */
+    int scores1[NUMBER_CANDIDATES] = {10, 20, 30, 40, 50}; // Vinder indeks 4
+    int scores2[NUMBER_CANDIDATES] = {50, 40, 30, 20, 10}; // Vinder indeks 0
+    int scores3[NUMBER_CANDIDATES] = {20, 30, 40, 10, 50}; // Vinder indeks 4
+
+    // Act
+    /* Kører calculate_winner_func på de forskellige arrays */
+    int winner1 = calculate_winner_func(scores1);
+    int winner2 = calculate_winner_func(scores2);
+    int winner3 = calculate_winner_func(scores3);
+
+    // Assert
+    /* Tjek hvorvidt output er rigtigt */
+    assert(winner1 == 4); // Test case 1
+    assert(winner2 == 0); // Test case 2
+    assert(winner3 == 4); // Test case 3
+    }
+
 
 /* Test af convert borda */
 
