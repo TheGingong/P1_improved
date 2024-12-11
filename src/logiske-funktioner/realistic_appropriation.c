@@ -44,8 +44,10 @@ void generate_data() {
     fclose(generate_data_file);
 
     /* Kan lave grafer til debugging*/
+    double test_array[] = {1, 6, 12, 19, 55, 10};
+    double test_array2[] = {11, 12, 13, 14, 15, 16};
     //create_graph(test_array, test_array2, "hej");
-    //FreeAllocations();
+    FreeAllocations();
 }
 
 /* Funktion, der kører andre underordnede funktioner.
@@ -53,8 +55,12 @@ void generate_data() {
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
     double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS];
     srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
-    int density = 0;
+    int density = 1;
     int box_muller = 1;
+    cluster_t test_array[3];
+    test_array[0].mean_cluster = 0.28934598834192937; test_array[0].spread_cluster = 0.068039796136356703; test_array[0].voters_cluster = 1100;
+    test_array[1].mean_cluster = 0.73094882045960885; test_array[1].spread_cluster = 0.9; test_array[1].voters_cluster = 1100;
+    test_array[2].mean_cluster = 0.63444929349650558; test_array[2].spread_cluster = 0.12379848628192998; test_array[2].voters_cluster = 1100;
 
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);
@@ -68,7 +74,7 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
             }
             for (int h = 0; h < CLUSTERS; h++) {
-                generate_one_gauss(cluster_array[h], gauss_2d_array, i, h);
+                generate_one_gauss(test_array[h], gauss_2d_array, i, h);
             }
 
 
@@ -78,18 +84,40 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
             }
 
             for (int h = 0; h < CLUSTERS; h++) {
-                generate_one_muller(cluster_array[h], gauss_2d_array, i, h);
+                generate_one_muller(test_array[h], gauss_2d_array, i, h);
             }
         }
 
 
+    //for (int a = 0; a < 20; a++) {
+    //    printf("%d", )
+    //}
+
     }
+    const int dim = 2;
+    double tal_x[TOTAL_VOTERS];
+    double tal_y[TOTAL_VOTERS];
+    for (int z = 0; z < TOTAL_VOTERS; z++) {
+        tal_x[z] = z;
+        tal_y[z] = gauss_2d_array[z][dim];
+        //printf("%d %lf\n", z, gauss_2d_array[z][dim]);
+    }
+    char title[64];
+    if (density) {
+        sprintf(title, "Density");
+    } else {
+        sprintf(title, "Box-Muller");
+    }
+
+    create_graph(tal_x, tal_y, "Gauss", title);
 
 
     /* Kører spatial funktionen for hver voter, der generere en præference baseret rangering */
     for (int i = 0; i < TOTAL_VOTERS; i++) { // Bruger spacial-stemmemodel for at skabe vælgerpræferencer
         spatial(gauss_2d_array[i], candidates_coordinates, file);
+
     }
+
 
 }
 
@@ -107,7 +135,7 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
 
 /* Funktion, der genererer tilfældige stemmer for én vælger i den j'te dimension*/
 void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
-    srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
+    //srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
     // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
     for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
@@ -159,18 +187,18 @@ double generate_normal_using_box_muller(cluster_t cluster_n) {
     if (use_last) { // Hvis vi har et tidligere ubenyttet udregnet tal, benyt det
         use_last = 0;
 
-        return cluster_n.mean_cluster + z2 * cluster_n.spread_cluster; // +mean og *spread
+        return (cluster_n.mean_cluster + z2 * cluster_n.spread_cluster); // +mean og *spread
     }
 
     box_muller(&z1, &z2); // Generer nye normalfordelte tal
     use_last = 1;
-    return cluster_n.mean_cluster + z1 * cluster_n.spread_cluster; // +mean og *spread
+    return (cluster_n.mean_cluster + z1 * cluster_n.spread_cluster); // +mean og *spread
 }
 
 
 /* Samme som "generate_one_gauss" men bare med Box Muller algoritmen */
 void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h) {
-    srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
+    //srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
     // Funktionen generate_normal_using_muller bruges, og tilegner opinioner for vælgere i den gældende dimension
     for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
@@ -257,7 +285,9 @@ int compare(const void* a, const void *b) {
 }
 
 /* Følgende bruges til at lave grafer ved brug af biblioteket, pbPlots, som hjælper til debugging */
-void create_graph (double *x_akse, double *y_akse, char prefix[]) {
+void create_graph (double *x_akse, double *y_akse, char prefix[], char title[]) {
+    wchar_t wTitle[100];
+    mbstowcs(wTitle, title, 100);
 
     _Bool success;
     StringReference *errorMessage;
@@ -271,15 +301,15 @@ void create_graph (double *x_akse, double *y_akse, char prefix[]) {
 
     ScatterPlotSeries *series = GetDefaultScatterPlotSeriesSettings();
     series->xs = x_akse;
-    series->xsLength = 200;
+    series->xsLength = TOTAL_VOTERS;
     series->ys = y_akse;
-    series->ysLength = 200;
+    series->ysLength = TOTAL_VOTERS;
     series->linearInterpolation = false;
 //	series->lineType = L"dotted";
  //   series->lineTypeLength = wcslen(series->lineType);
     series->pointType = L"dots";
     series->pointTypeLength = wcslen(series->pointType);
-   // series->lineThickness = 1;
+    series->lineThickness = 1;
     series->color = &color;
 
     ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
@@ -287,11 +317,11 @@ void create_graph (double *x_akse, double *y_akse, char prefix[]) {
     settings->height = 600;
     settings->autoBoundaries = true;
     settings->autoPadding = true;
-    settings->title = L"Koordinater";
+    settings->title = wTitle;
     settings->titleLength = wcslen(settings->title);
-    settings->xLabel = L"X axis";
+    settings->xLabel = L"Person index";
     settings->xLabelLength = wcslen(settings->xLabel);
-    settings->yLabel = L"Y axis";
+    settings->yLabel = L"Holdning";
     settings->yLabelLength = wcslen(settings->yLabel);
     ScatterPlotSeries *s [] = {series};
     settings->scatterPlotSeries = s;
@@ -315,13 +345,17 @@ void create_graph (double *x_akse, double *y_akse, char prefix[]) {
         fprintf(stderr, "\n");
     }
 
+
+   //     StartArenaAllocator();
    // RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();
    // /* Bestemmer størrelsen på billedet, og x og y aksen*/
-   // //DrawScatterPlot(imageRef, 600, 400, x_akse, 200, y_akse, 200, "Error in creating image");
+   // DrawScatterPlot(imageRef, 600, 400, x_akse, 6, y_akse, 6, "Error in creating image");
    // size_t length;
    // ByteArray *pngdata = ConvertToPNG(imageRef->image); //Konvertere til png
    // char filename[64];
    // sprintf(filename, "%s.png", prefix); //Sætter .png efter prefixet, for at danne filnavn
    // WriteToFile(pngdata, filename);
    // DeleteImage(imageRef->image);
+
+
 }
