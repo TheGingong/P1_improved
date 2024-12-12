@@ -10,7 +10,7 @@ int main(void) {
     /* Initialisere variabler til clock_t struct */
     clock_t start,end;
     start = clock();
-    srand(time(0) + getpid());  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
+    srand(time(NULL) % getpid() + getpid());  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
     generate_data();
 
