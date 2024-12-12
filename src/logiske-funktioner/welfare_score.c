@@ -4,9 +4,9 @@
 #include "../h-filer/static_variables.h"
 
 /* Funktion til at beregne social utility efficiency hos vinder kandidaten */
-double social_utility_efficiency(char winner) {
+double social_utility_efficiency(char winner, FILE *file) {
     candidate_welfare candidate[NUMBER_CANDIDATES] = {0};
-    read_candidate_welfare(candidate); // Kalder funktion der læser velfærdsscorene fra filen
+    read_candidate_welfare(candidate, file); // Kalder funktion der læser velfærdsscorene fra filen
     double max_welfare_score = 0.0;
 
     /* Gennemløber antallet af kandidater og finder den kandidat med højest velfærdsscore */
@@ -27,13 +27,7 @@ double social_utility_efficiency(char winner) {
 }
 
 /* Funktion der gennemløber filen for kandidater og summerer deres velfærdsscore */
-void read_candidate_welfare(candidate_welfare *candidate) {
-    FILE *file = fopen("text-files/test-tekstil.txt", "r");
-
-    if (file == NULL) {
-        perror("Could not open file.");
-    }
-
+void read_candidate_welfare(candidate_welfare *candidate, FILE *file) {
     char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
     char format[MAX_LINE_LENGTH]; // Det dynamiske format som skal fortælle hvor sscanf skal læse linjen
     double temp;
@@ -52,7 +46,6 @@ void read_candidate_welfare(candidate_welfare *candidate) {
             }
         }
     }
-    fclose(file);
 }
 
 /* Hashing funktion som returnerer et index, i candidate arrayet, for den kandidat den modtager */

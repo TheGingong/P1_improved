@@ -1,11 +1,12 @@
 #include "../h-filer/static_variables.h"
 
 #define DIMENSIONS 5
-#define CLUSTERS 3
-#define TOTAL_VOTERS 3300
-#define MIN_VALUE -1
-#define MAX_VALUE 1
-#define MIN_VALUE_SPREAD 0.01
+#define CLUSTERS 5
+#define TOTAL_VOTERS 10000
+#define MIN_VALUE_MEAN -1
+#define MAX_VALUE_MEAN 1
+#define MIN_SPREAD 0.1  // Minimum spread value
+#define MAX_SPREAD 0.5  // Maximum spread value
 
 /* Struct for en normalfordeling, indeholder dens middelværdi, spredning, og antal vælgere for én normalfordeling */
 typedef struct {
@@ -27,7 +28,7 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]);
 void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h);
 double generate_normal_using_density(cluster_t cluster_n);
 double gaussian_density (cluster_t cluster_n, double voter_x);
-void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file);
+void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file, double* max_length);
 int create_state();
 int compare(const void* a, const void *b);
 void create_graph (double *x_akse, double *y_akse, char prefix[], char title[]);
