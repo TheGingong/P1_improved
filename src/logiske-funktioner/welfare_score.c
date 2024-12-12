@@ -47,6 +47,7 @@ void read_candidate_welfare(candidate_welfare *candidate, FILE *file) {
             } else {
                 printf("Error: Could not parse the line (welfare_score.c).\n");
             }
+
         }
     }
 }
