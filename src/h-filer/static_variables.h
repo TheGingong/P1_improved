@@ -5,3 +5,4 @@
 
 /* Prototyper */
 FILE* open_file(const char* file_path); // Prototype til main.c
+void simulation(int run_times);
