@@ -1,7 +1,7 @@
 #include "../h-filer/static_variables.h"
 
 #define DIMENSIONS 5
-#define CLUSTERS 5
+#define CLUSTERS 10
 #define TOTAL_VOTERS 10000
 #define MIN_VALUE_MEAN -1
 #define MAX_VALUE_MEAN 1
@@ -31,8 +31,14 @@ double gaussian_density (cluster_t cluster_n, double voter_x);
 void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file, double* max_length);
 int create_state();
 int compare(const void* a, const void *b);
-void create_graph (double *x_akse, double *y_akse, char prefix[], char title[]);
+void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_akse2, char prefix[], char title[]);
 
 void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h);
 double generate_normal_using_box_muller(cluster_t cluster_n);
 void box_muller(double *z1, double *z2);
+
+double normal_cdf(double x, double mean, double stddev);
+double inverse_normal_cdf(double p, double mean, double stddev);
+double erf_inv(double x);
+double generate_truncated_normal(cluster_t cluster_n);
+void generate_one_truncated_normal(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h);

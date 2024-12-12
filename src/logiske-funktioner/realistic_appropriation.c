@@ -54,10 +54,17 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
     double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS];
     int density = 1;
     int box_muller = 0;
-    cluster_t test_array[3];
-    test_array[0].mean_cluster = 0.28934598834192937; test_array[0].spread_cluster = 0.068039796136356703; test_array[0].voters_cluster = 1100;
-    test_array[1].mean_cluster = 0.73094882045960885; test_array[1].spread_cluster = 0.9; test_array[1].voters_cluster = 1100;
-    test_array[2].mean_cluster = 0.63444929349650558; test_array[2].spread_cluster = 0.12379848628192998; test_array[2].voters_cluster = 1100;
+    cluster_t test_array[10];
+    test_array[0].mean_cluster = 0.49170812097537175; test_array[0].spread_cluster = 0.18810083315530871; test_array[0].voters_cluster = 1000;
+    test_array[1].mean_cluster = -0.25615405743583486; test_array[1].spread_cluster = 0.18441419721060825; test_array[1].voters_cluster = 1000;
+    test_array[2].mean_cluster = 0.33921323282570881; test_array[2].spread_cluster = 0.46380504776146736; test_array[2].voters_cluster = 1000;
+    test_array[3].mean_cluster = -0.5412213507492295; test_array[3].spread_cluster = 0.2740531632435072; test_array[3].voters_cluster = 1000;
+    test_array[4].mean_cluster = 0.59421369060335105; test_array[4].spread_cluster = 0.17401348918118839; test_array[4].voters_cluster = 1000;
+    test_array[5].mean_cluster = -0.29361857966856902; test_array[5].spread_cluster = 0.45019379253517255; test_array[5].voters_cluster = 1000;
+    test_array[6].mean_cluster = -0.56253547776726598; test_array[6].spread_cluster = 0.29495223853267005; test_array[6].voters_cluster = 1000;
+    test_array[7].mean_cluster = 0.51866206854457242; test_array[7].spread_cluster = 0.46303598132267221; test_array[7].voters_cluster = 1000;
+    test_array[8].mean_cluster = -0.23608508560441915; test_array[8].spread_cluster = 0.45855586413159577; test_array[8].voters_cluster = 1000;
+    test_array[9].mean_cluster = -0.55231788079470201; test_array[9].spread_cluster = 0.32080751976073485; test_array[9].voters_cluster = 1000;
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);
 
@@ -66,21 +73,21 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
             /* Genererer kandidat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
              * Ved tilfælde af flere kandidater end clusters, vil clusters blive gentaget */
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
-                candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
+                candidates_coordinates[k][i] = generate_normal_using_density(test_array[k%CLUSTERS]);
 
             }
             for (int h = 0; h < CLUSTERS; h++) {
-                generate_one_gauss(cluster_array[h], gauss_2d_array, i, h);
+                generate_one_gauss(test_array[h], gauss_2d_array, i, h);
             }
 
 
         } else if (box_muller) {
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
-                candidates_coordinates[k][i] = generate_normal_using_box_muller(cluster_array[k%CLUSTERS]);
+                candidates_coordinates[k][i] = generate_normal_using_box_muller(test_array[k%CLUSTERS]);
             }
 
             for (int h = 0; h < CLUSTERS; h++) {
-                generate_one_muller(cluster_array[h], gauss_2d_array, i, h);
+                generate_one_muller(test_array[h], gauss_2d_array, i, h);
             }
         }
 
@@ -98,6 +105,15 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
         tal_y[z] = gauss_2d_array[z][dim];
         //printf("%d %lf\n", z, gauss_2d_array[z][dim]);
     }
+    double tal_x2[NUMBER_CANDIDATES];
+    double tal_y2[NUMBER_CANDIDATES];
+    for (int z = 0; z < NUMBER_CANDIDATES; z++) {
+        tal_x2[z] = (TOTAL_VOTERS / CLUSTERS * z);
+        tal_y2[z] = candidates_coordinates[z][dim];
+        printf("%lf %lf\n", tal_x2[z], tal_y2[z]);
+    }
+
+
     char title[64];
     if (density) {
         sprintf(title, "Density");
@@ -105,7 +121,7 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
         sprintf(title, "Box-Muller");
     }
 
-    create_graph(tal_x, tal_y, "Gauss", title);
+    create_graph(tal_x, tal_y, tal_x2, tal_y2, "Gauss", title);
 
     double max_length = 0;
     /* Kører spatial funktionen for hver voter, der generere en præference baseret rangering */
@@ -121,7 +137,7 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
     for (int i = 0; i < CLUSTERS; i++) {
         // Sætter middelværdien til en tilfældig værdi fra -1 til 1
         //cluster_array[i].mean_cluster = MIN_VALUE_MEAN + (double) rand() / RAND_MAX * (MAX_VALUE_MEAN - MIN_VALUE_MEAN);
-        cluster_array[i].mean_cluster = (0 - 3 * 1) + (double) rand() / RAND_MAX * ((0 + 3 * 1) - (0 - 3 * 1));
+        cluster_array[i].mean_cluster = (0 - 3 * 0.2) + (double) rand() / RAND_MAX * ((0 + 3 * 0.2) - (0 - 3 * 0.2));
 
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
 
@@ -298,7 +314,7 @@ int compare(const void* a, const void *b) {
 }
 
 /* Følgende bruges til at lave grafer ved brug af biblioteket, pbPlots, som hjælper til debugging */
-void create_graph (double *x_akse, double *y_akse, char prefix[], char title[]) {
+void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_akse2, char prefix[], char title[]) {
     wchar_t wTitle[100];
     mbstowcs(wTitle, title, 100);
 
@@ -325,6 +341,17 @@ void create_graph (double *x_akse, double *y_akse, char prefix[], char title[]) 
     series->lineThickness = 1;
     series->color = &color;
 
+    ScatterPlotSeries *series2 = GetDefaultScatterPlotSeriesSettings();
+    series->xs = x_akse2;
+    series->xsLength = NUMBER_CANDIDATES;
+    series->ys = y_akse2;
+    series->ysLength = NUMBER_CANDIDATES;
+    series->linearInterpolation = false;
+    series->pointType = L"dots";
+    series->pointTypeLength = wcslen(series->pointType);
+    series->lineThickness = 1;
+    series->color = CreateRGBColor(0, 0, 1);
+
     ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
     settings->width = 1000;
     settings->height = 600;
@@ -332,13 +359,13 @@ void create_graph (double *x_akse, double *y_akse, char prefix[], char title[]) 
     settings->autoPadding = true;
     settings->title = wTitle;
     settings->titleLength = wcslen(settings->title);
-    settings->xLabel = L"Person index";
+    settings->xLabel = L"Personindex";
     settings->xLabelLength = wcslen(settings->xLabel);
     settings->yLabel = L"Holdning";
     settings->yLabelLength = wcslen(settings->yLabel);
-    ScatterPlotSeries *s [] = {series};
+    ScatterPlotSeries *s [] = {series, series2};
     settings->scatterPlotSeries = s;
-    settings->scatterPlotSeriesLength = 1;
+    settings->scatterPlotSeriesLength = 2;
 
     RGBABitmapImageReference *canvasReference = CreateRGBABitmapImageReference();
     errorMessage = (StringReference *)malloc(sizeof(StringReference));
