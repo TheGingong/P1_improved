@@ -7,7 +7,8 @@ add_executable(main main.c
         logiske-funktioner/calculate_winner.c
         logiske-funktioner/realistic_appropriation.c
         logiske-funktioner/NOTUSED_vote_generation.c
-        logiske-funktioner/utils.c)
+        logiske-funktioner/utils.c
+        logiske-funktioner/simulering.c)
 add_library(main_lib main.c
             valgsystemer/america.c
             valgsystemer/borda.c

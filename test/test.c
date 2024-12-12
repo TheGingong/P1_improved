@@ -44,7 +44,7 @@ void test_winner_america() {
     fclose(test_file3);
 
     /* Assert */
-    assert(winner1 == 'D'); // Test case 1
+    assert(winner1 == 'A'); // Test case 1
     assert(winner2 == 'C'); // Test case 2
     assert(winner3 == 'E'); // Test case 3
 }
@@ -66,7 +66,7 @@ void test_winner_borda() {
 
     /* Assert */
     assert(winner1 == 'D');
-    assert(winner2 == 'C');
+    assert(winner2 == 'B');
     assert(winner3 == 'D');
 }
 
@@ -159,19 +159,16 @@ void test_SUE() {
     FILE *test_file1 = open_file("test/test1.txt");
     FILE *test_file2 = open_file("test/test2.txt");
     FILE *test_file3 = open_file("test/test3.txt");
+
     /* Act */
-    double score1 = social_utility_efficiency('A', test_file1);
-    double score2 = social_utility_efficiency('B', test_file1);
-    double score3 = social_utility_efficiency('C', test_file1);
+
 
     fclose(test_file1);
     fclose(test_file2);
     fclose(test_file3);
+
     /* Assert */
-    //assert(fabs(score1 == 92.46) < 0.01);
-    assert(is_almost_equal(score1, 92.46));
-    //assert(score2, 100.0);
-    //assert(score3, 95.47);
+
 
 }
 

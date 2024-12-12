@@ -5,6 +5,7 @@
 #include "math.h"
 #include "../pbPlots/pbPlots.h"
 #include "../pbPlots/supportLib.h"
+#include <stdint.h>
 
 /* -- NOTER -- */
 /* -- Kontrolparametre --
@@ -52,8 +53,9 @@ void generate_data() {
  * Formålet er, at samle alle elementerne, og skriver resultaterne i tekstfilen */
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
     double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS];
-    int density = 1;
-    int box_muller = 0;
+    //srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
+    int density = 0;
+    int box_muller = 1;
 
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);

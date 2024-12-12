@@ -3,11 +3,11 @@
 
 #define DIMENSIONS 5
 #define CLUSTERS 5
-#define TOTAL_VOTERS 10000
-#define MIN_VALUE_MEAN -1
-#define MAX_VALUE_MEAN 1
-#define MIN_SPREAD 0.1  // Minimum spread value
-#define MAX_SPREAD 0.5  // Maximum spread value
+#define TOTAL_VOTERS 500
+#define MIN_VALUE -1
+#define MAX_VALUE 1
+#define MIN_SPREAD 0.001  // Minimum spread value
+#define MAX_SPREAD 0.4  // Maximum spread value
 
 /* Struct for en normalfordeling, indeholder dens middelværdi, spredning, og antal vælgere for én normalfordeling */
 typedef struct {
