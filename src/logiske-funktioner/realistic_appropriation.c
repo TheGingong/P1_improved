@@ -3,8 +3,8 @@
 #include "../h-filer/valgsystemer.h"
 #include "../h-filer/realistic_appropriation.h"
 #include "math.h"
-#include "pbPlots.h"
-#include "supportLib.h"
+#include "../pbPlots/pbPlots.h"
+#include "../pbPlots/supportLib.h"
 
 /* -- NOTER -- */
 /* -- Kontrolparametre --

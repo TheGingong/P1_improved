@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "../h-filer/static_variables.h"
 
 #define DIMENSIONS 1
