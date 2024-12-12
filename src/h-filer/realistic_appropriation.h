@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "../h-filer/static_variables.h"
 
-#define DIMENSIONS 1
-#define CLUSTERS 1
+#define DIMENSIONS 5
+#define CLUSTERS 5
 #define TOTAL_VOTERS 500
 #define MIN_VALUE -1
 #define MAX_VALUE 1

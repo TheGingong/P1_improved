@@ -1,15 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "../h-filer/valgsystemer.h"
 #include "../h-filer/welfare_score.h"
 #include "../h-filer/realistic_appropriation.h"
-#include <unistd.h>
 
 void simulation(int run_times) {
-    double elected_borda, elected_america, max, random_cand_welfare,
-           avg_elected_borda = 0, avg_elected_america = 0,
-           avg_max = 0, avg_random_cand_welfare = 0;
+    double elected_borda = 0.0, elected_america = 0.0, max = 0.0, random_cand_welfare = 0.0,
+           avg_elected_borda = 0.0, avg_elected_america = 0.0,
+           avg_max = 0.0, avg_random_cand_welfare = 0.0;
 
     for (int i = 0; i < run_times; i++) {
         /* Genererer stemmer */
@@ -57,7 +55,7 @@ void simulation(int run_times) {
     /* Beregningen af SUE værdier for valgsystemerne */
     double SUE_america = ((avg_elected_america - avg_random_cand_welfare) / denumerator) * 100;
     double SUE_borda = ((avg_elected_borda - avg_random_cand_welfare) / denumerator) * 100;
-    printf("The social utility efficiency for the american election is: %.3lf%% better than choosing a random candidate\n", SUE_america);
-    printf("The social utility efficiency for borda count is: %.3lf%% better than choosing a random candidate\n\n", SUE_borda);
+    printf("The social utility efficiency for the american election is: %.3lf%%\n", SUE_america);
+    printf("The social utility efficiency for borda count is: %.3lf%%\n\n", SUE_borda);
 
 }
