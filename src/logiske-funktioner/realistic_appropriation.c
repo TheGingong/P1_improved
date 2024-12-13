@@ -86,10 +86,11 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
     }
 
+    double min_length = 0;
     double max_length = 0;
     /* Kører spatial funktionen for hver voter, der generere en præference baseret rangering */
     for (int i = 0; i < TOTAL_VOTERS; i++) { // Bruger spacial-stemmemodel for at skabe vælgerpræferencer
-        spatial(gauss_2d_array[i], candidates_coordinates, file, &max_length);
+        spatial(gauss_2d_array[i], candidates_coordinates, file, &max_length, &min_length);
     }
 
 }
@@ -204,7 +205,7 @@ double ikke_linear(double x) {
 
 /* Funktion, som tager vælgeres rangerings-koordinater, og beregner længden fra dem til kandidaternes
  * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
-void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file, double* max_length) {
+void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file, double* max_length, double* min_length) {
 
     candidate_distance_t cand_distances[NUMBER_CANDIDATES]; // Array af candidate_distance_t structs
 
@@ -221,6 +222,9 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
             *max_length = cand_distances[i].distance;
         }
 
+        if (cand_distances[i].distance < *min_length) {
+            *min_length = cand_distances[i].distance;
+        }
     }
 
 
@@ -228,7 +232,8 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
     qsort(cand_distances, NUMBER_CANDIDATES, sizeof(candidate_distance_t), compare);
 
     /* Der initieres variabler til brug for velfærds-beregning */
-    double min_length = 0, welfare = 0;
+    //double min_length = 0,
+    double welfare = 0;
 
     /* Udregner maksimale længde en vælger kan være fra en kandidat
      * (velfærd på 0 for værst mulig, velfærd på 1 for bedst mulig) */
@@ -244,7 +249,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
 
     /* Udregner velfærd baseret på distance, og printer dette til tekstfilen med en tilfældig stat (0-50) foran */
     for (int i = 0; i< NUMBER_CANDIDATES; i++){
-        welfare = 1 - ((cand_distances[i].distance-min_length) / (*max_length - min_length)); // Normaliserer distance 0 til 1
+        welfare = 1 - ((cand_distances[i].distance- *min_length) / (*max_length - *min_length)); // Normaliserer distance 0 til 1
         //welfare = ikke_linear(cand_distances[i].distance); // Ikke linear welfare
         //printf("welfare = %lf dist = %lf\n", welfare, cand_distances[i].distance);
 
