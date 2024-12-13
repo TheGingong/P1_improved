@@ -33,8 +33,8 @@ void simulation(int run_times) {
         FILE *welfare_america = open_file(CHOSEN_FILE);
         FILE *welfare_borda = open_file(CHOSEN_FILE);
 
-        social_utility_efficiency(winner_america, welfare_america, &max, &elected_america, &random_cand_welfare);
-        social_utility_efficiency(winner_borda, welfare_borda, &max, &elected_borda, &random_cand_welfare);
+        utilitarian_welfare(winner_america, welfare_america, &max, &elected_america, &random_cand_welfare);
+        utilitarian_welfare(winner_borda, welfare_borda, &max, &elected_borda, &random_cand_welfare);
 
         avg_max += max / run_times;
         avg_elected_america += elected_america / run_times;
