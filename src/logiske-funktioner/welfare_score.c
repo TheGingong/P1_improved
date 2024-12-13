@@ -4,6 +4,24 @@
 #include <time.h>
 #include "../h-filer/static_variables.h"
 
+void SUE_value(double avg_max, double avg_random_cand_welfare, double avg_elected_america, double avg_elected_borda) {
+    /* Beregningen af SUE værdier for valgsystemerne
+    * Som følger den "korrekt" formel med en tilfældig kandidat */
+    double denumerator = (avg_max - avg_random_cand_welfare);
+    double SUE_america_formel = ((avg_elected_america - avg_random_cand_welfare) / denumerator) * 100;
+    double SUE_borda_formel = ((avg_elected_borda - avg_random_cand_welfare) / denumerator) * 100;
+    printf("SUE Value with a random candidate for the american election: %.3lf%%\n", SUE_america_formel);
+    printf("SUE Value with a random candidate for borda count election: %.3lf%%\n\n", SUE_borda_formel);
+
+    /* Beregningen af SUE værdier for valgsystemerne
+     * Som ikke tager højde for en tilfældig kandidat */
+    double SUE_america = (avg_elected_america / avg_max) * 100;
+    double SUE_borda = (avg_elected_borda / avg_max) * 100;
+    printf("SUE Value without a random candidate for the american election: %.3lf%%\n", SUE_america);
+    printf("SUE Value without a random candidate for borda count election: %.3lf%%\n\n", SUE_borda);
+}
+
+
 /* Funktion til at beregne social utility efficiency hos vinder kandidaten */
 void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, double *random) {
     candidate_welfare candidates[NUMBER_CANDIDATES] = {0};
