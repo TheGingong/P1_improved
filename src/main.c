@@ -13,7 +13,7 @@ int main(void) {
     srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
 
     /* Kalder antallet af simulering*/
-    simulation(300);
+    simulation(500);
 
     /* Printer programmet eksekverings tid */
     end = clock();

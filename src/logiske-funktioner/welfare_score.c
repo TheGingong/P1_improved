@@ -9,7 +9,6 @@ void social_utility_efficiency(char winner, FILE *file, double *max, double *ele
     candidate_welfare candidate[NUMBER_CANDIDATES] = {0};
     read_candidate_welfare(candidate, file); // Kalder funktion der læser velfærdsscorene fra filen
 
-
     /* Gennemløber antallet af kandidater og finder den kandidat med højest velfærdsscore */
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         if (candidate[i].welfare > *max) {
@@ -20,13 +19,10 @@ void social_utility_efficiency(char winner, FILE *file, double *max, double *ele
     /* Kalder hashing funktion for at få vinderne i hhv. borda og americas velfærdsscore */
     int winner_index = index_finder(winner, candidate);
 
+    int random_candidate = rand() % NUMBER_CANDIDATES; // Genererer et tilfældigt tal brugt til at indekse random
+
     *elected = candidate[winner_index].welfare; // Gemmer vinderens velfærd i winner_welfare
-    *random = candidate[rand() % NUMBER_CANDIDATES].welfare;
-
-    /* Beregningen af social utility efficiency mellem vinder kandidaten og den kandidat med højest velfærdsscore */
-    //double SUE_value = (winner_welfare / *max) * 100;
-
-    //return SUE_value; // Returnere procent værdien til main for print
+    *random = candidate[random_candidate].welfare; // Vælger en tilfældig kandidats velfærd
 }
 
 /* Funktion der gennemløber filen for kandidater og summerer deres velfærdsscore */
