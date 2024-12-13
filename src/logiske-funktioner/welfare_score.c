@@ -10,6 +10,7 @@ void social_utility_efficiency(char winner, FILE *file, double *max, double *ele
     read_candidate_welfare(candidate, file); // Kalder funktion der læser velfærdsscorene fra filen
 
     /* Gennemløber antallet af kandidater og finder den kandidat med højest velfærdsscore */
+    *max = 0; // Sikrer at for hver simulation defineres en ny max
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         if (candidate[i].welfare > *max) {
             *max = candidate[i].welfare;
