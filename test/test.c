@@ -14,8 +14,8 @@ void test_winner_borda();
 void test_convert_america();
 void test_calc_winner_func();
 void test_convert_borda();
-int is_almost_equal(double actual, double expected);
 void test_SUE();
+int is_almost_equal(double actual, double expected);
 
 int main(void) {
     /* Tester funktioner */
