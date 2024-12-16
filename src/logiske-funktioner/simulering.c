@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../h-filer/NOTUSED_vote_generation.h"
+#include "../h-filer/impartial_generation.h"
 #include "../h-filer/valgsystemer.h"
 #include "../h-filer/welfare_score.h"
 #include "../h-filer/realistic_appropriation.h"
 
-#define CHOSEN_FILE "text-files/test-tekstil.txt"
+#define CHOSEN_FILE "text-files/notused.txt"
 
 void simulation(int run_times) {
     double elected_borda = 0.0, elected_america = 0.0, max = 0.0, random_cand_welfare = 0.0,
@@ -14,8 +14,8 @@ void simulation(int run_times) {
 
     for (int i = 0; i < run_times; i++) {
         /* Genererer stemmer */
-        generate_data(); // Vores stemmegenerering
-        //generate_vote_file(1000); // Benytter impartial culture (tilfældig generering af stemmer)
+        //generate_data(); // Vores stemmegenerering
+        generate_vote_file(TOTAL_VOTERS); // Benytter impartial culture (tilfældig generering af stemmer)
 
         /* Kalder simluering af det amerikanske valgsystem */
         FILE *file_for_america = open_file(CHOSEN_FILE); // Filen med stemmer åbnes vha. funktion open_file()

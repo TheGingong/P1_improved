@@ -1,39 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "../h-filer/NOTUSED_vote_generation.h"
-#include "../h-filer/valgsystemer.h"
-#include "../h-filer/static_variables.h"
+#include "../h-filer/impartial_generation.h"
+#include "../h-filer/realistic_appropriation.h"
 
 void generate_vote_file(int voters_amount) {
     /* Åbner fil for at skrive til */
     FILE *f = fopen("text-files/notused.txt", "w");
+
     if (f == NULL) {
         printf("Could not open file, to write");
         exit(EXIT_FAILURE);
     }
-    srand(time(NULL)); //Seeder rand baseret på tid
-    char candidate[NUMBER_CANDIDATES]; //Array til hver individs præference blandt kandidater
-    double utility[NUMBER_CANDIDATES]; //Array til hver individs nytte for hver kandidat
+
+    srand(time(NULL)); // Seeder rand baseret på tid
+    char candidate[NUMBER_CANDIDATES]; // Array til hver individs præference blandt kandidater
+    double utility[NUMBER_CANDIDATES]; // Array til hver individs nytte for hver kandidat
+
     /* Indsætter kandidater i array med A-Z for antallet af kandidater*/
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-        candidate[i] = 'A'+i;
+        candidate[i] = 'A' + i;
     }
 
     for (int i = 0; i < voters_amount; i++) {
-        shuffle_array(candidate); //Blander array af kandidater
-        get_utility(utility); //Sortere array af tilfældig nytte
+        shuffle_array(candidate); // Blander array af kandidater
+        get_utility(utility); // Sortere array af tilfældig nytte
 
-        fprintf(f, "%d(", rand() % STATES); //Printer tilfældig stat og '('
+        fprintf(f, "%d(", create_state()); // Printer tilfældig stat og '('
 
         /* Loop printer kandidater og nytte i ordnet rækkefølge for hver kandidat*/
         for (int j = 0; j < NUMBER_CANDIDATES; j++) {
             fprintf(f, "%c%.3lf", candidate[j], utility[j]);
             if (j < NUMBER_CANDIDATES-1) {
-                fprintf(f, " "); //Printer mellemrum efter hver nytte, undtaget af den sidste
+                fprintf(f, " "); // Printer mellemrum efter hver nytte, undtaget af den sidste
             }
         }
-        fprintf(f, ")\n"); //Printer ')' og newline
+        fprintf(f, ")\n"); // Printer ')' og newline
     }
 
     fclose(f);
@@ -55,7 +57,7 @@ void get_utility (double* utility_array) {
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         utility_array[i] = rand() / (double)RAND_MAX;
     }
-    qsort(utility_array, NUMBER_CANDIDATES, sizeof(double), compare_NOT_USED);
+    qsort(utility_array, NUMBER_CANDIDATES, sizeof(double), compare_impartial);
 }
 
 /* Printer et array af chars. Brugt til debug, burde slettes */
@@ -67,7 +69,7 @@ void print_array(const char* array) {
 }
 
 /* Sammenligner to pointere til doubles, som returnere den største */
-int compare_NOT_USED(const void *a, const void *b) {
+int compare_impartial(const void *a, const void *b) {
     double ap = *(const double*)a;
     double bp = *(const double*)b;
     if (ap > bp) return -1;
