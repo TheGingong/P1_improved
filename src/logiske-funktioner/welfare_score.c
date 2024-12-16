@@ -39,6 +39,7 @@ void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, 
     /* Kalder hashing funktion for at få vinderne i hhv. borda og americas velfærdsscore */
     int winner_index = index_finder(winner, candidates);
 
+    /* Udregner de gennemsnitlige velfærdsscore blandt alle kandidater */
     for (int i = 0; i<NUMBER_CANDIDATES; i++) {
         avg_random_candidate += candidates[i].welfare;
     }
