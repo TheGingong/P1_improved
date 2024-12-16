@@ -8,8 +8,9 @@
 void SUE_value(double avg_max, double avg_random_cand_welfare, double avg_elected) {
     double denumerator = (avg_max - avg_random_cand_welfare);
     if (denumerator == 0) { // Tjekker om avg_max minus avg_random_cand_welfare gav 0
-        denumerator = 0,0001;
+        denumerator = 0.0001;
     }
+
     double SUE = ((avg_elected - avg_random_cand_welfare) / denumerator) * 100;
     printf("SUE Value for the american election: %.3lf%%\n", SUE);
 }
@@ -18,7 +19,6 @@ void SUE_value(double avg_max, double avg_random_cand_welfare, double avg_electe
 void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, double *random) {
     candidate_welfare candidates[NUMBER_CANDIDATES] = {0};
     read_candidate_welfare(candidates, file); // Kalder funktion der læser velfærdsscorene fra filen
-    double avg_random_candidate = 0;
 
     /* Gennemløber antallet af kandidater og finder den kandidat med højest velfærdsscore */
     *max = 0; // Sikrer at for hver simulation defineres en ny max
@@ -32,12 +32,13 @@ void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, 
     int winner_index = index_finder(winner, candidates);
 
     /* Udregner de gennemsnitlige velfærdsscore blandt alle kandidater */
+    double sum_of_candidates = 0;
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-        avg_random_candidate += candidates[i].welfare;
+        sum_of_candidates += candidates[i].welfare;
     }
 
     *elected = candidates[winner_index].welfare; // Gemmer vinderens velfærd i winner_welfare
-    *random = avg_random_candidate / NUMBER_CANDIDATES; // Vælger en tilfældig kandidats velfærd
+    *random = sum_of_candidates / NUMBER_CANDIDATES; // Vælger en tilfældig kandidats velfærd
 }
 
 /* Funktion der gennemløber filen for kandidater og summerer deres velfærdsscore */
@@ -62,7 +63,7 @@ void read_candidate_welfare(candidate_welfare *candidates, FILE *file) {
     }
 }
 
-/* Funktion som returnerer et index, i candidate arrayet, for den kandidat den modtager */
+/* Funktion som returnerer et index, i candidate fdfdfarrayet, for den kandidat den modtager */
 int index_finder(char winner, candidate_welfare candidates[]) {
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         if (candidates[i].candidate == winner) {
