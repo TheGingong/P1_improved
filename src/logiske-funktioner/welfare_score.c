@@ -4,23 +4,15 @@
 #include <time.h>
 #include "../h-filer/static_variables.h"
 
-void SUE_value(double avg_max, double avg_random_cand_welfare, double avg_elected_america, double avg_elected_borda) {
-    /* Beregningen af SUE værdier for valgsystemerne
-    * Som følger den "korrekt" formel med en tilfældig kandidat */
+/* Beregningen af SUE for det givet valgsystem */
+void SUE_value(double avg_max, double avg_random_cand_welfare, double avg_elected) {
     double denumerator = (avg_max - avg_random_cand_welfare);
-    double SUE_america_formel = ((avg_elected_america - avg_random_cand_welfare) / denumerator) * 100;
-    double SUE_borda_formel = ((avg_elected_borda - avg_random_cand_welfare) / denumerator) * 100;
-    printf("SUE Value with a random candidate for the american election: %.3lf%%\n", SUE_america_formel);
-    printf("SUE Value with a random candidate for borda count election: %.3lf%%\n\n", SUE_borda_formel);
-
-    /* Beregningen af SUE værdier for valgsystemerne
-     * Som ikke tager højde for en tilfældig kandidat */
-    double SUE_america = (avg_elected_america / avg_max) * 100;
-    double SUE_borda = (avg_elected_borda / avg_max) * 100;
-    printf("SUE Value without a random candidate for the american election: %.3lf%%\n", SUE_america);
-    printf("SUE Value without a random candidate for borda count election: %.3lf%%\n\n", SUE_borda);
+    if (denumerator == 0) { // Tjekker om avg_max minus avg_random_cand_welfare gav 0
+        denumerator = 0,0001;
+    }
+    double SUE = ((avg_elected - avg_random_cand_welfare) / denumerator) * 100;
+    printf("SUE Value for the american election: %.3lf%%\n", SUE);
 }
-
 
 /* Funktion til at beregne social utility efficiency hos vinder kandidaten */
 void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, double *random) {
@@ -36,7 +28,7 @@ void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, 
         }
     }
 
-    /* Kalder hashing funktion for at få vinderne i hhv. borda og americas velfærdsscore */
+    /* Kalder index_finder funktion for at få vinderne i hhv. borda og americas velfærdsscore */
     int winner_index = index_finder(winner, candidates);
 
     /* Udregner de gennemsnitlige velfærdsscore blandt alle kandidater */
@@ -66,12 +58,11 @@ void read_candidate_welfare(candidate_welfare *candidates, FILE *file) {
             } else {
                 printf("Error: Could not parse the line (welfare_score.c).\n");
             }
-
         }
     }
 }
 
-/* Hashing funktion som returnerer et index, i candidate arrayet, for den kandidat den modtager */
+/* Funktion som returnerer et index, i candidate arrayet, for den kandidat den modtager */
 int index_finder(char winner, candidate_welfare candidates[]) {
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         if (candidates[i].candidate == winner) {
