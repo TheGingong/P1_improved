@@ -26,6 +26,7 @@ void SUE_value(double avg_max, double avg_random_cand_welfare, double avg_electe
 void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, double *random) {
     candidate_welfare candidates[NUMBER_CANDIDATES] = {0};
     read_candidate_welfare(candidates, file); // Kalder funktion der læser velfærdsscorene fra filen
+    double avg_random_candidate = 0;
 
     /* Gennemløber antallet af kandidater og finder den kandidat med højest velfærdsscore */
     *max = 0; // Sikrer at for hver simulation defineres en ny max
@@ -38,10 +39,12 @@ void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, 
     /* Kalder hashing funktion for at få vinderne i hhv. borda og americas velfærdsscore */
     int winner_index = index_finder(winner, candidates);
 
-    int random_candidate = rand() % NUMBER_CANDIDATES; // Genererer et tilfældigt tal brugt til at indekse random
+    for (int i = 0; i<NUMBER_CANDIDATES; i++) {
+        avg_random_candidate += candidates[i].welfare;
+    }
 
     *elected = candidates[winner_index].welfare; // Gemmer vinderens velfærd i winner_welfare
-    *random = candidates[random_candidate].welfare; // Vælger en tilfældig kandidats velfærd
+    *random = avg_random_candidate/NUMBER_CANDIDATES; // Vælger en tilfældig kandidats velfærd
 }
 
 /* Funktion der gennemløber filen for kandidater og summerer deres velfærdsscore */
@@ -53,7 +56,7 @@ void read_candidate_welfare(candidate_welfare *candidates, FILE *file) {
     while (fgets(temp_text_str, sizeof(temp_text_str), file) != NULL) { // Kører så længe der ikke er en tom linje (returnerer NULL)
         /* For loop der gennemløber antallet af kandidater lægger kandidater ind i candidate arrayet */
         for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-            candidates[i].candidate = 'A' + i; // Her initializeres kandidaterne
+            candidates[i].candidate = 'A' + i; // Her initializeres kandidaterne i ordning
             sprintf(format, "%%*[^%c]%c%%lf", candidates[i].candidate, candidates[i].candidate); // sprintf gemmer læsningsformatet som sscanf skal bruge
                                                                                                // fortæller sscanf at den skal springe over alt til-og-med en char og derefter skal læse long float værdien
             if (sscanf(temp_text_str, format, &temp)==1){
