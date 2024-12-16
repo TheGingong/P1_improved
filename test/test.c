@@ -24,7 +24,10 @@ int main(void) {
     test_calc_winner_func();
     test_convert_borda();
     test_convert_america();
-    //test_SUE();
+    test_SUE();
+
+    printf("All tests passed.\n");
+
     return 0;
 }
 
@@ -156,19 +159,25 @@ void test_convert_america() {
 /* Test af welfare score */
 void test_SUE() {
     /* Arrange */
-    FILE *test_file1 = open_file("test/test1.txt");
-    FILE *test_file2 = open_file("test/test2.txt");
-    FILE *test_file3 = open_file("test/test3.txt");
+    FILE *test_file = open_file("test/test4.txt");
+    candidate_welfare test_candidates[NUMBER_CANDIDATES] = {0};
 
     /* Act */
-
-
-    fclose(test_file1);
-    fclose(test_file2);
-    fclose(test_file3);
+    read_candidate_welfare(test_candidates, test_file);
+    fclose(test_file);
 
     /* Assert */
+    /* Test case 1 */
+    assert(test_candidates[0].candidate == 'A');
+    assert(is_almost_equal(test_candidates[0].welfare, 1.663));
 
+    /* Test case 2 */
+    assert(test_candidates[3].candidate == 'D');
+    assert(is_almost_equal(test_candidates[3].welfare, 2.306));
+
+    /* Test case 3 */
+    assert(test_candidates[4].candidate == 'E');
+    assert(is_almost_equal(test_candidates[4].welfare, 2.164));
 
 }
 

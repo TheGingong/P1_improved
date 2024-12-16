@@ -53,7 +53,7 @@ void read_candidate_welfare(candidate_welfare *candidates, FILE *file) {
     while (fgets(temp_text_str, sizeof(temp_text_str), file) != NULL) { // Kører så længe der ikke er en tom linje (returnerer NULL)
         /* For loop der gennemløber antallet af kandidater lægger kandidater ind i candidate arrayet */
         for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-            candidates[i].candidate = 'A' + i; // Her initializeres kandidaterne
+            candidates[i].candidate = 'A' + i; // Her initializeres kandidaterne i ordning
             sprintf(format, "%%*[^%c]%c%%lf", candidates[i].candidate, candidates[i].candidate); // sprintf gemmer læsningsformatet som sscanf skal bruge
                                                                                                // fortæller sscanf at den skal springe over alt til-og-med en char og derefter skal læse long float værdien
             if (sscanf(temp_text_str, format, &temp)==1){
