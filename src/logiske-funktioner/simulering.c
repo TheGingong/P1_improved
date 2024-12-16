@@ -51,7 +51,7 @@ void simulation(int run_times) {
         fclose(welfare_america);
         fclose(welfare_borda);
     }
-    /* Sender vores gennemsnitlige værdier til beregning af SUE og printer resultatet af SUE beregningerne */
+    /* Sender vores gennemsnitlige værdier til beregning af SUE og printer resultatet af SUE beregning */
     SUE_value(avg_max, avg_random_cand_welfare, avg_elected_america);
     SUE_value(avg_max, avg_random_cand_welfare, avg_elected_borda);
 }
