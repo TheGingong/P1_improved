@@ -41,13 +41,6 @@ void simulation(int run_times) {
         avg_elected_borda += elected_borda / run_times;
         avg_random_cand_welfare += random_cand_welfare / run_times;
 
-        /* Print statements til hjælp af fejl håndtering af programmet
-        - printf("avg_max: %lf\n", avg_max);
-        - printf("avg_elected_america: %lf\n", avg_elected_america);
-        - printf("avg_elected_borda: %lf\n", avg_elected_borda);
-        - printf("avg_random_cand_welfare: %lf\n\n", avg_random_cand_welfare);
-        */
-
         fclose(welfare_america);
         fclose(welfare_borda);
     }
