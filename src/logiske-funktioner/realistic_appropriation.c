@@ -44,9 +44,6 @@ void generate_data() {
     assemble_gauss(cluster_array, total_model_array, generate_data_file);
     fclose(generate_data_file);
 
-    /* Kan lave grafer til debugging*/
-    //create_graph(test_array, test_array2, "hej");
-    //FreeAllocations();
 }
 
 /* Funktion, der kører andre underordnede funktioner.
@@ -86,31 +83,36 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
     }
 
-    const int dim = 2;
-    double tal_x[TOTAL_VOTERS];
-    double tal_y[TOTAL_VOTERS];
-    for (int z = 0; z < TOTAL_VOTERS; z++) {
-        tal_x[z] = z;
-        tal_y[z] = gauss_2d_array[z][dim];
-        //printf("%d %lf\n", z, gauss_2d_array[z][dim]);
-    }
-    double tal_x2[NUMBER_CANDIDATES];
-    double tal_y2[NUMBER_CANDIDATES];
-    for (int z = 0; z < NUMBER_CANDIDATES; z++) {
-        tal_x2[z] = (TOTAL_VOTERS / CLUSTERS) * (z % CLUSTERS +1) - (TOTAL_VOTERS / CLUSTERS) /2;
-        tal_y2[z] = candidates_coordinates[z][dim];
-        //printf("%lf %lf\n", tal_x2[z], tal_y2[z]);
-    }
+    if (PRINT_GRAPH) {
+        const int dim = 0; //Vælg hvilen dimension som skal printes.
+        double tal_x[TOTAL_VOTERS], tal_y[TOTAL_VOTERS],
+        tal_x2[NUMBER_CANDIDATES], tal_y2[NUMBER_CANDIDATES];
 
+        /* Arrayet tal_x indeholder alle heltal fra 0 til TOTAL_VOTERS-1
+         * Arrayet tal_y indeholder alle individers holdninger til dimensionen 'dim' */
+        for (int z = 0; z < TOTAL_VOTERS; z++) {
+            tal_x[z] = z;
+            tal_y[z] = gauss_2d_array[z][dim];
+        }
 
-    char title[16];
-    if (density) {
-        sprintf(title, "Density");
-    } else {
-        sprintf(title, "Box-Muller");
+        /* Arrayet tal_x2 placere kandidaten midt i det cluster de er genereret fra på x-aksen
+         * Arrayet tal_y2 indeholder alle kandidaters holdninger til dimensionen 'dim' */
+        for (int z = 0; z < NUMBER_CANDIDATES; z++) {
+            tal_x2[z] = (TOTAL_VOTERS / CLUSTERS) * (z % CLUSTERS +1) - (TOTAL_VOTERS / CLUSTERS) /2;
+            tal_y2[z] = candidates_coordinates[z][dim];
+        }
+
+        /* Sætter graf-titlen til den tilsvarende metode */
+        char title[16];
+        if (density) {
+             sprintf(title, "Rejection Sampling");
+        } else {
+            sprintf(title, "Box-Muller");
+        }
+
+        create_graph(tal_x, tal_y, tal_x2, tal_y2, "Graf", title);
+        FreeAllocations();
     }
-
-    create_graph(tal_x, tal_y, tal_x2, tal_y2, "BoxMuller", title);
 
     double min_length = 0;
     double max_length = 0;
@@ -316,14 +318,15 @@ int compare(const void* a, const void *b) {
 }
 
 /* Følgende bruges til at lave grafer ved brug af biblioteket, pbPlots, som hjælper til debugging */
-void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_akse2, char prefix[]) {
-
+/* Følgende bruges til at lave grafer ved brug af biblioteket, pbPlots, som hjælper til debugging */
+void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_akse2, char prefix[], char title[]) {
+    wchar_t wTitle[100];
+    mbstowcs(wTitle, title, 100);
     _Bool success;
     StringReference *errorMessage;
-
-
     StartArenaAllocator();
 
+    /* Indstillinger til dataserien for vælgere */
     ScatterPlotSeries *series = GetDefaultScatterPlotSeriesSettings();
     series->xs = x_akse;
     series->xsLength = TOTAL_VOTERS;
@@ -332,8 +335,10 @@ void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_ak
     series->linearInterpolation = false;
     series->pointType = L"dots";
     series->pointTypeLength = wcslen(series->pointType);
+    series->lineThickness = 1;
     series->color = CreateRGBColor(1,0,0);
 
+    /* Indstillinger til dataserien for kandidater */
     ScatterPlotSeries *series2 = GetDefaultScatterPlotSeriesSettings();
     series2->xs = x_akse2;
     series2->xsLength = NUMBER_CANDIDATES;
@@ -342,28 +347,32 @@ void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_ak
     series2->linearInterpolation = false;
     series2->pointType = L"dots";
     series2->pointTypeLength = wcslen(series->pointType);
-    series2->color = CreateRGBColor(0,0,1);
+    series2->lineThickness = 1;
+    series2->color = CreateRGBColor(0, 0, 1);
 
+    /* Indstillinger for genereringen af grafen */
     ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
     settings->width = 1000;
     settings->height = 600;
     settings->autoBoundaries = true;
     settings->autoPadding = true;
-    settings->title = L"Koordinater";
+    settings->title = wTitle;
     settings->titleLength = wcslen(settings->title);
-    settings->xLabel = L"X axis";
+    settings->xLabel = L"Personindex";
     settings->xLabelLength = wcslen(settings->xLabel);
-    settings->yLabel = L"Y axis";
+    settings->yLabel = L"Holdning";
     settings->yLabelLength = wcslen(settings->yLabel);
     ScatterPlotSeries *s [] = {series, series2};
     settings->scatterPlotSeries = s;
     settings->scatterPlotSeriesLength = 2;
 
+    /* Genereringen af grafen */
     RGBABitmapImageReference *canvasReference = CreateRGBABitmapImageReference();
     errorMessage = (StringReference *)malloc(sizeof(StringReference));
     success = DrawScatterPlotFromSettings(canvasReference, settings, errorMessage);
 
     if(success){
+        /* Konvertering til png, med prefixet som navn */
         ByteArray *pngdata = ConvertToPNG(canvasReference->image);
         char filename[64];
         sprintf(filename, "%s.png", prefix); //Sætter .png efter prefixet, for at danne filnavn
@@ -376,5 +385,4 @@ void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_ak
         }
         fprintf(stderr, "\n");
     }
-
 }
