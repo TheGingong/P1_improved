@@ -30,7 +30,7 @@ void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, 
 
     /* Kalder index_finder funktion for at få vinderne i hhv. borda og americas velfærdsscore */
     int winner_index = index_finder(winner, candidates);
-    *elected = candidates[winner_index].welfare; // Gemmer vinderens velfærd i winner_welfare
+    *elected = candidates[winner_index].welfare; // Gemmer vinderens velfærd i pointeren elected
 
     /* Udregner de gennemsnitlige velfærdsscore blandt alle kandidater */
     double sum_of_candidates = 0;
