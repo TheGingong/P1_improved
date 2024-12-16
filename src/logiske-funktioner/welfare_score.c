@@ -32,12 +32,12 @@ void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, 
     int winner_index = index_finder(winner, candidates);
 
     /* Udregner de gennemsnitlige velfærdsscore blandt alle kandidater */
-    for (int i = 0; i<NUMBER_CANDIDATES; i++) {
+    for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         avg_random_candidate += candidates[i].welfare;
     }
 
     *elected = candidates[winner_index].welfare; // Gemmer vinderens velfærd i winner_welfare
-    *random = avg_random_candidate/NUMBER_CANDIDATES; // Vælger en tilfældig kandidats velfærd
+    *random = avg_random_candidate / NUMBER_CANDIDATES; // Vælger en tilfældig kandidats velfærd
 }
 
 /* Funktion der gennemløber filen for kandidater og summerer deres velfærdsscore */
