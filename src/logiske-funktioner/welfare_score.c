@@ -5,14 +5,14 @@
 #include "../h-filer/static_variables.h"
 
 /* Beregningen af SUE for det givet valgsystem */
-void SUE_value(double avg_max, double avg_random_cand_welfare, double avg_elected) {
+double SUE_value(double avg_max, double avg_random_cand_welfare, double avg_elected) {
     double denumerator = (avg_max - avg_random_cand_welfare);
     if (denumerator == 0) { // Tjekker om avg_max minus avg_random_cand_welfare gav 0
         denumerator = 0.0001;
     }
 
     double SUE = ((avg_elected - avg_random_cand_welfare) / denumerator) * 100;
-    printf("SUE Value for the american election: %.3lf%%\n", SUE);
+    return SUE;
 }
 
 /* Funktion til at beregne social utility efficiency hos vinder kandidaten */
@@ -63,7 +63,7 @@ void read_candidate_welfare(candidate_welfare *candidates, FILE *file) {
     }
 }
 
-/* Funktion som returnerer et index, i candidate fdfdfarrayet, for den kandidat den modtager */
+/* Funktion som returnerer et index, i candidate arrayet, for den kandidat den modtager */
 int index_finder(char winner, candidate_welfare candidates[]) {
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         if (candidates[i].candidate == winner) {

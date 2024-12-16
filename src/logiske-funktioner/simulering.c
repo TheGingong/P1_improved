@@ -45,6 +45,6 @@ void simulation(int run_times) {
         fclose(welfare_borda);
     }
     /* Sender vores gennemsnitlige værdier til beregning af SUE og printer resultatet af SUE beregning */
-    SUE_value(avg_max, avg_random_cand_welfare, avg_elected_america);
-    SUE_value(avg_max, avg_random_cand_welfare, avg_elected_borda);
+    printf("SUE Value for the American election: %.3lf%%\n", SUE_value(avg_max, avg_random_cand_welfare, avg_elected_america));
+    printf("SUE Value for Borda count: %.3lf%%\n", SUE_value(avg_max, avg_random_cand_welfare, avg_elected_borda));
 }
