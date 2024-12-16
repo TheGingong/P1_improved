@@ -13,7 +13,6 @@ void generate_vote_file(int voters_amount) {
         exit(EXIT_FAILURE);
     }
 
-    srand(time(NULL)); // Seeder rand baseret på tid
     char candidate[NUMBER_CANDIDATES]; // Array til hver individs præference blandt kandidater
     double utility[NUMBER_CANDIDATES]; // Array til hver individs nytte for hver kandidat
 

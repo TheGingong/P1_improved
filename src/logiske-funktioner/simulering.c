@@ -43,6 +43,7 @@ void simulation(int run_times) {
 
         fclose(welfare_america);
         fclose(welfare_borda);
+        printf("Sim %.0lf%% out of 100%%\n", (((double)i+1) / 50) * 10);
     }
     /* Sender vores gennemsnitlige værdier til beregning af SUE og printer resultatet af SUE beregning */
     printf("SUE Value for the American election: %.3lf%%\n", SUE_value(avg_max, avg_random_cand_welfare, avg_elected_america));
