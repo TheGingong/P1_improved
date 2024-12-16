@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define NUMBER_CANDIDATES 5
+#define NUMBER_CANDIDATES 11
 #define MAX_LINE_LENGTH 256
 
 /* Prototyper */

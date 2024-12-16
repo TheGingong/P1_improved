@@ -45,15 +45,15 @@ void generate_data() {
 
     /* Kan lave grafer til debugging*/
     //create_graph(test_array, test_array2, "hej");
-    //FreeAllocations();
+    FreeAllocations();
 }
 
 /* Funktion, der kører andre underordnede funktioner.
  * Formålet er, at samle alle elementerne, og skriver resultaterne i tekstfilen */
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
     double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS];
-    int density = 1;
-    int box_muller = 0;
+    int density = 0;
+    int box_muller = 1;
     cluster_t test_array[10];
     test_array[0].mean_cluster = 0.49170812097537175; test_array[0].spread_cluster = 0.18810083315530871; test_array[0].voters_cluster = 1000;
     test_array[1].mean_cluster = -0.25615405743583486; test_array[1].spread_cluster = 0.18441419721060825; test_array[1].voters_cluster = 1000;
@@ -108,9 +108,9 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
     double tal_x2[NUMBER_CANDIDATES];
     double tal_y2[NUMBER_CANDIDATES];
     for (int z = 0; z < NUMBER_CANDIDATES; z++) {
-        tal_x2[z] = (TOTAL_VOTERS / CLUSTERS * z);
+        tal_x2[z] = (TOTAL_VOTERS / CLUSTERS) * (z % CLUSTERS +1) - (TOTAL_VOTERS / CLUSTERS) /2;
         tal_y2[z] = candidates_coordinates[z][dim];
-        printf("%lf %lf\n", tal_x2[z], tal_y2[z]);
+        //printf("%lf %lf\n", tal_x2[z], tal_y2[z]);
     }
 
 
@@ -121,7 +121,7 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
         sprintf(title, "Box-Muller");
     }
 
-    create_graph(tal_x, tal_y, tal_x2, tal_y2, "Gauss", title);
+    create_graph(tal_x, tal_y, tal_x2, tal_y2, "BoxMuller", title);
 
     double max_length = 0;
     /* Kører spatial funktionen for hver voter, der generere en præference baseret rangering */
@@ -342,15 +342,15 @@ void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_ak
     series->color = &color;
 
     ScatterPlotSeries *series2 = GetDefaultScatterPlotSeriesSettings();
-    series->xs = x_akse2;
-    series->xsLength = NUMBER_CANDIDATES;
-    series->ys = y_akse2;
-    series->ysLength = NUMBER_CANDIDATES;
-    series->linearInterpolation = false;
-    series->pointType = L"dots";
-    series->pointTypeLength = wcslen(series->pointType);
-    series->lineThickness = 1;
-    series->color = CreateRGBColor(0, 0, 1);
+    series2->xs = x_akse2;
+    series2->xsLength = NUMBER_CANDIDATES;
+    series2->ys = y_akse2;
+    series2->ysLength = NUMBER_CANDIDATES;
+    series2->linearInterpolation = false;
+    series2->pointType = L"dots";
+    series2->pointTypeLength = wcslen(series->pointType);
+    series2->lineThickness = 1;
+    series2->color = CreateRGBColor(0, 0, 1);
 
     ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
     settings->width = 1000;
