@@ -86,6 +86,32 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
     }
 
+    const int dim = 2;
+    double tal_x[TOTAL_VOTERS];
+    double tal_y[TOTAL_VOTERS];
+    for (int z = 0; z < TOTAL_VOTERS; z++) {
+        tal_x[z] = z;
+        tal_y[z] = gauss_2d_array[z][dim];
+        //printf("%d %lf\n", z, gauss_2d_array[z][dim]);
+    }
+    double tal_x2[NUMBER_CANDIDATES];
+    double tal_y2[NUMBER_CANDIDATES];
+    for (int z = 0; z < NUMBER_CANDIDATES; z++) {
+        tal_x2[z] = (TOTAL_VOTERS / CLUSTERS) * (z % CLUSTERS +1) - (TOTAL_VOTERS / CLUSTERS) /2;
+        tal_y2[z] = candidates_coordinates[z][dim];
+        //printf("%lf %lf\n", tal_x2[z], tal_y2[z]);
+    }
+
+
+    char title[16];
+    if (density) {
+        sprintf(title, "Density");
+    } else {
+        sprintf(title, "Box-Muller");
+    }
+
+    create_graph(tal_x, tal_y, tal_x2, tal_y2, "BoxMuller", title);
+
     double min_length = 0;
     double max_length = 0;
     /* Kører spatial funktionen for hver voter, der generere en præference baseret rangering */
@@ -290,30 +316,33 @@ int compare(const void* a, const void *b) {
 }
 
 /* Følgende bruges til at lave grafer ved brug af biblioteket, pbPlots, som hjælper til debugging */
-void create_graph (double *x_akse, double *y_akse, char prefix[]) {
+void create_graph (double *x_akse, double *y_akse, double *x_akse2, double *y_akse2, char prefix[]) {
 
     _Bool success;
     StringReference *errorMessage;
-    RGBA color;
-    color.r = 0; //Sort
-    color.g = 255; //Rød
-    color.b = 0; //Grøn
-    color.a = 1;
+
 
     StartArenaAllocator();
 
     ScatterPlotSeries *series = GetDefaultScatterPlotSeriesSettings();
     series->xs = x_akse;
-    series->xsLength = 200;
+    series->xsLength = TOTAL_VOTERS;
     series->ys = y_akse;
-    series->ysLength = 200;
+    series->ysLength = TOTAL_VOTERS;
     series->linearInterpolation = false;
-//	series->lineType = L"dotted";
- //   series->lineTypeLength = wcslen(series->lineType);
     series->pointType = L"dots";
     series->pointTypeLength = wcslen(series->pointType);
-   // series->lineThickness = 1;
-    series->color = &color;
+    series->color = CreateRGBColor(1,0,0);
+
+    ScatterPlotSeries *series2 = GetDefaultScatterPlotSeriesSettings();
+    series2->xs = x_akse2;
+    series2->xsLength = NUMBER_CANDIDATES;
+    series2->ys = y_akse2;
+    series2->ysLength = NUMBER_CANDIDATES;
+    series2->linearInterpolation = false;
+    series2->pointType = L"dots";
+    series2->pointTypeLength = wcslen(series->pointType);
+    series2->color = CreateRGBColor(0,0,1);
 
     ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
     settings->width = 1000;
@@ -326,9 +355,9 @@ void create_graph (double *x_akse, double *y_akse, char prefix[]) {
     settings->xLabelLength = wcslen(settings->xLabel);
     settings->yLabel = L"Y axis";
     settings->yLabelLength = wcslen(settings->yLabel);
-    ScatterPlotSeries *s [] = {series};
+    ScatterPlotSeries *s [] = {series, series2};
     settings->scatterPlotSeries = s;
-    settings->scatterPlotSeriesLength = 1;
+    settings->scatterPlotSeriesLength = 2;
 
     RGBABitmapImageReference *canvasReference = CreateRGBABitmapImageReference();
     errorMessage = (StringReference *)malloc(sizeof(StringReference));
@@ -348,13 +377,4 @@ void create_graph (double *x_akse, double *y_akse, char prefix[]) {
         fprintf(stderr, "\n");
     }
 
-   // RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();
-   // /* Bestemmer størrelsen på billedet, og x og y aksen*/
-   // //DrawScatterPlot(imageRef, 600, 400, x_akse, 200, y_akse, 200, "Error in creating image");
-   // size_t length;
-   // ByteArray *pngdata = ConvertToPNG(imageRef->image); //Konvertere til png
-   // char filename[64];
-   // sprintf(filename, "%s.png", prefix); //Sætter .png efter prefixet, for at danne filnavn
-   // WriteToFile(pngdata, filename);
-   // DeleteImage(imageRef->image);
 }
