@@ -1,13 +1,8 @@
 #include <stdio.h>
 #include "../h-filer/static_variables.h"
 
-#define DIMENSIONS 5
-#define CLUSTERS 5
-#define MIN_VALUE -1
-#define MAX_VALUE 1
 #define MIN_SPREAD 0.001  // Minimum spread value
 #define MAX_SPREAD 0.4  // Maximum spread value
-#define PRINT_GRAPH 1 // Sæt til 0, hvis der ikke skal printes en graf
 
 /* Struct for en normalfordeling, indeholder dens middelværdi, spredning, og antal vælgere for én normalfordeling */
 typedef struct {
