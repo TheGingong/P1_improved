@@ -30,7 +30,7 @@
 
 void generate_data() {
     /* Initiering */
-    FILE* generate_data_file = fopen("text-files/test-tekstil.txt", "w");
+    FILE* generate_data_file = fopen("text-files/spatial-file.txt", "w");
 
     if (generate_data_file == NULL) { // Tjekker om filen kan åbnes
         perror("Could not open file"); // Printer fejl hvis filen ikke kan åbnes

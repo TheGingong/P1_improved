@@ -6,7 +6,7 @@
 
 void generate_vote_file(int voters_amount) {
     /* Åbner fil for at skrive til */
-    FILE *f = fopen("text-files/notused.txt", "w");
+    FILE *f = fopen("text-files/impartial-file.txt", "w");
 
     if (f == NULL) {
         printf("Could not open file, to write");
