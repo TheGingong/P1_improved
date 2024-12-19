@@ -89,7 +89,7 @@ tilsvarende tekstfiler.
 - CHOSEN_FILE: Filen der skal skrives til og læses fra
 
 
-## Kollaberatorer
+## Samarbejdspartnere
 - Frederik Sperling Schacksen (https://github.com/FrederikSperling)
 - Søren Emil Schmidt-Laugesen (https://github.com/SorenAAU)
 - Mathias Østerskov Kejser (https://github.com/GakkiOne)
