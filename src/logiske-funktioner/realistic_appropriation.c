@@ -57,11 +57,11 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
         make_cluster_array(cluster_array);
 
         /* If statement så man kan køre tæthedsfunktionen eller Box Muller */
-        if (run_density) {
+        if (run_rejection) {
             /* Genererer kandidat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
              * Ved tilfælde af flere kandidater end clusters, vil clusters blive gentaget */
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
-                candidates_coordinates[k][i] = generate_normal_using_density(cluster_array[k%CLUSTERS]);
+                candidates_coordinates[k][i] = generate_normal_using_rejection(cluster_array[k%CLUSTERS]);
 
             }
             for (int h = 0; h < CLUSTERS; h++) {
@@ -102,7 +102,7 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
         /* Sætter graf-titlen til den tilsvarende metode */
         char title[16];
-        if (run_density) {
+        if (run_rejection) {
              sprintf(title, "Rejection Sampling");
         } else {
             sprintf(title, "Box-Muller");
@@ -125,15 +125,11 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
 
     for (int i = 0; i < CLUSTERS; i++) {
-        // Sætter middelværdien til en tilfældig værdi fra -1 til 1
+        // Sætter middelværdien til en tilfældig værdi ud fra empircal rule
         cluster_array[i].mean_cluster = (0 - 3 * 1) + (double) rand() / RAND_MAX * ((0 + 3 * 1) - (0 - 3 * 1));
 
-        // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
-
-        // Generate random spread from uniform distribution
+        // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ
         cluster_array[i].spread_cluster = (double) rand() / RAND_MAX * (MAX_SPREAD - MIN_SPREAD) + MIN_SPREAD;
-
-        //cluster_array[i].spread_cluster = MIN_VALUE_SPREAD + 0.5 * (double) rand() / RAND_MAX * (MAX_VALUE - MIN_VALUE_SPREAD);
 
         // Fordeler vælgere uniformt på mængden af normalfordelinger
         cluster_array[i].voters_cluster = (double)TOTAL_VOTERS / (double)CLUSTERS;
@@ -145,13 +141,13 @@ void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS]
 
     // Funktionen generate_normal_using_density bruges, og tilegner opinioner for vælgere i den gældende dimension
     for (int i = 0 + (h * cluster_n.voters_cluster); i < cluster_n.voters_cluster+(h*cluster_n.voters_cluster); i++) {
-            double value = generate_normal_using_density(cluster_n);
+            double value = generate_normal_using_rejection(cluster_n);
             gauss_2d_array[i][dimension_j] = value;
     }
 }
 
 /* Funktion, som generer et koordinat i én dimension for én stemme */
-double generate_normal_using_density(cluster_t cluster_n) {
+double generate_normal_using_rejection(cluster_t cluster_n) {
     double sample, density_at_sample, random_value;
     double min_sample = cluster_n.mean_cluster - 3 * cluster_n.spread_cluster;
     double max_sample = cluster_n.mean_cluster + 3 * cluster_n.spread_cluster;

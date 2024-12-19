@@ -22,7 +22,7 @@ void generate_data();
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file);
 void make_cluster_array (cluster_t cluster_array[CLUSTERS]);
 void generate_one_gauss(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], int dimension_j, int h);
-double generate_normal_using_density(cluster_t cluster_n);
+double generate_normal_using_rejection(cluster_t cluster_n);
 double gaussian_density (cluster_t cluster_n, double voter_x);
 void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS], FILE* file, double* max_length, double* min_length);
 int create_state();

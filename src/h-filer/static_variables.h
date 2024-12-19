@@ -8,7 +8,7 @@
 #define PRINT_GRAPH 0 // Sæt til 0, hvis der ikke skal printes en graf
 
 /* Kun én af de følgende kan være 1 på samme tid */
-#define run_density 1 // Sæt til 1 for at køre stemme generering med rejection sampling
+#define run_rejection 1 // Sæt til 1 for at køre stemme generering med rejection sampling
 #define run_box_muller 0 // Sæt til 1 for at køre stemme generering med box muller
 
 #define CHOSEN_FILE "text-files/spatial-file.txt"
