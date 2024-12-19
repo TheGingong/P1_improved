@@ -7,87 +7,75 @@ amerikanske valgsystem. C programmet simulerer vælgere, deres præferencer og h
 Herefter bliver forskellige valgsystemer evalueret på baggrund af social utility efficiency hos deres vinderkandidater.
 *****
 
-````
-src/h-filer
-````
+
+## [h-filer](src/h-filer)
+
 Inderholde header filen men prototyper til deres tilhørende c-filer.
 
-````
-static_variables.h
-````
+
+### [static_variables.h](src/h-filer/static_variables.h)
+
 Inderholder variabler der er afgørende for programmet simulationer og metoder brugt.
 
-````
-src/logiske-funktioner
-````
+*****
+## [logiske-funktioner](src/logiske-funktioner)
+
 Inderholder c filer til programmet.
 
-````
-calculate_winner.c
-````
+### [calculate_winner.c](src/logiske-funktioner/calculate_winner.c)
+
 Hjælpefunktion brugt til at calculere vinderkandidaten i et vilkårligt valgsystem.
 
-````
-convert.c
-````
+
+### [convert.c](src/logiske-funktioner/convert.c)
+
 Konvertere tesktfil til brugbar data til programmet.
 
-````
-impartial_generation.c
-````
+
+### [impartial_generation.c](src/logiske-funktioner/impartial_generation.c)
+
 Impartial culture generering af tilfældige stemmer og deres nytte til kandidater.
 
-````
-realistic_appropriation.c
-````
+
+### [realistic_appropriation.c](src/logiske-funktioner/realistic_appropriation.c)
+
 Spatial voting generering af virkelighedstro stemmer og deres nytte til kandidater.
 
 
 ### [simulering.c](src/logiske-funktioner/simulering.c)
-*****
+
 Åbner tekstfiler og kalder de forskellige funktioner fra andre c-filer.
 
- [utils.c](src/logiske-funktioner/utils.c)
+### [utils.c](src/logiske-funktioner/utils.c)
 Hjælpefunktion der åbner tekstfil og tester om åbning var succesfuld.
 
+### [welfare_score.c](src/logiske-funktioner/welfare_score.c)
+Beregner velfærd for forskellige kandidater og udregner social utility efficiency scoren.
+
+## [text-files](text-files)
+De to tekstfiler tilhører henholdsvis impartial og spatial stemme generering. Fil format ser 
+sådan ud:
+``````
+34(B0.979 A0.943 C0.847 D0.472 E0.000)
+24(A0.987 B0.977 C0.891 D0.516 E0.044)
+43(B0.960 A0.925 C0.830 D0.463 E0.000)
+39(A0.987 B0.979 C0.892 D0.525 E0.062)
+13(B0.985 A0.980 C0.886 D0.519 E0.056)
+``````
+Hver linje i tekstfilen repræsenterer en vælger. Tallet før parantesens start fortæller hvilken
+stat vælgeren er fra. Hvert bogstav i linjen er en kandidat, rangeret ud fra vælgerens præference.
+Tallet efter kandidaten repræsenterer den potentielle nytte for kandidaten.
 
 
 
+*****
+## [test](test)
+I mappen test ligger tests på diverse funktioner som er essentielle for programmet. De
+er lavet ud fra Arrange-Act-Assert princippet og til de funktioenr der har brug for det, er der
+tilsvarende tekstfiler.
+*****
+
+## Hvordan programmet bruges
+[static_variables.h](src/h-filer/static_variables.h) bruges til at ændre på parametre i simulationen.
 
 Data i tekstfilen: 4(A0.9 B0.8 C0.7 D0.62 E0.413)
-
-Input til borda_count:
-````
-array[n] = [A,B,C,D,E]
-````
-
-Input til america:
-````
-struct person {
-    stat = 0-51;
-    pref = 0-n;
-}
-````
-
-GUIDELINE FOR KODESKRIVNING:
-Kode skrives på engelsk
-Hvis flere ord skrives det sådan: hej_dig
-Kodekommentar skrives på dansk og akademisk! Det er en del af rapporten så skal se godt ud
-
-Eksempel på kode:
-
-````
-/* For loop som udskriver en værdi */
-for (int i = 0; i < 5; i++) {
-  printf("%d\n", i); // Her printes i
-}
-````
-
-HUSKELISTE:<br/>
-Husk at lave mellemrum mellem funktion så det kan læses! <br/>
-Husk gode variabel/funktion navne som klart beskriver hvad vi bruger det til!
-
-
-Til spatial voting <br\>
-https://en.wikipedia.org/wiki/Rejection_sampling
-
