@@ -78,4 +78,13 @@ tilsvarende tekstfiler.
 ## Hvordan programmet bruges
 [static_variables.h](src/h-filer/static_variables.h) bruges til at ændre på parametre i simulationen.
 
-- vpte
+- NUMBER_CANDIDATES: Hvor mange kandidater der skal simuleres
+- NUMBER_SIMULATIONS: Hvor mange simulationer der skal køres
+- TOTAL_VOTERS: Det totale antal vælgere
+- DIMENSIONS: Antal dimensioner i spatial voting modellen
+- CLUSTERS: Antal klynger i spatial voting modellen
+- PRINT_GRAPH: Laver graf til vilkårlig dimension
+- run_density: Kører rejection sampling
+- run_box_muller: Kører Box-Muller algoritmen
+- CHOSEN_FILE: Filen der skal skrives til og læses fra
+
