@@ -78,4 +78,4 @@ tilsvarende tekstfiler.
 ## Hvordan programmet bruges
 [static_variables.h](src/h-filer/static_variables.h) bruges til at ændre på parametre i simulationen.
 
-Data i tekstfilen: 4(A0.9 B0.8 C0.7 D0.62 E0.413)
+- vpte

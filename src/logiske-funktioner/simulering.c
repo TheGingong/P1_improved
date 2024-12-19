@@ -5,7 +5,7 @@
 #include "../h-filer/welfare_score.h"
 #include "../h-filer/realistic_appropriation.h"
 
-#define CHOSEN_FILE "text-files/spatial-file.txt"
+
 
 void simulation(int run_times) {
     double elected_borda = 0.0, elected_america = 0.0, max = 0.0, random_cand_welfare = 0.0,

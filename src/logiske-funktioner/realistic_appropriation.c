@@ -51,14 +51,13 @@ void generate_data() {
 void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TOTAL_VOTERS][DIMENSIONS], FILE* file) {
     double candidates_coordinates[NUMBER_CANDIDATES][DIMENSIONS];
     //srand(time(NULL));  // Der seed'es for tilfældighedsfunktionerne baseret på computerens tid
-    int density = 0;
-    int box_muller = 1;
+
 
     for (int i = 0; i < DIMENSIONS ;i++) {
         make_cluster_array(cluster_array);
 
         /* If statement så man kan køre tæthedsfunktionen eller Box Muller */
-        if (density) {
+        if (run_density) {
             /* Genererer kandidat på baggrund af de samme clusters som bliver brugt til generering af stemmer.
              * Ved tilfælde af flere kandidater end clusters, vil clusters blive gentaget */
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
@@ -70,7 +69,7 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
             }
 
 
-        } else if (box_muller) {
+        } else if (run_box_muller) {
             for (int k = 0; k < NUMBER_CANDIDATES; k++) {
                 candidates_coordinates[k][i] = generate_normal_using_box_muller(cluster_array[k%CLUSTERS]);
             }
@@ -79,7 +78,6 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
                 generate_one_muller(cluster_array[h], gauss_2d_array, i, h);
             }
         }
-
 
     }
 
@@ -104,7 +102,7 @@ void assemble_gauss (cluster_t cluster_array[CLUSTERS], double gauss_2d_array[TO
 
         /* Sætter graf-titlen til den tilsvarende metode */
         char title[16];
-        if (density) {
+        if (run_density) {
              sprintf(title, "Rejection Sampling");
         } else {
             sprintf(title, "Box-Muller");
@@ -128,7 +126,6 @@ void make_cluster_array (cluster_t cluster_array[CLUSTERS]) {
 
     for (int i = 0; i < CLUSTERS; i++) {
         // Sætter middelværdien til en tilfældig værdi fra -1 til 1
-        //cluster_array[i].mean_cluster = MIN_VALUE_MEAN + (double) rand() / RAND_MAX * (MAX_VALUE_MEAN - MIN_VALUE_MEAN);
         cluster_array[i].mean_cluster = (0 - 3 * 1) + (double) rand() / RAND_MAX * ((0 + 3 * 1) - (0 - 3 * 1));
 
         // Sætter spredningen til en tilfældig værdi fra 0 til 1 (spredning kan ikke være negativ)
@@ -170,8 +167,7 @@ double generate_normal_using_density(cluster_t cluster_n) {
         random_value = (double) rand() / RAND_MAX * gaussian_density(cluster_n, cluster_n.mean_cluster);
 
     } while (random_value > density_at_sample); // Tjekker, om sample er større end den tilfældige værdi, accepterer hvis den er
-    //printf("%lf %lf\n", sample, density_at_sample);
-    //printf("accepted sample = %lf\n", sample);
+
     return sample; // Returnerer sample-værdien
 }
 
@@ -224,12 +220,6 @@ void generate_one_muller(cluster_t cluster_n, double gauss_2d_array[TOTAL_VOTERS
 }
 
 
-double ikke_linear(double x) {
-    double step = sqrt(DIMENSIONS* 0.1) ;
-    return 1.0 / (x + 1.0);
-}
-
-
 
 /* Funktion, som tager vælgeres rangerings-koordinater, og beregner længden fra dem til kandidaternes
  * den kandidat der ligger tættest, er hvem vælgeren stemmer på for hver dimension*/
@@ -260,16 +250,7 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
     qsort(cand_distances, NUMBER_CANDIDATES, sizeof(candidate_distance_t), compare);
 
     /* Der initieres variabler til brug for velfærds-beregning */
-    //double min_length = 0,
     double welfare = 0;
-
-    /* Udregner maksimale længde en vælger kan være fra en kandidat
-     * (velfærd på 0 for værst mulig, velfærd på 1 for bedst mulig) */
-    //for (int i = 0; i < DIMENSIONS; i++) {
-    //    max_length += pow(MAX_VALUE-(MIN_VALUE),2);
-    //}
-    //max_length = sqrt(max_length); // Euklids igen
-
 
 
     /* Printer tilfældig stat til filen, må gerne være på baggrund af indbyggertal */
@@ -278,8 +259,6 @@ void spatial(double koords[DIMENSIONS], double candidates_coordinates[NUMBER_CAN
     /* Udregner velfærd baseret på distance, og printer dette til tekstfilen med en tilfældig stat (0-50) foran */
     for (int i = 0; i< NUMBER_CANDIDATES; i++){
         welfare = 1 - ((cand_distances[i].distance- *min_length) / (*max_length - *min_length)); // Normaliserer distance 0 til 1
-        //welfare = ikke_linear(cand_distances[i].distance); // Ikke linear welfare
-        //printf("welfare = %lf dist = %lf\n", welfare, cand_distances[i].distance);
 
         fprintf(file, "%c%.3lf",'A' + cand_distances[i].id, welfare); // Printer værdierne til tekstfilen
         if (i < NUMBER_CANDIDATES-1) {
