@@ -88,3 +88,12 @@ tilsvarende tekstfiler.
 - run_box_muller: Kører Box-Muller algoritmen
 - CHOSEN_FILE: Filen der skal skrives til og læses fra
 
+
+## Kollaberatorer
+- Frederik Sperling Schacksen (https://github.com/FrederikSperling)
+- Søren Emil Schmidt-Laugesen (https://github.com/SorenAAU)
+- Mathias Østerskov Kejser (https://github.com/GakkiOne)
+- David Henning Bach (https://github.com/DrMachoo)
+- Mads Møller Pedersen (https://github.com/MadsMolle)
+- Victoria Myrup Pedersen (https://github.com/Venil0u)
+- William Strandby Bauer (https://github.com/TheGingong)
