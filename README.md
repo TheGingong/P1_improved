@@ -94,6 +94,6 @@ tilsvarende tekstfiler.
 - Søren Emil Schmidt-Laugesen (https://github.com/SorenAAU)
 - Mathias Østerskov Kejser (https://github.com/GakkiOne)
 - David Henning Bach (https://github.com/DrMachoo)
-- Mads Møller Pedersen (https://github.com/MadsMolle)
+- Mads Møller Pedersen (https://github.com/MadsMoneyCrank)
 - Victoria Myrup Pedersen (https://github.com/Venil0u)
 - William Strandby Bauer (https://github.com/TheGingong)
