@@ -7,6 +7,7 @@
 #include "../src/h-filer/valgsystemer.h"
 #include "../src/h-filer/convert.h"
 #include "../src/h-filer/welfare_score.h"
+#include "../src/h-filer/main.h"
 
 /* Prototyper */
 void test_winner_america();

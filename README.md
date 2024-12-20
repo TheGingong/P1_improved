@@ -87,6 +87,7 @@ tilsvarende tekstfiler.
 - RUN_REJECTION: Kører rejection sampling
 - RUN_BOXMULLER: Kører Box-Muller algoritmen
 - CHOSEN_FILE: Filen der skal skrives til og læses fra
+- GENERATE_DATA: Valget af stemmegenereringsmodel 
 
 
 ## Samarbejdspartnere
