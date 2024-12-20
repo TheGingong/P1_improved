@@ -4,6 +4,7 @@
 #include "../h-filer/valgsystemer.h"
 #include "../h-filer/welfare_score.h"
 #include "../h-filer/realistic_appropriation.h"
+#include "../h-filer/main.h"
 
 
 
@@ -14,7 +15,7 @@ void simulation(int run_times) {
 
     for (int i = 0; i < run_times; i++) {
         /* Genererer stemmer */
-        generate_data(); // Vores stemmegenerering
+         generate_data(); // Vores stemmegenerering
         //generate_vote_file(TOTAL_VOTERS); // Benytter impartial culture (tilfældig generering af stemmer)
 
         /* Kalder simluering af det amerikanske valgsystem */

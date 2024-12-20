@@ -3,6 +3,7 @@
 #include <time.h>
 #include "./h-filer/valgsystemer.h"
 #include "./h-filer/realistic_appropriation.h"
+#include "./h-filer/main.h"
 
 int main(void) {
     /* Initialisere variabler til clock_t struct */

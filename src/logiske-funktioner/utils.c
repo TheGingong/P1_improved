@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../src/h-filer/main.h"
 
 FILE* open_file(const char* file_path) {
     FILE *file = fopen(file_path, "r");
