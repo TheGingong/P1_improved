@@ -1,13 +1,12 @@
 #include "../h-filer/welfare_score.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "../h-filer/static_variables.h"
 
 /* Beregningen af SUE for det givet valgsystem */
 double SUE_value(double avg_max, double avg_random_cand_welfare, double avg_elected) {
     double denumerator = (avg_max - avg_random_cand_welfare);
-    if (denumerator == 0) { // Tjekker om avg_max minus avg_random_cand_welfare gav 0
+    if (denumerator == 0) { // Tjekker om avg_max minus avg_random_cand_welfare gav 0, dette gøres for at undgå division med 0
         denumerator = 0.0001;
     }
 
@@ -15,16 +14,17 @@ double SUE_value(double avg_max, double avg_random_cand_welfare, double avg_elec
     return SUE;
 }
 
-/* Funktion til at beregne social utility efficiency hos vinder kandidaten */
+/* Funktion der sørger for at velfærdsscore for maksimerende kandidat, valgte kandidat og en tilfældig kandidat,
+ * bliver talt op, hen over alle simulationer*/
 void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, double *random) {
     candidate_welfare candidates[NUMBER_CANDIDATES] = {0};
-    read_candidate_welfare(candidates, file); // Kalder funktion der læser velfærdsscorene fra filen
+    read_candidate_welfare(candidates, file); // Kalder funktion der læser velfærdsscore fra filen
 
     /* Gennemløber antallet af kandidater og finder den kandidat med højest velfærdsscore */
     *max = 0; // Sikrer at for hver simulation defineres en ny max
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         if (candidates[i].welfare > *max) {
-            *max = candidates[i].welfare;
+            *max = candidates[i].welfare; //værdien gemmes i max, hvor denne værdi sendes tilbage til simulations.c i form af en pointer
         }
     }
 
@@ -32,30 +32,29 @@ void utilitarian_welfare(char winner, FILE *file, double *max, double *elected, 
     int winner_index = index_finder(winner, candidates);
     *elected = candidates[winner_index].welfare; // Gemmer vinderens velfærd i pointeren elected
 
-    /* Udregner de gennemsnitlige velfærdsscore blandt alle kandidater */
+    /* Summere alle kandidaters velfærdsscore op, så den gennemsnitlige velfærdsscore for en tilfældig kandidat kan beregnes */
     double sum_of_candidates = 0;
     for (int i = 0; i < NUMBER_CANDIDATES; i++) {
         sum_of_candidates += candidates[i].welfare;
     }
-
-    *random = sum_of_candidates / NUMBER_CANDIDATES; // Vælger en tilfældig kandidats velfærd
+    *random = sum_of_candidates / NUMBER_CANDIDATES;
 }
 
-/* Funktion der gennemløber filen for kandidater og summerer deres velfærdsscore */
+/* Funktion der optæller hver kandidats velfærdsscore */
 void read_candidate_welfare(candidate_welfare *candidates, FILE *file) {
     char temp_text_str[MAX_LINE_LENGTH]; // Erklærer en temp tekst streng hvor hele linjen fra tekst filen gemmes i
     char format[MAX_LINE_LENGTH]; // Det dynamiske format som skal fortælle hvor sscanf skal læse linjen
     double temp;
 
     while (fgets(temp_text_str, sizeof(temp_text_str), file) != NULL) { // Kører så længe der ikke er en tom linje (returnerer NULL)
-        /* For loop der gennemløber antallet af kandidater lægger kandidater ind i candidate arrayet */
+        /* For-løkke der gennemløber antallet af kandidater lægger kandidater ind i candidate arrayet */
         for (int i = 0; i < NUMBER_CANDIDATES; i++) {
-            candidates[i].candidate = 'A' + i; // Her initializeres kandidaterne i ordning
+            candidates[i].candidate = (char)('A' + i); // Her initialiseres kandidaterne i ordning, først tælles kandidat A's velfærdsscore op, så B, C, D...
             sprintf(format, "%%*[^%c]%c%%lf", candidates[i].candidate, candidates[i].candidate); // sprintf gemmer læsningsformatet som sscanf skal bruge
-                                                                                               // fortæller sscanf at den skal springe over alt til-og-med en char og derefter skal læse long float værdien
-            if (sscanf(temp_text_str, format, &temp)==1){
-                candidates[i].welfare += temp; // Summerer den indlæste velfærdsscoren til den nuværende kandidat i loopet
-                //printf("Candidate %c welfare: %lf\n", candidate[i].candidate, candidate[i].welfare);
+                                                                                                       // fortæller sscanf at den skal springe over alt til-og-med den ønsket char
+                                                                                                       // og derefter skal læse long float værdien
+            if (sscanf(temp_text_str, format, &temp) == 1){ // sscanf læser på temp_text_str strengen (der indeholder én vælgers præference) med format givet af sprinf.
+                candidates[i].welfare += temp; // Summerer den indlæste velfærdsscoren til den nuværende kandidat i løkken
             } else {
                 printf("Error: Could not parse the line (welfare_score.c).\n");
             }
