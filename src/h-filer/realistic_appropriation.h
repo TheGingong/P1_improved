@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include "../h-filer/static_variables.h"
 
-#define MIN_SPREAD 0.001  // Minimum spread value
-#define MAX_SPREAD 0.4  // Maximum spread value
+#define MIN_SPREAD 0.001  // Minimum spredningsværdi
+#define MAX_SPREAD 0.5  // Maximum spredningsværdi
 
-/* Struct for en normalfordeling, indeholder dens middelværdi, spredning, og antal vælgere for én normalfordeling */
+/* Struct for en normalfordeling
+ * Indeholder middelværdi, spredning, og antal vælgere for én normalfordeling */
 typedef struct {
     double mean_cluster; // Middelværdi
     double spread_cluster; // Spredning
-    int voters_cluster; // Vælgere for undertegnede normalfordeling
+    int voters_cluster; // Vælgere for normalfordelingen
 } cluster_t;
 
 /* Struct for længde fra én holdning tilhørende en vælger, til en kandidat */
