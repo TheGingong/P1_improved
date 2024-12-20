@@ -84,8 +84,8 @@ tilsvarende tekstfiler.
 - DIMENSIONS: Antal dimensioner i spatial voting modellen
 - CLUSTERS: Antal klynger i spatial voting modellen
 - PRINT_GRAPH: Laver graf til vilkårlig dimension
-- run_density: Kører rejection sampling
-- run_box_muller: Kører Box-Muller algoritmen
+- RUN_REJECTION: Kører rejection sampling
+- RUN_BOXMULLER: Kører Box-Muller algoritmen
 - CHOSEN_FILE: Filen der skal skrives til og læses fra
 
 
