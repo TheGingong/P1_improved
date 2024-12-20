@@ -6,7 +6,7 @@
 /* Hovedfunktion, som generere stemmesæt med størrelsen voters_amount
  * Stemmerne er upartiske, så præferencen blandt kandidater er tilfældigt genereret
  * Stemmernes bosiddende stat er fortsat fordelt efter statens antal af valgmænd */
-void generate_vote_file(int voters_amount) {
+generate_impartial_data(int voters_amount) {
     /* Åbner fil for at skrive til. */
     FILE *file_for_impartial = fopen("text-files/impartial-file.txt", "w");
 

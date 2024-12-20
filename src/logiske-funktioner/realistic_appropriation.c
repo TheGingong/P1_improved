@@ -7,7 +7,7 @@
 #include "../pbPlots/supportLib.h"
 #include <stdint.h>
 
-void generate_data() {
+void generate_spatial_data() {
     /* Initiering */
     FILE* generate_data_file = fopen("text-files/spatial-file.txt", "w");
 
