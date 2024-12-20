@@ -37,9 +37,9 @@ int main(void) {
 /* Testing af om den rigtige kandidat bliver valgt */
 void test_winner_america() {
     /* Arrange */
-    FILE *test_file1 = open_file("test/test1.txt");
-    FILE *test_file2 = open_file("test/test2.txt");
-    FILE *test_file3 = open_file("test/test3.txt");
+    FILE *test_file1 = open_file("test/test1.txt"); // Indeholder 5 kandidater
+    FILE *test_file2 = open_file("test/test2.txt"); // Indeholder 5 kandidater
+    FILE *test_file3 = open_file("test/test3.txt"); // Indeholder 5 kandidater
 
     /* Act */
     char winner1 = america(test_file1);
@@ -50,17 +50,17 @@ void test_winner_america() {
     fclose(test_file3);
 
     /* Assert */
-    assert(winner1 == 'A'); // Test case 1
-    assert(winner2 == 'C'); // Test case 2
-    assert(winner3 == 'E'); // Test case 3
+    assert(winner1 == 'A'); // Test case 1 - Bemærk NUMBER_CANDIDATES i static_variables.h skal være 5 for succes
+    assert(winner2 == 'C'); // Test case 2 - Bemærk NUMBER_CANDIDATES i static_variables.h skal være 5 for succes
+    assert(winner3 == 'E'); // Test case 3 - Bemærk NUMBER_CANDIDATES i static_variables.h skal være 5 for succes
 }
 
 /* Testing af Borda */
 void test_winner_borda() {
     /* Arrange */
-    FILE *test_file1 = open_file("test/test1.txt");
-    FILE *test_file2 = open_file("test/test2.txt");
-    FILE *test_file3 = open_file("test/test3.txt");
+    FILE *test_file1 = open_file("test/test1.txt"); // Indeholder 5 kandidater
+    FILE *test_file2 = open_file("test/test2.txt"); // Indeholder 5 kandidater
+    FILE *test_file3 = open_file("test/test3.txt"); // Indeholder 5 kandidater
 
     /* Act */
     char winner1 = borda_count(test_file1);
@@ -71,9 +71,9 @@ void test_winner_borda() {
     fclose(test_file3);
 
     /* Assert */
-    assert(winner1 == 'D');
-    assert(winner2 == 'B');
-    assert(winner3 == 'D');
+    assert(winner1 == 'D'); // Bemærk NUMBER_CANDIDATES i static_variables.h skal være 5 for succes
+    assert(winner2 == 'B'); // Bemærk NUMBER_CANDIDATES i static_variables.h skal være 5 for succes
+    assert(winner3 == 'D'); // Bemærk NUMBER_CANDIDATES i static_variables.h skal være 5 for succes
 }
 
 /* Test af calculate winner */
@@ -184,7 +184,7 @@ void test_SUE() {
 
 }
 
-/* Åbner en fil */
+/* Åbner en vilkårlig fil */
 FILE* open_file(const char* file_path) {
     FILE *file = fopen(file_path, "r");
 
