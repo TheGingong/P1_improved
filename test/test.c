@@ -173,7 +173,6 @@ void test_SUE() {
     /* Assert */
     /* I hvert case testes der om read_candidate_welfare finder float værdien der tilhører den rigtige kandidat og at den bliver plusset op */
     /* Test case 1 */
-
     assert(test_candidates[0].candidate == 'A');
     assert(is_almost_equal(test_candidates[0].welfare, 1.663));
 
