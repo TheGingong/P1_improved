@@ -13,16 +13,16 @@ char america(FILE* file) {
     initialize_states(all_states); // Kalder funktion som laver stater og tildeler valgmænd
 
     /* Initialisere person structen som benyttes */
-    struct person current_state = convert_america(file); // Læser den første linje fra convert_america. Hvis den returnere -1 vil den ikke køre while loopet.
+    struct person current_state = convert_america(file); // Læser den første linje fra convert_america.
 
-    /* While loop som kører så længe at convert_america ikke returnerer -1 */
+    /* While løkke som kører så længe at convert_america ikke returnerer -1 */
     while(current_state.stat != -1) {
-        all_states[current_state.stat].votes[current_state.pref]++; // Tæller votes op i all_states udfra præferencen hos den individuelle person
+        all_states[current_state.stat].votes[current_state.pref]++; // Tæller votes op i all_states ud fra præferencen hos den individuelle person
         current_state = convert_america(file); // Modtager en ny struct, current_state, fra convert_america til 'index' linje
     }
 
-    /* For loop som gennemløber alle stater for at beregne vinderen i hver stat */
-    /* Kald vinder funktion som også bruges af borda.c */
+    /* For løkke som gennemløber alle stater for at beregne vinderen i hver stat
+     * Kald vinder funktion som også bruges af borda.c */
     for (int i = 0; i < STATES; i++) {
         all_states[i].winner = calculate_winner_func(all_states[i].votes);
     }
@@ -37,18 +37,17 @@ char america(FILE* file) {
 char assign_electors(states all_states[]) {
     int candidates[NUMBER_CANDIDATES] = {0};
 
-    /* For loop gennemløber hver stats vinder og tildeler valgmændende i arrayet */
+    /* For løkke gennemløber hver stats vinder og tildeler valgmændende i arrayet */
     for (int i = 0; i < STATES; i++) {
         candidates[all_states[i].winner] += all_states[i].electors;
     }
 
-    /* Kalder calculate_winner
-     * for at bestemme hvilken kandidat der har flest valgmænd og dermed vinder valget */
+    /* Kalder calculate_winner for at bestemme hvilken kandidat der har flest valgmænd og dermed vinder valget */
     char winner = calculate_winner_func(candidates);
-    return 'A' + winner; // Returnere den korrekte kandidat ved brug af det index fra calculate_winner_func
+    return 'A' + winner; // Returnerer den korrekte kandidat ved brug af det index fra calculate_winner_func
 }
 
-/* Her initialiseres alle staterne i USA med korrekte antal valgmænd udfra antal hus repræsentanter og senater pr. stat */
+/* Her initialiseres alle staterne i USA med korrekte antal valgmænd ud fra antal husrepræsentanter og senatorer pr. stat */
 void initialize_states(states all_states[]) {
     for (int i = 0; i < STATES; i++) {
         all_states[i].electors = electors[i];

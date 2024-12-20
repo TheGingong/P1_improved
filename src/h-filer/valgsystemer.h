@@ -3,10 +3,11 @@
 #define STATES 51
 #define ANTAL_VALGMÆND 538
 
+/* Struct der indholder resultaterne i hver stat */
 typedef struct {
-    int votes[NUMBER_CANDIDATES];
-    int electors;
-    int winner;
+    int votes[NUMBER_CANDIDATES]; // Antal stemmmer per kandidat for en stat
+    int electors; // Antal valgmænd for en stat
+    int winner; // Vinderkandidaten for en stat
 } states;
 
 typedef enum {
@@ -35,4 +36,4 @@ static int electors[STATES] = {
 char america(FILE* file);
 void initialize_states(states all_states[]);
 char assign_electors(states all_states[]);
-char borda_count(FILE* borda_file); // Borda prototype
+char borda_count(FILE* borda_file);
