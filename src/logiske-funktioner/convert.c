@@ -10,7 +10,7 @@ int convert_borda(int* array_pref, FILE *file) {
     * - og gemmer dem i tekststrengen "temp_text_str"
     * fgets stopper med at parse text hvis den rammer en ny linje */
     if (fgets(temp_text_str, sizeof(temp_text_str), file) == NULL) {
-        return 0; // returner 0 for fejl
+        return 0; // returner 0 for at signalere slutningen af tekstfilen
     }
 
     /* Benytter strtok, fra string.h library, for at tilgå de nødvendige dele af hver linje i tekstfilen.
@@ -40,7 +40,7 @@ struct person convert_america(FILE *file) {
     * - og gemmer dem i tekststrengen "temp_text_str"
     * fgets stopper med at parse text hvis den rammer en ny linje */
     if (fgets(temp_text_str, sizeof(temp_text_str), file) == NULL) {
-        ny_person.stat = -1; // Hvis fgets har læst til en ny linje returneres 'ny_person.stat' med -1 for at signalere slutningen af tekstfilen
+        ny_person.stat = -1; // Hvis fgets har læst til en ny linje, returneres 'ny_person.stat' med -1, for at signalere slutningen af tekstfilen
         return ny_person;
     }
 
