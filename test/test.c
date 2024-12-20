@@ -139,6 +139,7 @@ void test_convert_borda() {
 /* Test af convert america */
 void test_convert_america() {
     /* Arrange */
+    /* Åbner tre filer med tre forskellige scenarier */
     FILE *test_file1 = open_file("test/test1.txt");
     FILE *test_file2 = open_file("test/test2.txt");
     FILE *test_file3 = open_file("test/test3.txt");
@@ -152,6 +153,7 @@ void test_convert_america() {
     fclose(test_file3);
 
     /* Assert */
+    /* Vi kigger om testene af convert_america returnere struct person med de rigtige stater og præferencer */
     assert(test1.stat == 40 && test1.pref == 3);
     assert(test2.stat == 0 && test2.pref == 3);
     assert(test3.stat == 0 && test3.pref == 2);
@@ -162,14 +164,16 @@ void test_convert_america() {
 void test_SUE() {
     /* Arrange */
     FILE *test_file = open_file("test/test4.txt");
-    candidate_welfare test_candidates[NUMBER_CANDIDATES] = {0};
+    candidate_welfare test_candidates[NUMBER_CANDIDATES] = {0}; // Et array af structen candidate_welfare laves med antal kandidater
 
     /* Act */
-    read_candidate_welfare(test_candidates, test_file);
+    read_candidate_welfare(test_candidates, test_file); // read_candidate_welfare kaldes med array test_candidates og filen
     fclose(test_file);
 
     /* Assert */
+    /* I hvert case testes der om read_candidate_welfare finder float værdien der tilhører den rigtige kandidat og at den bliver plusset op */
     /* Test case 1 */
+
     assert(test_candidates[0].candidate == 'A');
     assert(is_almost_equal(test_candidates[0].welfare, 1.663));
 
