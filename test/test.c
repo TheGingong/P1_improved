@@ -18,8 +18,6 @@ void test_convert_borda();
 void test_SUE();
 int is_almost_equal(double actual, double expected);
 
-/* Hej med dig */
-
 int main(void) {
     /* Tester funktioner */
     test_winner_america();
@@ -29,7 +27,7 @@ int main(void) {
     test_convert_america();
     test_SUE();
 
-    printf("All tests passed.\n");
+    printf("All tests passed.\n"); // Printer hvis alle tests går igennem uden problemer
 
     return 0;
 }
@@ -79,10 +77,10 @@ void test_winner_borda() {
 /* Test af calculate winner */
 void test_calc_winner_func(){
     /* Arrange */
-    /* 3 cases med forskellige indeks' som vinder */
-    int scores1[NUMBER_CANDIDATES] = {10, 20, 30, 40, 50}; // Vinder indeks 4
-    int scores2[NUMBER_CANDIDATES] = {50, 40, 30, 20, 10}; // Vinder indeks 0
-    int scores3[NUMBER_CANDIDATES] = {20, 50, 40, 10, 30}; // Vinder indeks 4
+    /* 3 cases med forskellige indeks som vinder */
+    int scores1[NUMBER_CANDIDATES] = {10, 20, 30, 40, 50}; // Vinder indeks 4 (50)
+    int scores2[NUMBER_CANDIDATES] = {50, 40, 30, 20, 10}; // Vinder indeks 0 (50)
+    int scores3[NUMBER_CANDIDATES] = {20, 50, 40, 10, 30}; // Vinder indeks 1 (50)
 
     /* Act */
     /* Kører calculate_winner_func på de forskellige arrays */
@@ -106,16 +104,16 @@ void test_convert_borda() {
 
     /* Initialisering af arrays som bruges af convert borda */
     int voter_preference_1[NUMBER_CANDIDATES] = {0};
-    int expected_array_output_1[NUMBER_CANDIDATES] = {3,2,4,0,1}; // Dette array bruges til at tjekke om output er korrekt
+    int expected_array_output_1[NUMBER_CANDIDATES] = {3,2,4,0,1}; // Forventede array som bruges til at tjekke om output er korrekt
 
     int voter_preference_2[NUMBER_CANDIDATES] = {0};
-    int expected_array_output_2[NUMBER_CANDIDATES] = {3,2,1,4,0}; // Dette array bruges til at tjekke om output er korrekt
+    int expected_array_output_2[NUMBER_CANDIDATES] = {3,2,1,4,0}; // Forventede array som bruges til at tjekke om output er korrekt
 
     int voter_preference_3[NUMBER_CANDIDATES] = {0};
-    int expected_array_output_3[NUMBER_CANDIDATES] = {2,0,4,1,3}; // Dette array bruges til at tjekke om output er korrekt
+    int expected_array_output_3[NUMBER_CANDIDATES] = {2,0,4,1,3}; // Forventede array som bruges til at tjekke om output er korrekt
 
     /* Arrange */
-    /* Første linje i filen */
+    /* Første linje i filen bliver kørt */
     convert_borda(voter_preference_1, test_file1);
     convert_borda(voter_preference_2, test_file2);
     convert_borda(voter_preference_3, test_file3);
@@ -124,6 +122,7 @@ void test_convert_borda() {
     fclose(test_file3);
 
     /* Assert */
+    /* Løkker der eftertjekker om hvert element i de tre arrays passer med de forventede arrays */
     for (int i = 0; i < 5; i++) {
         assert(voter_preference_1[i] == expected_array_output_1[i]);
     }
@@ -184,7 +183,7 @@ void test_SUE() {
 
 }
 
-/* Åbner en fil */
+/* Funktion som bruges til at åbne en fil */
 FILE* open_file(const char* file_path) {
     FILE *file = fopen(file_path, "r");
 
@@ -192,9 +191,11 @@ FILE* open_file(const char* file_path) {
         perror("Could not open file");
         exit(EXIT_FAILURE);
     }
+
     return file;
 }
 
+/* Funktion som bruges til at ignorere optil et antal decimaler i float værdier */
 int is_almost_equal(double actual, double expected) {
     return fabs(actual - expected) < 0.000001;
 }
