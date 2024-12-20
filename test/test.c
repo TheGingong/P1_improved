@@ -18,6 +18,8 @@ void test_convert_borda();
 void test_SUE();
 int is_almost_equal(double actual, double expected);
 
+/* Hej med dig */
+
 int main(void) {
     /* Tester funktioner */
     test_winner_america();
